@@ -8,32 +8,20 @@ import { getCookie } from '~/utils/cookie';
 import { SUCCESS } from '~/utils/constant';
 
 import loadable from '~/utils/loadable';
-import Svg from '~/components/atoms/Svg';
-import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
 
-const Login = () => {
+const Register = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [visibleModalWarning, setVisibleModalWarning] = useState(false);
-  const [activeCode, setActiveCode] = useState('')
-  const [emailNotActive, setEmailNotActive] = useState('')
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
 
 
-  const handlModalActive = (email: any) => {
-    if (email) {
-      setEmailNotActive(email)
-      setVisibleModalWarning(true)
-    }
-  }
-
-  const handleGetCookie = async (formValues: any) => {
+  const handleRegister = async (formValues: any) => {
     setLoading(true)
     try {
       if (form) {
@@ -43,9 +31,6 @@ const Login = () => {
         }
         const res = await setLogin(fmData)
         if (res) {
-          if (res.message === 'Account is not activated'){
-            handlModalActive(fmData.email)
-          }
           if (res.message === SUCCESS) {
             const token = res?.data?.token
             handleLogin({
@@ -64,14 +49,6 @@ const Login = () => {
     }
   }
 
-  const handleActiveAccount = async () => {
-    const res = await setActive(activeCode, {email: emailNotActive})
-    if (res.message === SUCCESS){
-      message.success('Active account success')
-      setVisibleModalWarning(false)
-    }
-  }
-
   useEffect(() => {
     const token = getCookie('token');
     if (token) {
@@ -83,13 +60,13 @@ const Login = () => {
   return (
     <>
       <Spin spinning={loading}>
-        <div className={styles.loginContainer}>
+        <div className={styles.registerContainer}>
           <div className={styles.formContainer}>
           <h1>Login</h1>
             <Form
               form={form}
               layout='vertical'
-              onFinish={handleGetCookie}
+              onFinish={handleRegister}
             >
               <Form.Item 
                 name='userName'
@@ -123,34 +100,13 @@ const Login = () => {
               </Form.Item>
             </Form>
             <div className={styles.forgotPassword}>
-              <p>Forgot password?</p> &nbsp; <Link to={ROUTES.ResetPasswordCode}>Get reset password code here!</Link>
-            </div>
-            <div className={styles.forgotPassword}>
-              <p>Don't have account?</p> &nbsp; <Link to={ROUTES.Register}>Register here!</Link>
+              <p>Allready have account?</p> &nbsp; <Link to={ROUTES.Login}>Login now!</Link>
             </div>
           </div>
         </div>
       </Spin> 
-      <Modal
-        open={visibleModalWarning}
-        centered
-        onCancel={() => setVisibleModalWarning(false)}
-        onOk={handleActiveAccount}
-      >
-      <div className={styles.headerConfirm}>
-          <Svg className={styles.iconWarning} src={iconWarning} alt="icon warning" />
-          <span className={styles.title}>Account is not activated</span>
-      </div>
-      <div className={styles.warningContent}>
-        Check code in your email and active here
-      </div>
-      <Input
-        placeholder='Active code'
-        onChange={(e: any) => setActiveCode(e.target.value)}
-      />
-      </Modal>
     </>
   )
 }
 
-export default Login
+export default Register
