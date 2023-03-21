@@ -18,12 +18,13 @@ const ResetPassword = () => {
       let res: any = null;
       if (form){
         const code = form.getFieldValue('code')
+        const email = form.getFieldValue('email')
         const fmData = form.getFieldsValue([
           'email',
           'newPassword',
           'confirmPassword',
         ])
-        res = await resetPassword(code, fmData)
+        res = await resetPassword(code ,email, fmData)
         if (res.message === SUCCESS) {
           message.success('Reset password success')
           setTimeout(

@@ -4,7 +4,6 @@ import Auth from '~/wrapper/Auth';
 
 const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
-const Register = loadable(() => import('~/pages/register'));
 const About = loadable(() => import('~/pages/about'));
 const Ideas = loadable(() => import('~/pages/ideas/lists'));
 const ResetPassword = loadable(() => import('~/pages/resetPassword'));
@@ -30,7 +29,6 @@ export const ROUTES = {
   IdeaDetail: (id: number | string) => `/ideas/lists/${id}`,
   // no auth
   Login: '/login',
-  Register: '/register',
   ResetPasswordCode: '/get-code',
   ResetPassword: '/resetPassword'
 };
@@ -48,7 +46,6 @@ const routes = [
 
   // no auth
   { exact: true, path: ROUTES.Login, component: Login, isAuth: false },
-  { exact: true, path: ROUTES.Register, component: Register, isAuth: false },
   { exact: true, path: ROUTES.ResetPasswordCode, component: ResetPasswordCode, isAuth: false },
   { exact: true, path: ROUTES.ResetPassword, component: ResetPassword, isAuth: false },
 ];

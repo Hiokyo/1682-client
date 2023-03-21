@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Divider, Form, Input, message } from 'antd';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 import { setActive, setLogin } from '~/api/login';
@@ -11,6 +11,7 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
+import ModalRegister from '~/components/molecules/ModalRegister';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -18,20 +19,10 @@ const Modal = loadable(() => import('~/components/atoms/Modal'));
 const Login = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [visibleModalWarning, setVisibleModalWarning] = useState(false);
-  const [activeCode, setActiveCode] = useState('')
-  const [emailNotActive, setEmailNotActive] = useState('')
+  const [visibleModalRegister, setVisibleModalRegister] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
-
-
-  const handlModalActive = (email: any) => {
-    if (email) {
-      setEmailNotActive(email)
-      setVisibleModalWarning(true)
-    }
-  }
 
   const handleGetCookie = async (formValues: any) => {
     setLoading(true)
@@ -43,9 +34,6 @@ const Login = () => {
         }
         const res = await setLogin(fmData)
         if (res) {
-          if (res.message === 'Account is not activated'){
-            handlModalActive(fmData.email)
-          }
           if (res.message === SUCCESS) {
             const token = res?.data?.token
             handleLogin({
@@ -64,13 +52,6 @@ const Login = () => {
     }
   }
 
-  const handleActiveAccount = async () => {
-    const res = await setActive(activeCode, {email: emailNotActive})
-    if (res.message === SUCCESS){
-      message.success('Active account success')
-      setVisibleModalWarning(false)
-    }
-  }
 
   useEffect(() => {
     const token = getCookie('token');
@@ -125,30 +106,26 @@ const Login = () => {
             <div className={styles.forgotPassword}>
               <p>Forgot password?</p> &nbsp; <Link to={ROUTES.ResetPasswordCode}>Get reset password code here!</Link>
             </div>
-            <div className={styles.forgotPassword}>
-              <p>Don't have account?</p> &nbsp; <Link to={ROUTES.Register}>Register here!</Link>
+            <Divider
+            
+            />
+            <div className={styles.btnRegister}>
+              <Button 
+                className={styles.btnRegister}
+                type="primary"
+                style={{ backgroundColor: '#7cb305' }}
+                onClick={() => setVisibleModalRegister(true)}
+              >
+                Register
+              </Button>
             </div>
           </div>
         </div>
+        <ModalRegister
+          visible={visibleModalRegister}
+          setVisible={setVisibleModalRegister}
+        />
       </Spin> 
-      <Modal
-        open={visibleModalWarning}
-        centered
-        onCancel={() => setVisibleModalWarning(false)}
-        onOk={handleActiveAccount}
-      >
-      <div className={styles.headerConfirm}>
-          <Svg className={styles.iconWarning} src={iconWarning} alt="icon warning" />
-          <span className={styles.title}>Account is not activated</span>
-      </div>
-      <div className={styles.warningContent}>
-        Check code in your email and active here
-      </div>
-      <Input
-        placeholder='Active code'
-        onChange={(e: any) => setActiveCode(e.target.value)}
-      />
-      </Modal>
     </>
   )
 }
