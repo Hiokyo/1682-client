@@ -1,3 +1,3 @@
 import { sendPost } from "~/utils/axios";
 
-export const setRegister = (params: any) => sendPost('/api/user/register', params);
+export const setRegister = (params: any) => sendPost('/user/register', params);

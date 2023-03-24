@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
@@ -33,6 +33,7 @@ interface DataType {
 
 const CategoryTable = (props: Props) => {
   const { categories, refetch, isFetching, isLoading, setParams } = props;
+  const dataCetogories = categories?.topics
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ visibleModalInactive, setVisibleModalInactive ] = useState(false);
   const [ idInactive, setIdInactive ] = useState();
@@ -40,8 +41,10 @@ const CategoryTable = (props: Props) => {
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 5,
-    total: 10
+    total: categories && categories.total
   });
+
+  
   
   const handleEdit = (record: any) => {
     setCategory(record)
@@ -87,13 +90,13 @@ const CategoryTable = (props: Props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '35%',
+      width: '30%',
       sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
-      width: '35%',
+      width: '30%',
       sorter: true,
       render: (date: any) => 
       <div>
@@ -102,15 +105,9 @@ const CategoryTable = (props: Props) => {
      
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      width: '20%',
-      render: (status: string, record: any) =>
-      (status === 'ACTIVE') ?
-        <Tag className='cursor-pointer' onClick={() => showModalInactive(record?._id)} color="blue">{status}</Tag> 
-        :
-        <Tag color="red">{status}</Tag> 
-      
+      title: 'Note',
+      dataIndex: 'Note',
+      width: '30%',
     },
     {
       title: '',
@@ -139,7 +136,7 @@ const CategoryTable = (props: Props) => {
             scroll={{ x: '60vh' }}
             columns={columns}
             rowKey={(record: any) => record._id}
-            dataSource={categories}
+            dataSource={dataCetogories}
             onChange={handleTableChange}
             pagination={pagination}
           />

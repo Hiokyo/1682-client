@@ -1,16 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { NAME_ASC, SortIdeas } from '~/utils/constant';
+import { SortIdeas } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import iconPlus from '~/assets/images/iconPlus.svg';
 
 import styles from './styles.module.scss';
+import ModalPost from '../PostModal';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
-const ModalIdeas = loadable(() => import('~/components/molecules/IdeasList/ModalIdeas'));
+const ModalIdeas = loadable(() => import('~/components/molecules/BooksList/ModalBooks'));
 
 interface Props {
   afterSuccess?: () => void;
@@ -48,7 +49,7 @@ const Filter = (props: Props) => {
               form={form}
               onValuesChange={handleValuesChange}
               initialValues={{
-                sort: SortIdeas.POPULARITY_DESC
+                sort: sortOption[5].value
               }}
             >
               <div className={styles.filterWrapper}>
@@ -70,7 +71,7 @@ const Filter = (props: Props) => {
           </div>
         </div>
       </div>
-      <ModalIdeas
+      <ModalPost
         visible={isModalVisible}
         setVisible={setIsModalVisible}
         afterSuccess={afterSuccess}

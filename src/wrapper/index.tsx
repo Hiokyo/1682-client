@@ -20,13 +20,13 @@ function Wrapper() {
     if (!token) {
       navigate(ROUTES.Login)
     }
-  }, [token, user, dispatch])
+  }, [token, dispatch])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (user){
       dispatch(setUserInfo(user?.data))
     }
-  }, [user?.data?._id, token, dispatch])
+  }, [user?.data?._id, dispatch])
   
   return (
     <Routes>

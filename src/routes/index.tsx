@@ -4,13 +4,13 @@ import Auth from '~/wrapper/Auth';
 
 const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
-const About = loadable(() => import('~/pages/about'));
-const Ideas = loadable(() => import('~/pages/ideas/lists'));
+const Posts = loadable(() => import('~/pages/posts/lists'));
+const Books = loadable(() => import('~/pages/books/lists'));
 const ResetPassword = loadable(() => import('~/pages/resetPassword'));
 const Category = loadable(() => import('~/pages/category'));
 const Campaign  = loadable(() => import('~/pages/thread'));
 const DashBoard = loadable(() => import('~/pages/dashboard'));
-const IdeaDetail = loadable(() => import('~/pages/ideas/[id]'));
+const BookDetail = loadable(() => import('~/pages/books/[id]'));
 const Profile = loadable(() => import('~/pages/profile'));
 const Setting = loadable(() => import('~/pages/systemSetting'));
 const ResetPasswordCode = loadable(() => import('~/pages/getResetPwCode'));
@@ -19,14 +19,14 @@ const ResetPasswordCode = loadable(() => import('~/pages/getResetPwCode'));
 export const ROUTES = {
 
   Home: '/',
-  About: '/about',
-  Ideas: '/ideas',
+  Posts: '/posts',
+  Books: '/books',
   Category: '/category',
   Campaign: '/campaign',
   DashBoard: '/dashboard',
   Profile: '/profile',
   Setting: '/setting',
-  IdeaDetail: (id: number | string) => `/ideas/lists/${id}`,
+  BookDetail: (id: number | string) => `/books/lists/${id}`,
   // no auth
   Login: '/login',
   ResetPasswordCode: '/get-code',
@@ -35,9 +35,9 @@ export const ROUTES = {
 
 const routes = [
   { exact: true, path: ROUTES.Home, component: Home, layout: Auth, isAuth: true },
-  { exact: true, path: ROUTES.About, component: About, layout: Auth, isAuth: true },
-  { exact: true, path: ROUTES.Ideas, component: Ideas, layout: Auth, isAuth: true },
-  { exact: true, path: ROUTES.IdeaDetail(':id'), component: IdeaDetail, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.Posts, component: Posts, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.Books, component: Books, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.BookDetail(':id'), component: BookDetail, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Campaign, component: Campaign, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },

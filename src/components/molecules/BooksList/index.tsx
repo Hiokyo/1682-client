@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 
-import { useIdeas } from '~/hooks/useIdeas';
+import { useBooks } from '~/hooks/useBooks';
 import { PARAMS_FILTER } from '~/utils/constant';
 import loadable from '~/utils/loadable';
 
-const IdeaList = loadable(() => import('~/components/molecules/IdeasList/List'));
-const Filter = loadable(() => import('~/components/molecules/IdeasList/Filter'));
+const BookList = loadable(() => import('~/components/molecules/BooksList/List'));
+const Filter = loadable(() => import('~/components/molecules/BooksList/Filter'));
 
 const IdeasList = () => {
   const [params, setParams] = useState({
     ...PARAMS_FILTER,
-    sort: 'POPULARITY_DESC'
+    sort: 'TITLE_ASC'
   })
-  const { data, isLoading, isFetching, refetch } = useIdeas(params)
+  const { data, isLoading, isFetching, refetch } = useBooks(params)
 
   const handleFilter = (value: any) => {
     setParams({
@@ -27,8 +27,8 @@ const IdeasList = () => {
         onChange={handleFilter}
         afterSuccess={refetch}
       />
-      <IdeaList 
-        dataIdeas={data?.data?.ideas}
+      <BookList 
+        dataBooks={data?.data?.books}
         isLoading={isLoading}
         isFetching={isFetching}
         refetch={refetch}

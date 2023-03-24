@@ -1,0 +1,22 @@
+.container {
+  background: #fff;
+  margin: 0px 100px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  .contentWrapper {
+    display        : flex;
+    justify-content: flex-end;
+    padding         : 20px 24px;
+    height         : 100%;
+
+      .btnAdd {
+        display    : flex;
+        align-items: center;
+        .iconPlus {
+          width       : 10.75px;
+          height      : 11.25px;
+          margin-right: 8px;
+        }
+      }
+  }
+}
+

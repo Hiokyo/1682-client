@@ -7,19 +7,19 @@ export const DATE_SIMPLE = 'MM/dd';
 
 export const SUCCESS = 'Success'
 export const KEY_MESSAGE = 'message'
-export const NAME_ASC = 'NAME_ASC';
+export const TITLE_ASC = 'TITLE_ASC';
 
 export const COMMON_PARAMS = {
   page: 1,
   limit: 5,
-  sort: NAME_ASC
+  sort: TITLE_ASC
 }
 
 
 export const PARAMS_GET_ALL = {
   page: 1,
   limit: 999,
-  sort: NAME_ASC
+  sort: TITLE_ASC
 }
 
 export const PARAMS_FILTER = {

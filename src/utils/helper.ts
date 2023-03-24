@@ -21,16 +21,16 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userId }: IHa
     expires,
   });
   if (userId) {
-    setCookie('userId', userId)
+    setCookie('userId', userId, {expires})
   }
 
   if (getCookie('token')) {
-    history.push(callbackUrl ?? ROUTES.Ideas);
+    history.push(callbackUrl ?? ROUTES.Posts);
     // window.location.reload();
   }
 };
 
-export const handleLogout = (callbackUrl = ROUTES.Ideas) => {
+export const handleLogout = (callbackUrl = ROUTES.Posts) => {
   removeCookie('token');
   removeCookie('userId')
   removeCookie('refreshToken');

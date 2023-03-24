@@ -3,8 +3,8 @@ import { Button, Checkbox, Form, Switch, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import { Option } from '~/components/atoms/Select';
-import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
-import { setIdea } from '~/api/ideas';
+import { KEY_MESSAGE, SUCCESS, termAndCondition } from '~/utils/constant';
+import { createBook } from '~/api/book';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -21,7 +21,6 @@ const Modal = loadable(() => import('~/components/atoms/Modal'));
 interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
-  userData?: any;
   afterSuccess?: () => void;
 }
 
@@ -30,30 +29,13 @@ const ModalIdeas = (props: Props) => {
   const {
     visible,
     setVisible,
-    userData,
     afterSuccess,
   } = props;
 
   const [metaData, setMetaData] = useState({});
   const rules = [{ required: true, message: '' }];
-  const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
-  const categories = data?.data?.categories;
   const [showModalTerms, setShowModalTerms] = useState(false)
   const [agreeTerm, setAgreeTerm] = useState(false)
-  const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
-  const dataThread = threadList?.data?.threads;
-
-  const categoryOption = useMemo(() => 
-  // render options gender
-  categories?.map((item: any) => (
-    { id: item._id, name: item.name, }
-  )), [categories]);
-
-  const threadOption = useMemo(() => 
-  // render options gender
-  dataThread?.map((item: any) => (
-    { id: item._id, name: item.name, }
-  )), [dataThread]);
 
   const handleClose = () => {
     if (setVisible) {
@@ -109,7 +91,7 @@ const ModalIdeas = (props: Props) => {
         ...rest,
         documents: [metaData]
       }
-      res = await setIdea(fmData)
+      res = await createBook(fmData)
       if (res.message === SUCCESS) {
         message.success('Upload idea success')
         if (afterSuccess) {
@@ -134,7 +116,7 @@ const ModalIdeas = (props: Props) => {
       className={styles.modalContainer}
     >
     <div>
-      <h3>Upload Idea</h3>
+      <h3>Add new book</h3>
     </div>
     <Form
       form={form}
@@ -179,11 +161,11 @@ const ModalIdeas = (props: Props) => {
         <Select
           mode='multiple'
           placeholder={'Select category'}
-          loading={loadingCategories || fetchingCategories}
+          // loading={loadingCategories || fetchingCategories}
         >
-          {categoryOption?.map((item: any) =>
+          {/* {categoryOption?.map((item: any) =>
             <Option key={item.id} value={item.id}>{item.name}</Option>
-          )}
+          )} */}
         </Select>
       </Form.Item>
       <Form.Item
@@ -193,11 +175,11 @@ const ModalIdeas = (props: Props) => {
       >
         <Select
           placeholder={'Select campaign'}
-          loading={loadingThread || fetchingThread}
+          // loading={loadingThread || fetchingThread}
         >
-          {threadOption?.map((item: any) =>
+          {/* {threadOption?.map((item: any) =>
             <Option key={item.id} value={item.id}>{item.name}</Option>
-          )}
+          )} */}
         </Select>
       </Form.Item>
 

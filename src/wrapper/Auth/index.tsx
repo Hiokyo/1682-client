@@ -35,18 +35,25 @@ function Auth(props: Props) {
 
   const menuLeft: MenuItem[] = useMemo(() => [
     {
-      key: ROUTES.Ideas,
-      label: <Link to={ROUTES.Ideas}>Ideas</Link>,
+      key: ROUTES.Posts,
+      label: <Link to={ROUTES.Posts}>Posts</Link>,
       icon: <UnorderedListOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.Ideas,
-      content: 'Ideas'
+      url: ROUTES.Posts,
+      content: 'Posts'
     },
     {
-      key: ROUTES.Campaign,
-      label: <Link to={ROUTES.Campaign}>Campaign</Link>,
+      key: ROUTES.Books,
+      label: <Link to={ROUTES.Books}>Books</Link>,
       icon: <BookOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.Campaign,
+      url: ROUTES.Books,
+      content: 'Books'
     },
+    // {
+    //   key: ROUTES.Campaign,
+    //   label: <Link to={ROUTES.Campaign}>Campaign</Link>,
+    //   icon: <BookOutlined style={{fontSize: '18px'}}/>,
+    //   url: ROUTES.Campaign,
+    // },
     {
       key: ROUTES.Category,
       label: <Link to={ROUTES.Category}>Category</Link>,

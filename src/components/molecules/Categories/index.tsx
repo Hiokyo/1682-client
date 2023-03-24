@@ -16,7 +16,7 @@ const Categories = () => {
     <>
       <Filter refetch={refetch}/>
       <CategoryTable  
-        categories={data?.data?.categories}
+        categories={data?.data}
         refetch={refetch}  
         isLoading={isLoading}
         isFetching={isFetching}

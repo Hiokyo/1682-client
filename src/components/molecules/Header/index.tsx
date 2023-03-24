@@ -7,7 +7,7 @@ import history from '~/utils/history';
 import loadable from '~/utils/loadable';
 import iconNotification from '~/assets/images/iconNotification.svg';
 import iconAvatar from '~/assets/images/iconAvatar.svg';
-import logo from '~/assets/images/1640-logos_white.png';
+import logo from '~/assets/images/one more page-logos_white.png';
 
 import { RootState, useAppDispatch, useAppSelector } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
@@ -79,7 +79,7 @@ export default function Header() {
           tabIndex={0}
         >
           <Svg className={styles.logo} src={logo}/>
-          <h3>UniCollective</h3>
+          <h3>One more page</h3>
         </div>
         <div className={styles.info}>
           <Dropdown  menu={{items: notifications}}>

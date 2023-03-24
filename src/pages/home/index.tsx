@@ -13,7 +13,7 @@ export default function Home() {
     if (!getCookie('token')) {
      navigate(ROUTES.Login) 
     } else {
-      navigate(ROUTES.Ideas);
+      navigate(ROUTES.Posts);
     }
   }, [navigate, getCookie]);
 

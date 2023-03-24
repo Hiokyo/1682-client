@@ -7,12 +7,21 @@
     }
     
   }
+  .metaUser{
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
   .formContainer {
+    .uploadBtn{
+      margin-bottom: 1rem;
+    }
+    .checkbox{
+      margin-bottom: 1rem;
+    }
     .btnGroup{
       display: flex;
-      justify-content: flex-end;
-      .btnClose{
-        margin-right: 5.5px;
+      .btnPost{
+        width: 100%;
       }
     }
   }
