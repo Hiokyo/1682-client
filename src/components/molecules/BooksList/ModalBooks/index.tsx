@@ -147,7 +147,7 @@ const ModalIdeas = (props: Props) => {
       </Form.Item>
       <div className={styles.uploadBtn}>
         <Upload
-          onChange={(info) => info.file.status = 'done'}
+          // onChange={(info) => info.file.status = 'done'}
           customRequest={(file: any ) => uploadFileToFirebase(file)}
         >
           <Button icon={<UploadOutlined />}>Upload Ideas</Button>
