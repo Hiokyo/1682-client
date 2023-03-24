@@ -1,8 +1,6 @@
 import { ROUTES } from "~/routes";
 import { getCookie, removeCookie, setCookie } from "./cookie";
 import history from './history';
-import { hoursToMilliseconds } from "date-fns";
-import { message } from "antd";
 
 export const getFileName = (path: string) => {
   const index = path.lastIndexOf('/');
@@ -13,23 +11,19 @@ interface IHandleLogin {
   accessToken?: string;
   expiresOn?: Date | null;
   callbackUrl?: string;
+  userId?: string;
 }
 
-export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogin) => {
+export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userId }: IHandleLogin) => {
   if (typeof window === 'undefined' || !accessToken) return;
-  const expires = expiresOn ? +new Date(expiresOn) : hoursToMilliseconds(5);
+  const expires = expiresOn ? +new Date(expiresOn) : 9999;
   setCookie('token', accessToken, {
     expires,
   });
-  if (expires) {
-    setTimeout(() => {
-      message.warning('Your token has expired, please log in again!')
-      setTimeout(() => {
-        history.push(ROUTES.Login)
-      }, 2000);
-      removeCookie('token');
-    }, expires);
+  if (userId) {
+    setCookie('userId', userId)
   }
+
   if (getCookie('token')) {
     history.push(callbackUrl ?? ROUTES.Ideas);
     // window.location.reload();
@@ -38,6 +32,7 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogi
 
 export const handleLogout = (callbackUrl = ROUTES.Ideas) => {
   removeCookie('token');
+  removeCookie('userId')
   removeCookie('refreshToken');
   localStorage.clear();
   if (callbackUrl) {

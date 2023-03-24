@@ -11,10 +11,10 @@ import { setUserInfo } from '~/store/userInfo';
 
 function Wrapper() {
   const token = getCookie('token');
+  const userId = getCookie('userId')
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [enable, setEnable] = useState(false)
-  const { data: user, refetch } = useUser(enable);
+  const { data: user, refetch } = useUser(userId);
 
   useEffect(() => {
     if (!token) {
@@ -23,9 +23,6 @@ function Wrapper() {
   }, [token, user, dispatch])
 
   useLayoutEffect(() => {
-    if (token) {
-      setEnable(true)
-    }
     if (user){
       dispatch(setUserInfo(user?.data))
     }

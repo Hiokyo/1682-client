@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import Modal from '~/components/atoms/Modal';
 import { Button, Form, Input, message } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Option } from '~/components/atoms/Select';
 
 
 import styles from './styles.module.scss';
 import { setRegister } from '~/api/register';
-import { SUCCESS } from '~/utils/constant';
+import { Gender, SUCCESS } from '~/utils/constant';
 import { ROUTES } from '~/routes';
 import DatePicker from '~/components/atoms/DatePicker';
+import Select from '~/components/atoms/Select';
+import InputNumber from '~/components/atoms/InputNumber';
 
 interface Props{
   visible: boolean;
@@ -21,6 +24,11 @@ const ModalRegister = (props: Props) => {
   const [form] = Form.useForm();
 
   const rules = [{ required: true, message: '' }];
+  const genderOption = useMemo(() => Object.entries(Gender)
+  // render options gender
+  .map((item: any, index) => (
+    { id: index, name: item[1], value: item[0] }
+  )), []);
 
   const handleRegister = async (formValues: any) => {
     try {
@@ -28,11 +36,10 @@ const ModalRegister = (props: Props) => {
         const fmData = {
           firstName: formValues.firstName,
           lastName: formValues.lastName,
-          phoneNumber: formValues.phoneNumber,
+          phoneNumber: String(formValues.phoneNumber),
           address: '',
           dob: formValues.dob,
-          gender: '',
-          userName: '',
+          gender: formValues.gender,
           confirmPassword: formValues.confirmPassword,
           email: formValues.email,
           password: formValues.password
@@ -86,7 +93,9 @@ const ModalRegister = (props: Props) => {
               label='First name'
               rules={rules}
             >
-              <Input/>
+              <Input
+                placeholder='First name'
+              />
             </Form.Item>
             <Form.Item 
               className={styles.secondItem}
@@ -94,7 +103,9 @@ const ModalRegister = (props: Props) => {
               label='Last name'
               rules={rules}
             >
-              <Input/>
+              <Input
+                placeholder='Last name'
+              />
             </Form.Item>
           </div>
 
@@ -105,7 +116,10 @@ const ModalRegister = (props: Props) => {
               label='Phone number'
               rules={rules}
             >
-              <Input/>
+              <InputNumber
+                style={{width: '100%'}}
+                placeholder='Phone number'
+              />
             </Form.Item>
             <Form.Item 
               className={styles.datePicker}
@@ -131,7 +145,22 @@ const ModalRegister = (props: Props) => {
               }, 
             ]}
           >
-            <Input/>
+            <Input
+              placeholder='Email'
+            />
+          </Form.Item>
+          <Form.Item
+            label='Gender'
+            name='gender'
+            rules={rules}
+          >
+            <Select
+              placeholder='Select gender'
+            >
+              {genderOption?.map((item: any) =>
+                <Option key={item.id} value={item.value}>{item.name}</Option>
+              )}
+            </Select>
           </Form.Item>
 
           <Form.Item 
@@ -139,7 +168,9 @@ const ModalRegister = (props: Props) => {
             label='Password'
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password/>
+            <Input.Password
+              placeholder='Password'
+            />
           </Form.Item>
 
           <Form.Item 
@@ -147,7 +178,9 @@ const ModalRegister = (props: Props) => {
             label='Confirm password'
             rules={[{ required: true, message: 'Please input your confirm password!' }]}
           >
-            <Input.Password/>
+            <Input.Password
+              placeholder='Confirm password'
+            />
           </Form.Item>
           <div className={styles.btnGroup}>
             <Button

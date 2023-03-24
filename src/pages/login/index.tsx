@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Divider, Form, Input, message } from 'antd';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
-import { setActive, setLogin } from '~/api/login';
+import { setLogin } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
 import { getCookie } from '~/utils/cookie';
 import { SUCCESS } from '~/utils/constant';
-
 import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
-import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
 import ModalRegister from '~/components/molecules/ModalRegister';
 
@@ -35,9 +33,11 @@ const Login = () => {
         const res = await setLogin(fmData)
         if (res) {
           if (res.message === SUCCESS) {
-            const token = res?.data?.token
+            const token = res?.data?.token;
+            const userId = res?.data?._id
             handleLogin({
               accessToken: token,
+              userId: userId
             })
             setLoading(false)
           }
@@ -106,19 +106,12 @@ const Login = () => {
             <div className={styles.forgotPassword}>
               <p>Forgot password?</p> &nbsp; <Link to={ROUTES.ResetPasswordCode}>Get reset password code here!</Link>
             </div>
-            <Divider
-            
-            />
-            <div className={styles.btnRegister}>
-              <Button 
-                className={styles.btnRegister}
-                type="primary"
-                style={{ backgroundColor: '#7cb305' }}
-                onClick={() => setVisibleModalRegister(true)}
-              >
-                Register
-              </Button>
+            <Divider/>
+            <div
+            >
+              If you don't have an account click <a onClick={() => setVisibleModalRegister(true)}>Here</a>
             </div>
+
           </div>
         </div>
         <ModalRegister

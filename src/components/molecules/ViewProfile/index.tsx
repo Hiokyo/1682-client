@@ -13,12 +13,14 @@ import iconEdit from '~/assets/images/iconEdit.svg';
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import styles from './styles.module.scss';
+import { getCookie } from '~/utils/cookie';
 
 const ProfileModal = loadable(() => import('~/components/molecules/ViewProfile/ModalEditProfile'));
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const ViewProfile = () => {
-  const { data, isLoading, isFetching, refetch } = useUser(true)
+  const userId = getCookie('userId')
+  const { data, isLoading, isFetching, refetch } = useUser(userId)
   const userData = data?.data;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const status: Status['value'] = userData?.status;
