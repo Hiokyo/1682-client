@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Form, List, Popover, Statistic, Tag, message } from 'antd'
+import { Avatar, Card, Dropdown, Form, List, MenuProps, Popover, Statistic, Tag, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
   DislikeOutlined,
+  MoreOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
@@ -13,10 +14,12 @@ import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { setComment, updateAction } from '~/api/book';
 import { useAppSelector } from '~/store';
-import { TextArea } from '~/components/atoms/Input';
+import Input, { TextArea } from '~/components/atoms/Input';
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom';
 import TopicTag from '~/components/atoms/TopicTag';
+import Modal from '~/components/atoms/Modal';
+import { createReport } from '~/api/report';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -29,11 +32,15 @@ interface Prop {
 const BookList = (props: Prop) => {
   const {dataBooks, isFetching, isLoading, refetch} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
-  const [showCommentMap, setShowCommentMap] = useState<any>({})
-  const [bookId, setBookId] = useState('')
-  const [isLoadingComment, setIsLoadingComment] = useState(false)
   const [form] = Form.useForm();
+  const [formReport] = Form.useForm();
+
+  const [showCommentMap, setShowCommentMap] = useState<any>({});
+  const [bookId, setBookId] = useState('');
+  const [isLoadingComment, setIsLoadingComment] = useState(false);
   const [dataSource, setDataSource] = useState<any>([]);
+  const [visibleModalReport, setVisibleModalReport] = useState(false);
+  const [idBookReported, setIdBookReported] = useState('');
 
   useEffect(() => {
     if (dataBooks){
@@ -155,6 +162,34 @@ const BookList = (props: Prop) => {
       message.error(res.message)
     }
   }
+
+  const handleShowModalReportBook = (bookId: string) => {
+    setVisibleModalReport(true)
+    setIdBookReported(bookId)
+  }
+  
+  const handleReportBook = async (value: any) => {
+    if ((value.trim().length === 0)){
+      return message.warning('Please enter reason!')
+    }
+    if(idBookReported) {
+      const fmData = {
+        title: 'Report',
+        type: 'REPORT',
+        schema: 'books',
+        schemaId: idBookReported,
+        content: value
+      }
+      const res = await createReport(fmData)
+      if (res.message === SUCCESS) {
+        message.success('Report novel success')
+        setVisibleModalReport(false)
+      } else {
+        message.error(res.message)
+      }
+    }
+  }
+  
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -251,14 +286,40 @@ const BookList = (props: Prop) => {
                   } 
                 />,
               ]}
-              extra={format(new Date(item.createdAt), DATE)}
+              extra={
+                <div className='d-flex'>
+                  <div className='mr-2'>
+                    {format(new Date(item.createdAt), DATE)}
+                  </div>
+                  <Dropdown
+                    className={styles.dropDown}
+                    menu={
+                      { 
+                        items: [
+                          {
+                            label: <div onClick={() => handleShowModalReportBook(item._id)}>Report novel</div>,
+                            key: '0',
+                          },
+                          {
+                            label: <a href="https://www.aliyun.com">2nd menu item</a>,
+                            key: '1',
+                          },
+                        ]  
+                      }
+                    } 
+                    trigger={['click']}
+                  >
+                    <MoreOutlined style={{fontSize: 16}} />
+                  </Dropdown>
+                </div>
+              }
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
-                    to={`/ideas/lists/${item._id}`}
+                    to={`/books/lists/${item._id}`}
                   >
                     {item.title} {`(${item.chapterCount} Chapter)`}
                   </Link>
@@ -316,6 +377,40 @@ const BookList = (props: Prop) => {
           </div>
         )}
       />
+      <Modal
+        width={460}
+        centered
+        open={visibleModalReport}
+        footer={false}
+        closable={false}
+        maskClosable
+        onCancel={() => setVisibleModalReport(false)}
+        className={styles.modalContainer}
+      >
+        <div>
+          <h3>Report Novel</h3>
+        </div>
+        <Form
+          form={formReport}
+          layout='vertical'
+        >
+          <Form.Item
+            name='content'
+            label='Reason'
+            rules={[
+              {
+                required: true,
+                message: ''
+              }
+            ]}
+          >
+            <Input
+              placeholder='Reason'
+              onPressEnter={(e: any) => handleReportBook(e.target?.value)}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Spin>
   )
 }

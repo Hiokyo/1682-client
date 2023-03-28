@@ -41,10 +41,13 @@ const CategoryTable = (props: Props) => {
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 5,
-    total: categories && categories.total
+    total: categories && categories?.total
   });
 
+  useEffect(() => {
+    setPagination({...pagination, total: categories?.total})
   
+  }, [categories])
   
   const handleEdit = (record: any) => {
     setCategory(record)
