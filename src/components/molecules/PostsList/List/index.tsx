@@ -178,7 +178,7 @@ const PostList = (props: Prop) => {
                       content={(
                         item.like?.map((userLike: any) => 
                           <div key={userLike.user._id}>
-                            {userLike.user.firstName} {userLike.user.lastName}
+                            {userLike.user?.firstName} {userLike.user?.lastName}
                           </div>
                         )
                       )}
@@ -193,7 +193,7 @@ const PostList = (props: Prop) => {
                       content={(
                         item.like?.map((userLike: any) => 
                           <div key={userLike.user._id}>
-                            {userLike.user.firstName} {userLike.user.lastName}
+                            {userLike?.user?.firstName} {userLike?.user?.lastName}
                           </div>
                         )
                       )}
