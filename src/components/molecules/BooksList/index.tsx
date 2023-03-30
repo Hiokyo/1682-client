@@ -10,7 +10,7 @@ const Filter = loadable(() => import('~/components/molecules/BooksList/Filter'))
 const IdeasList = () => {
   const [params, setParams] = useState({
     ...PARAMS_FILTER,
-    sort: 'TITLE_ASC'
+    sort: 'LIKE_DESC'
   })
   const { data, isLoading, isFetching, refetch } = useBooks(params)
 

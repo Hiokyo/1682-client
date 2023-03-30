@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { SortIdeas } from '~/utils/constant';
+import { SortPosts } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
@@ -24,7 +24,7 @@ const Filter = (props: Props) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const sortOption = useMemo(() => Object.entries(SortIdeas)
+  const sortOption = useMemo(() => Object.entries(SortPosts)
   // render options sort by
   .map((item: any, index) => (
     { id: index, name: item[1], value: item[0] }
@@ -49,7 +49,7 @@ const Filter = (props: Props) => {
               form={form}
               onValuesChange={handleValuesChange}
               initialValues={{
-                sort: sortOption[5].value
+                sort: sortOption[1].value
               }}
             >
               <div className={styles.filterWrapper}>

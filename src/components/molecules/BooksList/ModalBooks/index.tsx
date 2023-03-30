@@ -5,8 +5,6 @@ import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase
 import { Option } from '~/components/atoms/Select';
 import { KEY_MESSAGE, SUCCESS, termAndCondition } from '~/utils/constant';
 import { createBook } from '~/api/book';
-import { useCategories } from '~/hooks/useCategory';
-import { useThread } from '~/hooks/useThread';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 import storage from '~/utils/firebase';

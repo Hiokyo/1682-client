@@ -27,16 +27,40 @@ export const PARAMS_FILTER = {
   limit: 999,
 }
 
-export enum SortIdeas {
-  'POPULARITY_ASC' = 'Popularity (Ascending)',
-  'POPULARITY_DESC' = 'Popularity (Descending)',
-  'DATE_CREATED_ASC' = 'Date create (Ascending)',
-  'DATE_CREATED_DESC' = 'Date create (Descending)',
+export enum SortBooks {
+  'TITLE_DESC' = 'Title',
+  'CHAPTER_DESC' = 'Chapter',
+  'SUBSCRIBED_USER_DESC' = 'Subscribed',
+  'VIEW_ASC' = 'View (Ascending)',
+  'VIEW_DESC' = 'View (Descending)',
   'LIKE_ASC' = 'Like (Accending)',
   'LIKE_DESC' = 'Like (Descending)',
   'DISLIKE_ASC' = 'Dislike (Ascending)',
   'DISLIKE_DESC' = 'Dislike (Descending)',
+  'COMENT_ASC' = 'Comment (Accending)',
+  'COMENT_DESC' = 'Comment (Descending)',
 }
+
+export enum SortTopic {
+  'NAME_ASC' = 'Name (Ascending)',
+  'NAME_DESC' = 'Name (Descending)',
+  'DATE_CREATED_ASC' = 'Date created (Ascending)',
+  'DATE_CREATED_DESC' = 'Date created (Descending)',
+}
+
+export enum SortPosts {
+  'LIKE_ASC' = 'Like (Accending)',
+  'LIKE_DESC ' = 'Like (Descending)',
+  'DISLIKE_ASC' = 'Dislike (Ascending)',
+  'DISLIKE_DESC' = 'Dislike (Descending)',
+  'VIEW_ASC' = 'View (Ascending)',
+  'VIEW_DESC' = 'View (Descending)',
+  'COMENT_ASC' = 'Comment (Accending)',
+  'COMENT_DESC' = 'Comment (Descending)',
+  'DATE_CREATED_ASC' = 'Date created (Ascending)',
+  'DATE_CREATED_DESC' = 'Date created (Descending)',
+}
+
 
 export enum SortAccount {
   'EMAIL_ASC' = 'Email (Ascending)',
@@ -50,6 +74,11 @@ export enum SortAccount {
 export enum UserStatus {
   'ACTIVE' = 'Active',
   'INACTIVE' = 'Inactive',
+}
+
+export enum Anonymous {
+  'Anonymous' = 'Anonymous',
+  'Public' = 'Public',
 }
 
 export enum Gender {

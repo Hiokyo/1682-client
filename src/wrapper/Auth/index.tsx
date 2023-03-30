@@ -86,7 +86,7 @@ function Auth(props: Props) {
           <Content className={styles.contentList}>{children}</Content>
         </Layout>
       </Content>
-      <Footer className={styles.footer} style={{ textAlign: 'center' }}>1640 ©2023 Created by Group 3</Footer>
+    <Footer className={styles.footer} style={{ textAlign: 'center' }}>1682 ©2023 Created by Quan - Hieu</Footer>
     </Layout>
   );
 }
