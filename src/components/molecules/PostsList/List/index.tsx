@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
 import ModalEditComment from '~/components/atoms/ModalEditComment';
 import ImageList from '../ImageList';
+import ModalPost from '../PostModal';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -42,6 +43,8 @@ const PostList = (props: Prop) => {
   const [itemEditComment, setItemEditComment] = useState<any>({});
   const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
 
+  const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
+  const [postEditing, setPostEditing] = useState({});
 
   useEffect(() => {
     if (dataPosts){
@@ -173,7 +176,10 @@ const PostList = (props: Prop) => {
       message.error(res.message)
     }
   }
-
+  const handleEditPost = (post: any) => {
+    setVisibleModalEditPost(true)
+    setPostEditing(post)
+  }
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -270,7 +276,7 @@ const PostList = (props: Prop) => {
                   } 
                 />,
               ]}
-              // extra={format(new Date(item.createdAt), DATE)}
+              extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
@@ -375,6 +381,12 @@ const PostList = (props: Prop) => {
       commentId={itemEditComment?.commentId}
       refetch={refetch}
     />  
+    <ModalPost 
+      postData={postEditing}
+      visible={visibleModalEditPost}
+      setVisible={setVisibleModalEditPost}
+      afterSuccess={refetch}
+    />
     </Spin>
   )
 }

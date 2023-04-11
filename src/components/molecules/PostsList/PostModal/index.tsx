@@ -1,12 +1,12 @@
 import { Avatar, Button, Form, Upload, message } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextArea } from '~/components/atoms/Input'
 import Modal from '~/components/atoms/Modal'
 import styles from './styles.module.scss'
 import { InboxOutlined } from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta'
 import { useAppSelector } from '~/store'
-import { setPost } from '~/api/post'
+import { setPost, updatePost } from '~/api/post'
 import { KEY_MESSAGE, SUCCESS } from '~/utils/constant'
 import { Option } from '~/components/atoms/Select';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
@@ -16,6 +16,7 @@ import Select from '~/components/atoms/Select'
 import { RcFile, UploadFile } from 'antd/es/upload'
 
 interface Props {
+  postData?: any;
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   afterSuccess?: () => void;
@@ -24,15 +25,16 @@ interface Props {
 const ModalPost = (props: Props) => {
   const [form] = Form.useForm();
   const { Dragger } = Upload;
-  const {visible, setVisible, afterSuccess} = props;
+  const {visible, setVisible, afterSuccess, postData} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const rules = [{ required: true, message: '' }];
-
+  
   const [metadataList, setMetadataList] = useState<any>([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
+  const [fileList, setFileList] = useState<any>();
 
   const uploadFileToFirebase = async (file: any, onSuccess: any, onError: any, onProgress: any) => {
     const storageRef = ref(storage, `files/${file.name}`);
@@ -60,7 +62,6 @@ const ModalPost = (props: Props) => {
     );
   };
 
-
   const handleSave = async (formValues: any) => {
     try {
       let res: any = null;
@@ -70,9 +71,15 @@ const ModalPost = (props: Props) => {
         isAnonymous: isAnonymous,
         images: metadataList
       }
-      res = await setPost(fmData)
+      if (postData) {
+        res = await updatePost(postData._id, fmData)
+      } else {
+        res = await setPost(fmData)
+      }
       if (res.message === SUCCESS) {
-        message.success('Create post success')
+        message.success({
+          content: postData ? 'Update post success' : 'Add post success'
+        })
         if (afterSuccess) {
           afterSuccess()
         }
@@ -96,7 +103,9 @@ const ModalPost = (props: Props) => {
 
   const handleClose = () => {
     setVisible(false);
-    form.resetFields()
+    if (!postData) {
+      form.resetFields()
+    }
   }
   const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -117,6 +126,15 @@ const ModalPost = (props: Props) => {
   };
 
   const handleCancel = () => setPreviewOpen(false);
+  useEffect(() => {
+    if (postData) {
+      form.setFieldsValue({
+        content: postData.content
+      })
+      setFileList(postData.images)
+    }
+  }, [postData])
+  
   return (
     <Modal
       width={560}
@@ -166,34 +184,41 @@ const ModalPost = (props: Props) => {
         />
       </Form.Item>
       <div className={styles.uploadBtn}>
-      <Dragger
-        multiple={true}
-        customRequest={({ file, onSuccess, onError, onProgress }) => uploadFileToFirebase(file, onSuccess, onError, onProgress)}
-        listType="picture-card"
-        onPreview={handlePreview}
-        // onChange={(info) => {
-        //   const fileList = info.fileList.map(file => {
-        //     if (file.status === 'done') {
-        //       return {
-        //         ...file,
-        //         url: file.response.url
-        //       }
-        //     }
-        //     return file;
-        //   });
-        //   // setFileList(fileList);
-        // }}
-        
-      >
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-          banned files.
-        </p>
-      </Dragger>
+        <Dragger
+          multiple={true}
+          customRequest={({ file, onSuccess, onError, onProgress }) => uploadFileToFirebase(file, onSuccess, onError, onProgress)}
+          listType="picture-card"
+          onPreview={handlePreview}
+          fileList={fileList}
+          onChange={(info) => {
+            const { status } = info.file;
+            // if (status !== "uploading") {
+            //   console.log(info.fileList);
+            // }
+            if (status === "done") {
+              message.success(`${info.file.name} file uploaded successfully.`);
+            } else if (status === "error") {
+              message.error(`${info.file.name} file upload failed.`);
+            } else if (status === "removed") {
+              const result = info.fileList?.map((item: any) => (
+                {
+                  name: item.name,
+                  contentType: item.contentType,
+                  url: item.url
+                }
+              ))
+              setMetadataList(result);;
+            }
+            // Save file list in state
+            const fileList = [...info.fileList];
+            setFileList(fileList);
+          }}
+        >
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to image</p>
+        </Dragger>
       </div>
       <div className={styles.btnGroup}>
         <Button
