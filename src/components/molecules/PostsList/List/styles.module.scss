@@ -29,7 +29,15 @@
     font-style: italic;
   }
   .commentContainer{
+    :global {
+      .ant-form-item{
+        margin: 0 !important;
+      }
+    }
     .comment{ 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #e6f7ff;
       padding: 15px 10px ;
       border-radius: 1rem;
@@ -39,34 +47,20 @@
       .commentContent{
         margin-bottom: 0;
       }
-    }
-  }
-}
-
-@media only screen and (max-width: 500px) {
-  .listContainer {
-    margin: 10px 0px;
-    :global {
-      .ant-card .ant-card-actions {
-        padding-left: 24px;
-        li {
-          width: fit-content !important;
-          margin-right: 15px;
-          margin-left: 15px;
+      .commentOption{
+        margin: 0 1rem;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+      
+        &:hover {
+          background-color: #ccc;
         }
-      }
-      .ant-card-actions>li:not(:last-child){
-        border: none;
-      }
-    }
-    .commentContainer{
-      .comment{ 
-        background-color: #e6f7ff;
-        padding: 15px;
-        border-radius: 1rem;
-        margin-top: 10px;
-        margin-left: 50px;
-        margin-right: 50px;
       }
     }
   }
