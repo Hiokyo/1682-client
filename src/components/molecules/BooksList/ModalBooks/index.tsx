@@ -181,15 +181,6 @@ const ModalIdeas = (props: Props) => {
         </Select>
       </Form.Item>
 
-      <Form.Item
-        name='isAnonymous'
-        label='Anonymous'
-        valuePropName='checked'
-      >
-        <Switch
-        />
-      </Form.Item>
-
       <div className={styles.checkbox}>
         <Checkbox
           onChange={onCheckBoxChange}

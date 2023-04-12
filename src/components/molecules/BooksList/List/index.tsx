@@ -5,6 +5,9 @@ import {
   MessageOutlined,
   DislikeOutlined,
   MoreOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
@@ -12,7 +15,7 @@ import loadable from '~/utils/loadable';
 
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
-import { setComment, updateAction } from '~/api/book';
+import { deleteBookComment, setComment, updateAction } from '~/api/book';
 import { useAppSelector } from '~/store';
 import Input, { TextArea } from '~/components/atoms/Input';
 import styles from './styles.module.scss'
@@ -20,6 +23,7 @@ import { Link } from 'react-router-dom';
 import TopicTag from '~/components/atoms/TopicTag';
 import Modal from '~/components/atoms/Modal';
 import { createReport } from '~/api/report';
+import ModalEditComment from '~/components/atoms/ModalEditComment';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -41,6 +45,8 @@ const BookList = (props: Prop) => {
   const [dataSource, setDataSource] = useState<any>([]);
   const [visibleModalReport, setVisibleModalReport] = useState(false);
   const [idBookReported, setIdBookReported] = useState('');
+  const [itemEditComment, setItemEditComment] = useState<any>({});
+  const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
 
   useEffect(() => {
     if (dataBooks){
@@ -136,14 +142,6 @@ const BookList = (props: Prop) => {
       setDataSource(updatedData)
     }
   };
-  
-  // // console.log(dataSource)
-  // const handleLike_Dislike = async (itemId: string, action: string) => {
-  //   const res = await updateAction(itemId, action)
-  //   if (res.message === SUCCESS) {
-  //     refetch()
-  //   }
-  // }
 
   const handleKeyPress = (event: any, bookId: string) => {
     setBookId(bookId)
@@ -187,6 +185,24 @@ const BookList = (props: Prop) => {
       } else {
         message.error(res.message)
       }
+    }
+  }
+
+  const handleEditComment = (bookId: string, commentId: string) => {
+    setItemEditComment({
+      bookId,
+      commentId
+    })
+    setVisibleModalEditComment(true)
+  }
+
+  const handleDeleteComment = async (bookId: string, commentId: string) => {
+    const res = await deleteBookComment(bookId, commentId);
+    if (res.message === SUCCESS) {
+      message.success('Delete comment succes')
+      refetch();
+    } else {
+      message.error(res.message)
     }
   }
   
@@ -315,7 +331,7 @@ const BookList = (props: Prop) => {
               }
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
+                avatar={<Avatar shape='square' size={42} src={'https://joesch.moe/api/v1/random'}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -345,12 +361,46 @@ const BookList = (props: Prop) => {
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
                 {item?.comments?.map((comment: any) =>
-                  <Meta
+                  <div 
                     key={comment._id}
                     className={styles.comment}
-                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
-                    description={<p className={styles.commentContent}>{comment.content}</p>}
-                  />
+                  >
+                    <Meta
+                      key={comment._id}
+                      avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                      description={<p className={styles.commentContent}>{comment.content}</p>}
+                    />
+                     {(comment.createdBy._id === userData?._id) ?
+                      <Dropdown 
+                        menu={
+                          { 
+                            items: [
+                              {
+                                label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                key: '0',
+                              },
+                              {
+                                type: 'divider',
+                              },
+                              {
+                                label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                key: '2',
+                                danger: true,
+                              },
+                            ] 
+                          }
+                        } 
+                        trigger={['click']}
+                      >
+                        <div
+                          className={styles.commentOption}
+                        >
+                          <EllipsisOutlined/>
+                        </div>
+                      </Dropdown>
+                      : null
+                    }
+                  </div>
                   ) 
                 }
                 <div className={styles.commentArea}>
@@ -411,6 +461,13 @@ const BookList = (props: Prop) => {
           </Form.Item>
         </Form>
       </Modal>
+      <ModalEditComment
+        visible={visibleModalEditComment}
+        setVisivle={setVisibleModalEditComment}
+        bookId={itemEditComment?.bookId}
+        commentId={itemEditComment?.commentId}
+        refetch={refetch}
+      />  
     </Spin>
   )
 }

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Form, List, Popover, Statistic, Tag, message } from 'antd'
+import { Avatar, Card, Dropdown, Form, List, Popover, Statistic, Tag, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
   DislikeOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
@@ -16,7 +19,10 @@ import { TextArea } from '~/components/atoms/Input';
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom';
 
-import { setCommentPost, updateActionPost } from '~/api/post';
+import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
+import ModalEditComment from '~/components/atoms/ModalEditComment';
+import ImageList from '../ImageList';
+import ModalPost from '../PostModal';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -34,6 +40,11 @@ const PostList = (props: Prop) => {
   const [isLoadingComment, setIsLoadingComment] = useState(false)
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
+  const [itemEditComment, setItemEditComment] = useState<any>({});
+  const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
+
+  const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
+  const [postEditing, setPostEditing] = useState({});
 
   useEffect(() => {
     if (dataPosts){
@@ -129,14 +140,6 @@ const PostList = (props: Prop) => {
       setDataSource(updatedData)
     }
   };
-  
-  // // console.log(dataSource)
-  // const handleLike_Dislike = async (itemId: string, action: string) => {
-  //   const res = await updateAction(itemId, action)
-  //   if (res.message === SUCCESS) {
-  //     refetch()
-  //   }
-  // }
 
   const handleKeyPress = (event: any, postId: string) => {
     setPostId(postId)
@@ -154,6 +157,28 @@ const PostList = (props: Prop) => {
     } else {
       message.error(res.message)
     }
+  }
+
+ const handleEditComment = (postId: string, commentId: string) => {
+    setItemEditComment({
+      postId,
+      commentId
+    })
+    setVisibleModalEditComment(true)
+  }
+
+  const handleDeleteComment = async (postId: string, commentId: string) => {
+    const res = await deletePostComment(postId, commentId);
+    if (res.message === SUCCESS) {
+      message.success('Delete comment succes')
+      refetch();
+    } else {
+      message.error(res.message)
+    }
+  }
+  const handleEditPost = (post: any) => {
+    setVisibleModalEditPost(true)
+    setPostEditing(post)
   }
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -177,7 +202,7 @@ const PostList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.like?.map((userLike: any) => 
-                          <div key={userLike.user._id}>
+                          <div key={userLike.user?._id}>
                             {userLike.user?.firstName} {userLike.user?.lastName}
                           </div>
                         )
@@ -192,7 +217,7 @@ const PostList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.like?.map((userLike: any) => 
-                          <div key={userLike.user._id}>
+                          <div key={userLike.user?._id}>
                             {userLike?.user?.firstName} {userLike?.user?.lastName}
                           </div>
                         )
@@ -213,8 +238,8 @@ const PostList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike.user._id}>
-                            {userDislike.user.firstName} {userDislike.user.lastName}
+                          <div key={userDislike.user?._id}>
+                            {userDislike.user?.firstName} {userDislike.user?.lastName}
                           </div>
                         )
                       )}
@@ -228,8 +253,8 @@ const PostList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike.user._id}>
-                            {userDislike.user.firstName} {userDislike.user.lastName}
+                          <div key={userDislike.user?._id}>
+                            {userDislike.user?.firstName} {userDislike.user?.lastName}
                           </div>
                         )
                       )}
@@ -251,7 +276,7 @@ const PostList = (props: Prop) => {
                   } 
                 />,
               ]}
-              // extra={format(new Date(item.createdAt), DATE)}
+              extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
@@ -275,6 +300,7 @@ const PostList = (props: Prop) => {
               />
               <div className={styles.postContent}>
                 {item.content}
+                <ImageList imageList={item.images}/>
               </div>
             </Card>
             
@@ -282,12 +308,46 @@ const PostList = (props: Prop) => {
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
                 {item?.comments?.map((comment: any) =>
-                  <Meta
+                  <div 
                     key={comment._id}
                     className={styles.comment}
-                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
-                    description={<p className={styles.commentContent}>{comment.content}</p>}
-                  />
+                  >
+                    <Meta
+                      key={comment._id}
+                      avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                      description={<p className={styles.commentContent}>{comment.content}</p>}
+                    />
+                    { (comment.createdBy._id === userData?._id) ?
+                      <Dropdown 
+                        menu={
+                          { 
+                            items: [
+                              {
+                                label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                key: '0',
+                              },
+                              {
+                                type: 'divider',
+                              },
+                              {
+                                label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                key: '2',
+                                danger: true,
+                              },
+                            ] 
+                          }
+                        } 
+                        trigger={['click']}
+                      >
+                        <div
+                          className={styles.commentOption}
+                        >
+                          <EllipsisOutlined/>
+                        </div>
+                      </Dropdown>
+                      : null
+                    }
+                  </div>
                   ) 
                 }
                 <div className={styles.commentArea}>
@@ -314,6 +374,19 @@ const PostList = (props: Prop) => {
           </div>
         )}
       />
+    <ModalEditComment
+      visible={visibleModalEditComment}
+      setVisivle={setVisibleModalEditComment}
+      postId={itemEditComment?.postId}
+      commentId={itemEditComment?.commentId}
+      refetch={refetch}
+    />  
+    <ModalPost 
+      postData={postEditing}
+      visible={visibleModalEditPost}
+      setVisible={setVisibleModalEditPost}
+      afterSuccess={refetch}
+    />
     </Spin>
   )
 }
