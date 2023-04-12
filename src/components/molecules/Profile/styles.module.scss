@@ -1,0 +1,37 @@
+.profileContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  justify-content: space-between;
+  .avatarContainer {
+    display: flex;
+    margin-right: 24px;
+  }
+
+  .infoGroup{
+    display: flex;
+    flex-direction: column;
+    p{
+      margin: 5px 0;
+    }
+    margin-left: 1rem;
+  }
+  .btnGroup {
+    align-self: flex-end;
+    justify-self: flex-end;
+  }
+  
+
+}
+
+@media screen and (max-width: 768px) {
+  .profileContainer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .avatarContainer {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+  }
+}

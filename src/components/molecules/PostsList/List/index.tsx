@@ -258,7 +258,7 @@ const PostList = (props: Prop) => {
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
-                    to={`/ideas/lists/${item._id}`}
+                    to={`/userProfile/${item.updatedBy?._id}`}
                   >
                     {item.updatedBy?.firstName} {item.updatedBy?.lastName}
                   </Link>

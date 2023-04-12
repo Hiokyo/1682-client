@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 
@@ -17,6 +17,7 @@ import Header from '~/components/molecules/Header';
 import Sider from 'antd/es/layout/Sider';
 import history from '~/utils/history';
 import SideNav from '~/components/molecules/Sidebar';
+import FriendList from '~/components/molecules/FriendList';
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -32,6 +33,22 @@ function Auth(props: Props) {
 
   const { pathname } = useLocation();
   const convertPathName = pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
+
+  const [friends, setFriends] = useState<any>([
+    {
+      id: '1',
+      name: 'Alice',
+      avatarUrl: 'https://randomuser.me/api/portraits/women/1.jpg',
+      isOnline: true,
+    },
+    {
+      id: '2',
+      name: 'Bob',
+      avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+      isOnline: false,
+    },
+    // ...
+  ]);
 
   const menuLeft: MenuItem[] = useMemo(() => [
     {
@@ -84,6 +101,9 @@ function Auth(props: Props) {
             <SideNav menus={menuLeft}/>
           </Sider>
           <Content className={styles.contentList}>{children}</Content>
+          <div className={styles.friendListContainer}>
+            <FriendList/>
+          </div>
         </Layout>
       </Content>
     <Footer className={styles.footer} style={{ textAlign: 'center' }}>1682 ©2023 Created by Quan - Hieu</Footer>

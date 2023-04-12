@@ -21,6 +21,12 @@
   height: 100vh;
   width: 100vw;
 }
+.friendListContainer{
+  float: right;
+  width: 15vw;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  height: 75vh;
+}
 .contentMain{
   padding: 0 50px;
 }
@@ -28,36 +34,7 @@
   padding: 0 24px;
   height: 75vh
 }
-// .pageWrapper {
-//   height: 100vh;
-//   width: 100vw;
-//   .mainWrapper {
-//     max-height: 100%;
-//     flex: 1;
-//     overflow-y: auto;
-//     .coverContent {
-//       display: flex;
-//       overflow: hidden;
-//       .pageContent {
-//         flex: 1;
-//         margin-top: 48px;
-//         &.headerTop {
-//           margin-top: 0;
-//           max-width: 100vw;
-//         }
-//       }
-//     }
-//   }
-// }
 
-// :global{
-//   .ant-picker-month-panel{
-//     width: 210px !important;
-//   }
-//   .ant-picker-month-panel .ant-picker-content{
-//     height: 180px !important;
-//   }
-// }
 
 @media only screen and (max-width: 500px) {
   ::-webkit-scrollbar {

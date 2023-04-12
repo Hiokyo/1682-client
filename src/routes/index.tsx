@@ -14,6 +14,7 @@ const BookDetail = loadable(() => import('~/pages/books/[id]'));
 const Profile = loadable(() => import('~/pages/profile'));
 const Setting = loadable(() => import('~/pages/systemSetting'));
 const ResetPasswordCode = loadable(() => import('~/pages/getResetPwCode'));
+const userProfile = loadable(() => import('~/pages/userProfile/[id]'));
 
 
 export const ROUTES = {
@@ -27,6 +28,7 @@ export const ROUTES = {
   Profile: '/profile',
   Setting: '/setting',
   BookDetail: (id: number | string) => `/books/lists/${id}`,
+  userProfile: (id: number | string) => `/userProfile/${id}`,
   // no auth
   Login: '/login',
   ResetPasswordCode: '/get-code',
@@ -37,7 +39,10 @@ const routes = [
   { exact: true, path: ROUTES.Home, component: Home, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Posts, component: Posts, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Books, component: Books, layout: Auth, isAuth: true },
+
   { exact: true, path: ROUTES.BookDetail(':id'), component: BookDetail, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.userProfile(':id'), component: userProfile, layout: Auth, isAuth: true },
+  
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Campaign, component: Campaign, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },
