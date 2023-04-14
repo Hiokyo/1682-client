@@ -1,17 +1,21 @@
 .dashboardContainer {
-  // background-color: aquamarine;
-  height: 100%;
-  
-  .chart{
-    height: 42%;
-    background-color: aliceblue;
-    border-radius: 0.5rem;
-    div[size-sensor-id="1"],
-    div[size-sensor-id="2"],
-    div[size-sensor-id="3"],
-    div[size-sensor-id="4"]{
-      height: 90% !important;
-    }
-    
+  max-height: 75vh !important;
+  overflow: hidden;
+  overflow-y: scroll;
+  .cardColumnChart{
+    background-image: linear-gradient(to top right, #0038a4, #978aff);
+  }
+  .cardInfoValue{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .statistic{
+    display: flex;
+    align-items: center;
+  }
+  .dualLineChart{
+    height: 100%;
   }
 }
