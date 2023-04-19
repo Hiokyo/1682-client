@@ -1,22 +1,47 @@
-.mainContainer {
-  margin: 30px;
-  .profile {
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 2px;
-    height: 70vh;
-    width: 70%;
-    margin: auto;
+.profileContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  justify-content: space-between;
+
+  :global {
+    .ant-upload{
+      width: 120px !important;
+      height: 120px !important;
+    }
+    .ant-upload-wrapper{
+      width: 120px !important;
+    }
+  }
+  .avatarContainer {
+    display: flex;
+    margin-right: 24px;
+  }
+
+  .infoGroup{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    .editInfo {
-      align-self: end;
-      margin: 16px;
+    p{
+      margin: 5px 0;
     }
-    .info {
-      width: 70%;
-      margin-bottom: 15vh;
+    margin-left: 1rem;
+  }
+  .btnGroup {
+    align-self: flex-end;
+    justify-self: flex-end;
+  }
+  
+
+}
+
+@media screen and (max-width: 768px) {
+  .profileContainer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .avatarContainer {
+      margin-right: 0;
+      margin-bottom: 16px;
     }
   }
 }

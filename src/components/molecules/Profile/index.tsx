@@ -1,4 +1,4 @@
-import { Avatar, Button, Col, Divider, Row, Tooltip, Typography, message } from 'antd';
+import { Avatar, Button, Col, Divider, Row, Tabs, TabsProps, Tooltip, Typography, message } from 'antd';
 import React, { useState } from 'react'
 import { useUser } from '~/hooks/useUser';
 import { UserOutlined } from '@ant-design/icons';
@@ -6,15 +6,23 @@ import Spin from '~/components/atoms/Spin';
 import styles from './styles.module.scss'
 import { addFriend } from '~/api/friend';
 import { SUCCESS } from '~/utils/constant';
+import {UserDeleteOutlined} from '@ant-design/icons'
+import { useAppSelector } from '~/store';
+import Infomations from './Infomations';
+import Friends from './Friends';
+import ChatModal from '~/components/atoms/ChatModal';
+import Post from './Post';
 interface Props{
   userId: any;
 }
 
 const Profile = (props: Props) => {
   const {userId} = props;
-  const {data, isLoading, isFetching} = useUser(userId);
+  const { data, isLoading, isFetching } = useUser(userId);
   const userData = data?.data;
-  const [adding, setAdding] = useState(false)
+  const [adding, setAdding] = useState(false);
+  const me = useAppSelector((state) => state.userInfo.userData);
+  const [openChat, setOpenChat] = useState(false);
 
   const handleAddFriend = async () => {
     setAdding(true)
@@ -26,6 +34,28 @@ const Profile = (props: Props) => {
     }
     setAdding(false);
   }
+
+  const onCloseChat = () => {
+    setOpenChat(false);
+  };
+
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: `Post`,
+      children: <Post data={userData}/>,
+    },
+    {
+      key: '2',
+      label: `Infomation`,
+      children: <Infomations data={userData}/>,
+    },
+    {
+      key: '3',
+      label: `Friend`,
+      children: <Friends data={userData}/>,
+    }
+  ];
   return (
     <Spin spinning={isLoading || isFetching}>
       <div className={styles.profileContainer}>
@@ -54,25 +84,23 @@ const Profile = (props: Props) => {
           </div>
         </div>
         <div className={styles.btnGroup}>
-          <Button disabled={adding} type="primary" onClick={handleAddFriend}>Add Friend</Button>
-          <Button className='ml-2' >Chat now</Button>
+          { me && me?.following?.find((item: any) => item.user._id === userId) ? 
+            <Button icon={<UserDeleteOutlined />}>Friend</Button>
+            :
+            <Button disabled={adding} type="primary" onClick={handleAddFriend}>Add Friend</Button>
+          }
+          <Button type='primary' className='ml-2' onClick={() => setOpenChat(true)}>Chat now</Button>
         </div>
       </div>
       <Divider />
-      <Row gutter={[16, 16]}>
-        <Col>
-          <Typography.Text strong>Address:</Typography.Text>
-          <Typography.Text>{userData?.address}</Typography.Text>
-        </Col>
-        <Col>
-          <Typography.Text strong>Date of Birth:</Typography.Text>
-          <Typography.Text>{userData?.dob}</Typography.Text>
-        </Col>
-        <Col>
-          <Typography.Text strong>Gender:</Typography.Text>
-          <Typography.Text>{userData?.gender}</Typography.Text>
-        </Col>
-      </Row>
+        <Tabs defaultActiveKey="1" items={items} />
+      <Divider />
+      
+      <ChatModal
+        open={openChat}
+        onClose={onCloseChat}
+        userId={userId}
+      />
     </Spin>
 
   );

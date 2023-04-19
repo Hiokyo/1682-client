@@ -1,0 +1,13 @@
+.friend{
+  :global {
+    .ant-card-body {
+      display: flex;
+    }
+    .ant-card-meta-detail{
+      display: flex;
+      margin-left: 1.5rem;
+      justify-content: center;
+      align-items: center !important;
+    }
+  }
+}

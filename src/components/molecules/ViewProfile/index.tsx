@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Descriptions, Divider, Upload, message } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Tabs, TabsProps, Tooltip, Typography, Upload, message } from 'antd';
 import { useUser } from '~/hooks/useUser';
 import { format } from 'date-fns';
 import { DATE, SUCCESS, Status, UserStatus, userIcon } from '~/utils/constant';
@@ -14,6 +14,9 @@ import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import styles from './styles.module.scss';
 import { getCookie } from '~/utils/cookie';
+import Post from '../Profile/Post';
+import Infomations from '../Profile/Infomations';
+import Friends from '../Profile/Friends';
 
 const ProfileModal = loadable(() => import('~/components/molecules/ViewProfile/ModalEditProfile'));
 const Spin = loadable(() => import('~/components/atoms/Spin'));
@@ -23,7 +26,24 @@ const ViewProfile = () => {
   const { data, isLoading, isFetching, refetch } = useUser(userId)
   const userData = data?.data;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
-  const status: Status['value'] = userData?.status;
+
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: `Post`,
+      children: <Post data={userData}/>,
+    },
+    {
+      key: '2',
+      label: `Infomation`,
+      children: <Infomations data={userData}/>,
+    },
+    {
+      key: '3',
+      label: `Friend`,
+      children: <Friends data={userData}/>,
+    }
+  ];
 
   const beforeUpload = (file: RcFile): boolean => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -56,78 +76,66 @@ const ViewProfile = () => {
   };
   
   return (
-    <div>
-      <div className={styles.mainContainer}>
-        <Spin spinning={isLoading || isFetching}>
-        <div className={styles.profile}>
-          <div className={styles.editInfo}>
-            <Button
-              onClick={() => setIsModalVisible(true)}
-            >
-              <Svg src={iconEdit}/>
-            </Button>
-          </div>
+      <Spin spinning={isLoading || isFetching}>
+        <div className={styles.profileContainer}>
           <div className={styles.avatarContainer}>
             <Upload
               name="avatar"
               listType="picture-circle"
-              className="avatar-uploader"
               showUploadList={false}
               accept="image/*"
               beforeUpload={beforeUpload}
               customRequest={(file: any ) => handleImageUpload(file)}
             >
-              {userData?.avatar ? (
-                <Avatar 
-                  size={100}
-                  src={userData?.avatar}
-                  
-                />
-              ) : (
-                <Avatar 
-                  size={100}
-                  icon={<UserOutlined />}
-                />
-              )}
-            </Upload>
-            <div className='mt-2 text-center'>
-              {userData?.firstName} &nbsp; {userData?.lastName}
-            </div>
+                {userData?.avatar ? (
+                  <Avatar 
+                    size={120}
+                    src={userData?.avatar}
+                    
+                  />
+                ) : (
+                  <Avatar 
+                    size={120}
+                    icon={<UserOutlined />}
+                  />
+                )}
+              </Upload>
+              <div className={styles.infoGroup}>
+                <Typography.Title 
+                  level={3}
+                  style={{marginBottom: 0}}
+                >
+                  {userData?.firstName} {userData?.lastName}
+                </Typography.Title>
+                <p>{userData?.role}</p>
+                <Avatar.Group>
+                  { 
+                    userData?.following?.map((item: any) => (
+                      <Tooltip 
+                        title={`${item.user.firstName} ${item.user.lastName}`} 
+                        placement="bottom"
+                      >
+                        <Avatar src="https://joesch.moe/api/v1/random?key=1" />
+                      </Tooltip>
+                    ))
+                  }
+                </Avatar.Group>
+              </div>
           </div>
-          <Divider/>
-          <Descriptions
-            className={styles.info}
-            column={{xl: 3, sm: 2,  xs: 1}}
-          >
-            <Descriptions.Item label="Role">{userData?.role}</Descriptions.Item>
-            <Descriptions.Item label="Telephone">{userData?.phoneNumber}</Descriptions.Item>
-            <Descriptions.Item label="Email">{userData?.email}</Descriptions.Item>
-            <Descriptions.Item label="Gender">{userData?.gender}</Descriptions.Item>
-            <Descriptions.Item label="Birthday">
-              {userData?.dob && format(new Date(userData.dob), DATE)}
-            </Descriptions.Item>
-            <Descriptions.Item label="Address">
-              {userData?.address || '-'}
-            </Descriptions.Item>
-            <Descriptions.Item label="Status">
-              {userData?.status}
-              <Svg
-                className='ml-2'
-                src={userIcon[UserStatus[status] ?? -1]}
-                alt="status"
-              />
-            </Descriptions.Item>
-          </Descriptions>
+          <div className={styles.btnGroup}>
+            <Button type="primary" onClick={() => setIsModalVisible(true)}>Edit infomation</Button>
+          </div>
         </div>
-        </Spin>
-      </div>
-      <ProfileModal
-        visible={isModalVisible}
-        userData={userData}
-        setVisible={setIsModalVisible}
-        afterSuccess={refetch}
-      />
-    </div>
+        <Divider />
+          <Tabs defaultActiveKey="1" items={items} />
+        <Divider />
+        <ProfileModal
+          visible={isModalVisible}
+          userData={userData}
+          setVisible={setIsModalVisible}
+          afterSuccess={refetch}
+        />
+      </Spin>
   )
 }
 

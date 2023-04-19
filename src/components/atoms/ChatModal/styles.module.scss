@@ -1,0 +1,32 @@
+.modalChat {
+  .listChat {
+    .chatBorder {
+      display: flex;
+      flex-direction: column;
+  
+      .sender {
+        width: fit-content;
+        background-color: #DCF8C6;
+        border-radius: 8px;
+        padding: 8px 16px;
+        margin: 8px 0;
+        align-self: flex-end;
+        float: right;
+      }
+      
+      .receiver {
+        width: fit-content;
+        background-color: #F0F0F0;
+        border-radius: 8px;
+        padding: 8px 16px;
+        margin: 8px 0;
+        align-self: flex-start;
+        float: left;
+      }
+    }
+  }
+
+  .inputChat {
+
+  }
+}
