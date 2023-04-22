@@ -106,6 +106,7 @@ const Profile = (props: Props) => {
               { 
                 userData?.followers?.map((item: any) => (
                   <Tooltip 
+                    key={item.user._id}
                     title={`${item.user.firstName} ${item.user.lastName}`} 
                     placement="bottom"
                   >
@@ -117,18 +118,20 @@ const Profile = (props: Props) => {
           </div>
         </div>
         <div className={styles.btnGroup}>
-          { me && me?.following?.find((item: any) => item.user._id === userId) ? 
+          { me && me?.following?.find((item: any) => (item.user._id === userId)) ? 
             <Button icon={<UserDeleteOutlined />}>Friend</Button>
-            :
+            : me?._id !== userId &&
             <Button disabled={adding} type="primary" onClick={handleAddFriend}>Add Friend</Button>
           }
-          <Button 
-            type='primary' 
-            className='ml-2' 
-            onClick={() => handleClick(userId)}
-          >
-            Chat now
-          </Button>
+          { me && me?._id !== userId &&
+            <Button 
+              type='primary' 
+              className='ml-2' 
+              onClick={() => handleClick(userId)}
+            >
+              Chat now
+            </Button>
+          }
         </div>
       </div>
       <Divider />

@@ -1,5 +1,5 @@
-import { List, Avatar, message } from "antd";
-import React, { useState } from "react";
+import { List, Avatar, message, Menu } from "antd";
+import React, { useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 import { useFriends } from "~/hooks/useFriends";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
@@ -7,7 +7,10 @@ import Spin from "~/components/atoms/Spin";
 import ChatModal from "~/components/atoms/ChatModal";
 import { setMessages, setReceiver } from "~/store/chatMessages";
 import { getMessages } from "~/api/user";
+import type { MenuProps } from 'antd';
 
+
+// type MenuItem = Required<MenuProps>['items'][number];
 const FriendList = () => {
   const userData = useAppSelector((state) => state.userInfo.userData);
 
@@ -19,7 +22,27 @@ const FriendList = () => {
     userId: userData?._id,
   });
 
+  // const [collapsed, setCollapsed] = useState(false);
+  // const [openKeys, setOpenKeys] = useState<string[]>([]);
+  // const [selectedKey, setSelectedKey] = useState('1');
   const friends = data?.data?.following;
+
+  // function getItem(
+  //   label: React.ReactNode,
+  //   key: React.Key,
+  //   icon?: React.ReactNode,
+  //   children?: MenuItem[],
+  //   type?: 'group',
+  // ): MenuItem {
+  //   return {
+  //     key,
+  //     icon,
+  //     children,
+  //     label,
+  //     type,
+  //   } as MenuItem;
+  // }
+
   const onClose = () => {
     setOpen(false);
   };
@@ -32,7 +55,6 @@ const FriendList = () => {
 
   const handleClick = async (receiver: string) => {
     dispatch(setReceiver(receiver));
-
     try {
       const res = await getMessages(receiver);
 
@@ -69,6 +91,22 @@ const FriendList = () => {
     return messages[messages.length - 1].content;
   };
 
+  // const itemsInMenu = useMemo(() => {
+  //   if (friends) {
+  //     return friends.map((friend: any) => (
+  //       getItem(
+  //         <List.Item.Meta
+  //           title={friend.user.firstName + " " + friend.user.lastName}
+  //           description={getLastMessage(friend.user._id)}
+  //         />,
+  //         friend.user._id,
+  //         <Avatar size={40} src={friend.user.avatar} />,
+  //         [],
+  //       )
+  //     ))
+  //   }
+  // }, [friends])
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -85,11 +123,21 @@ const FriendList = () => {
               handleClick(item.user._id);
             }}
           >
-            <List.Item.Meta
-              avatar={<Avatar size={40} src={item.user.avatar} />}
-              title={item.user.firstName + " " + item.user.lastName}
-              description={getLastMessage(item.user._id)}
-            />
+            {/* Show only the avatar when screen size is small */}
+            <div className={styles.avatarContainer}>
+              <List.Item.Meta
+                avatar={<Avatar size={30} src={item.user.avatar} />}
+              />
+            </div>
+
+            {/* Show the name and last message when screen size is large */}
+            <div className={styles.detailsContainer}>
+              <List.Item.Meta
+                avatar={<Avatar size={40} src={item.user.avatar} />}
+                title={item.user.firstName + " " + item.user.lastName}
+                description={getLastMessage(item.user._id)}
+              />
+            </div>
           </List.Item>
         )}
       />

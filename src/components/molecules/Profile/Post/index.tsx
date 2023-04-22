@@ -7,10 +7,10 @@ interface Props{
 
 const Post = (props: Props) => {
   const {data} = props;
-  const useId  = data?._id;
-  const {data: postList} = usePostByUser(useId) 
+  const userId  = data?._id;
+  const {data: postList} = usePostByUser({userId}) 
   console.log(postList?.data)
-  
+
   return (
     <div>index</div>
   )

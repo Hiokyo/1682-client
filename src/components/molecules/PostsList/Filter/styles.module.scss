@@ -48,21 +48,20 @@
       .btnAdd {
         display    : flex;
         align-items: center;
+        p {
+          margin: 0;
+        }
         .iconPlus {
           width       : 10.75px;
           height      : 11.25px;
           margin-right: 8px;
         }
       }
-
-      .btnAdd:after{
-        content:" New post ";
-      }
     }
   }
 }
 
-@media only screen and (max-width: 1024px) and (min-width: 501px) {
+@media only screen and (max-width: 1024px) and (min-width: 650px) {
   .container {
     background: #fff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
@@ -114,22 +113,20 @@
         .btnAdd {
           display    : flex;
           align-items: center;
+          p {
+            margin: 0;
+          }
           .iconPlus {
             width       : 10.75px;
             height      : 11.25px;
-            margin-right: 8px;
           }
-        }
-
-        .btnAdd:after{
-          content:"New post";
         }
       }
     }
   }
 }
 
-@media only screen and (max-width: 500px){
+@media only screen and (max-width: 650px){
   .container {
     background: #fff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
@@ -180,17 +177,15 @@
   
         .btnAdd {
           display    : flex;
-          align-items: center;
-          padding: 4px 5px;
+          align-items: center;;
           .iconPlus {
             width       : 10.75px;
             height      : 11.25px;
-            margin-right: 8px;
+            margin: 0;
           }
-        }
-
-        .btnAdd:after{
-          content:"New post";
+          .btnText {
+            display: none;
+          }
         }
       }
     }

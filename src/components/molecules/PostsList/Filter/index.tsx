@@ -67,6 +67,7 @@ const Filter = (props: Props) => {
             </Form>
             <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
               <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
+              <p className={styles.btnText}> New post</p>
             </Button>
           </div>
         </div>

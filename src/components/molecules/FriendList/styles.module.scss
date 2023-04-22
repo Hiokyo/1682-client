@@ -7,8 +7,12 @@
     .ant-list-item-meta-avatar {
       align-self: center;
     }
+    .ant-menu-submenu,
+    .ant-menu-submenu-title{
+      min-height: 55px !important;
+    }
   }
-
+  
   .friendItem {
     cursor: pointer;
     background-image: linear-gradient(#e6f4ff 0 0);
@@ -23,5 +27,32 @@
       background-size: 200% 100%;
       background-position: 100% 100%;
     }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  :global {
+    .ant-list-item {
+      padding: 12px 14px !important;
+    }
+  }
+  .avatarContainer {
+    width: 100%;
+    display: block;
+  }
+  
+  .detailsContainer {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .avatarContainer {
+    display: none;
+  }
+  
+  .detailsContainer {
+    width: 100%;
+    display: flex;
   }
 }
