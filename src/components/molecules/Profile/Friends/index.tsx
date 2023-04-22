@@ -15,7 +15,9 @@ const Friends = (props: Props) => {
       grid={{ gutter: 16, column: 3 }}
       dataSource={friendData}
       renderItem={(friend: any) => (
-        <List.Item>
+        <List.Item
+          key={friend.user?._id}
+        >
           <Card className={styles.friend}>
             <Avatar 
               src={`https://joesch.moe/api/v1/random`}

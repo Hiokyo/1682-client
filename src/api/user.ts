@@ -18,3 +18,6 @@ export const sendMessage = (receiver: string, content: string) =>
   sendPut(`/user/chat/${receiver}`, { content });
 
 export const getAllMessages = () => sendGet("/user/all-messages");
+
+export const getPostByUser = (params: any) => sendGet(`/user/post/list`, params);
+
