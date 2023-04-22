@@ -3,7 +3,7 @@
     .chatBorder {
       display: flex;
       flex-direction: column;
-  
+
       .sender {
         width: fit-content;
         background-color: #DCF8C6;
@@ -13,7 +13,7 @@
         align-self: flex-end;
         float: right;
       }
-      
+
       .receiver {
         width: fit-content;
         background-color: #F0F0F0;
@@ -27,6 +27,8 @@
   }
 
   .inputChat {
-
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
   }
 }

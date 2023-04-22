@@ -1,33 +1,55 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
-import routes, { ROUTES } from '~/routes';
-import Blank from '~/layouts';
-import { getCookie } from '~/utils/cookie';
-import NotFound from '~/pages/404';
-import { useAppDispatch,  } from '~/store';
-import { useUser } from '~/hooks/useUser';
-import { setUserInfo } from '~/store/userInfo';
+import routes, { ROUTES } from "~/routes";
+import Blank from "~/layouts";
+import { getCookie } from "~/utils/cookie";
+import NotFound from "~/pages/404";
+import { useAppDispatch } from "~/store";
+import { useUser } from "~/hooks/useUser";
+import { setUserInfo, setUserMessages } from "~/store/userInfo";
+import { setUserId } from "~/store/chatMessages";
+import { getAllMessages } from "~/api/user";
+import { message } from "antd";
+// import { socket } from "~/socket";
 
 function Wrapper() {
-  const token = getCookie('token');
-  const userId = getCookie('userId')
+  const token = getCookie("token");
+  const userId = getCookie("userId");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: user, refetch } = useUser(userId);
+  const { data: user } = useUser(userId);
 
   useEffect(() => {
+    const getSelfMessages = async () => {
+      try {
+        const res = await getAllMessages();
+
+        if (res && !res.errorCode && !res.errors.length) {
+          const { data } = res;
+          dispatch(setUserMessages(data));
+        } else {
+          message.error("Fail to load messages");
+        }
+      } catch (error) {
+        message.error("Fail to load messages");
+      }
+    };
+
     if (!token) {
-      navigate(ROUTES.Login)
+      navigate(ROUTES.Login);
+    } else {
+      getSelfMessages();
     }
-  }, [token, dispatch])
+  }, [token, dispatch]);
 
   useEffect(() => {
-    if (user){
-      dispatch(setUserInfo(user?.data))
+    if (user) {
+      dispatch(setUserInfo(user?.data));
+      dispatch(setUserId(user.data._id));
     }
-  }, [user?.data?._id, dispatch])
-  
+  }, [user?.data?._id, dispatch]);
+
   return (
     <Routes>
       {routes.map((route, index) => {
@@ -38,15 +60,14 @@ function Wrapper() {
               key={index}
               path={route.path}
               element={
-                (
-                  <React.Fragment>
-                    <Blank>
-                      <Layout>
-                        <route.component />
-                      </Layout>
-                    </Blank>
-                  </React.Fragment>
-                )}
+                <React.Fragment>
+                  <Blank>
+                    <Layout>
+                      <route.component />
+                    </Layout>
+                  </Blank>
+                </React.Fragment>
+              }
             />
           );
         }
@@ -54,7 +75,7 @@ function Wrapper() {
           <Route
             key={index}
             path={route.path}
-            element={(
+            element={
               <React.Fragment>
                 <Blank>
                   <Layout>
@@ -62,7 +83,7 @@ function Wrapper() {
                   </Layout>
                 </Blank>
               </React.Fragment>
-            )}
+            }
           />
         );
       })}

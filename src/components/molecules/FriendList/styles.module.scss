@@ -1,20 +1,25 @@
 .listContainer {
   :global {
-    .ant-list-item-meta-title{
+    .ant-list-item-meta-title {
       margin: 0;
     }
-    .ant-list-item-meta-avatar{
+
+    .ant-list-item-meta-avatar {
       align-self: center;
     }
   }
+
   .friendItem {
+    cursor: pointer;
     background-image: linear-gradient(#e6f4ff 0 0);
-    background-size: 200% .08em; /* .08em is our fixed height; modify as needed. */
-    background-position:  200% 100%;
+    background-size: 200% .08em;
+    /* .08em is our fixed height; modify as needed. */
+    background-position: 200% 100%;
     background-repeat: no-repeat;
-    transition: background-size .3s, background-position .3s .3s;
+    transition: background-size .15s, background-position .15s .15s;
+
     &:hover {
-      transition: background-size .3s .3s, background-position .3s;
+      transition: background-size .15s .15s, background-position .15s;
       background-size: 200% 100%;
       background-position: 100% 100%;
     }

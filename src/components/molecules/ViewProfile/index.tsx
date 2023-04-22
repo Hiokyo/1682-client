@@ -1,48 +1,55 @@
-import React, { useState } from 'react';
-import { Avatar, Button, Descriptions, Divider, Tabs, TabsProps, Tooltip, Typography, Upload, message } from 'antd';
-import { useUser } from '~/hooks/useUser';
-import { format } from 'date-fns';
-import { DATE, SUCCESS, Status, UserStatus, userIcon } from '~/utils/constant';
+import React, { useState } from "react";
 import {
-  UserOutlined
-} from '@ant-design/icons'
-import { RcFile } from 'antd/es/upload';
-import { setAvatar } from '~/api/user';
+  Avatar,
+  Button,
+  Divider,
+  Tabs,
+  TabsProps,
+  Tooltip,
+  Typography,
+  Upload,
+  message,
+} from "antd";
+import { useUser } from "~/hooks/useUser";
+import { SUCCESS } from "~/utils/constant";
+import { UserOutlined } from "@ant-design/icons";
+import { RcFile } from "antd/es/upload";
+import { setAvatar } from "~/api/user";
 
-import iconEdit from '~/assets/images/iconEdit.svg';
-import Svg from '~/components/atoms/Svg';
-import loadable from '~/utils/loadable';
-import styles from './styles.module.scss';
-import { getCookie } from '~/utils/cookie';
-import Post from '../Profile/Post';
-import Infomations from '../Profile/Infomations';
-import Friends from '../Profile/Friends';
+import loadable from "~/utils/loadable";
+import styles from "./styles.module.scss";
+import { getCookie } from "~/utils/cookie";
+import Post from "../Profile/Post";
+import Infomations from "../Profile/Infomations";
+import Friends from "../Profile/Friends";
 
-const ProfileModal = loadable(() => import('~/components/molecules/ViewProfile/ModalEditProfile'));
-const Spin = loadable(() => import('~/components/atoms/Spin'));
+const ProfileModal = loadable(
+  () => import("~/components/molecules/ViewProfile/ModalEditProfile")
+);
+const Spin = loadable(() => import("~/components/atoms/Spin"));
 
 const ViewProfile = () => {
-  const userId = getCookie('userId')
-  const { data, isLoading, isFetching, refetch } = useUser(userId)
+  const userId = getCookie("userId");
+  const { data, isLoading, isFetching, refetch } = useUser(userId);
   const userData = data?.data;
-  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const items: TabsProps['items'] = [
+  const items: TabsProps["items"] = [
     {
-      key: '1',
+      key: "1",
       label: `Post`,
-      children: <Post data={userData}/>,
+      children: <Post data={userData} />,
     },
     {
-      key: '2',
+      key: "2",
       label: `Infomation`,
-      children: <Infomations data={userData}/>,
+      children: <Infomations data={userData} />,
     },
     {
-      key: '3',
+      key: "3",
       label: `Friend`,
-      children: <Friends data={userData}/>,
-    }
+      children: <Friends data={userData} />,
+    },
   ];
 
   const beforeUpload = (file: RcFile): boolean => {
@@ -59,7 +66,7 @@ const ViewProfile = () => {
   const handleImageUpload = async (file: any) => {
     try {
       if (!(file?.file instanceof Blob)) {
-        throw new Error('Invalid file type');
+        throw new Error("Invalid file type");
       }
       const reader = new FileReader();
       reader.readAsDataURL(file.file);
@@ -67,76 +74,75 @@ const ViewProfile = () => {
         const base64String = reader.result;
         const response = await setAvatar(userData?._id, { img: base64String });
         if (response.message === SUCCESS) {
-          refetch()
+          refetch();
         }
       };
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   return (
-      <Spin spinning={isLoading || isFetching}>
-        <div className={styles.profileContainer}>
-          <div className={styles.avatarContainer}>
-            <Upload
-              name="avatar"
-              listType="picture-circle"
-              showUploadList={false}
-              accept="image/*"
-              beforeUpload={beforeUpload}
-              customRequest={(file: any ) => handleImageUpload(file)}
-            >
-                {userData?.avatar ? (
-                  <Avatar 
-                    size={120}
-                    src={userData?.avatar}
-                    
-                  />
-                ) : (
-                  <Avatar 
-                    size={120}
-                    icon={<UserOutlined />}
-                  />
-                )}
-              </Upload>
-              <div className={styles.infoGroup}>
-                <Typography.Title 
-                  level={3}
-                  style={{marginBottom: 0}}
+    <Spin spinning={isLoading || isFetching}>
+      <div className={styles.profileContainer}>
+        <div className={styles.avatarContainer}>
+          <Upload
+            name="avatar"
+            listType="picture-circle"
+            showUploadList={false}
+            accept="image/*"
+            beforeUpload={beforeUpload}
+            customRequest={(file: any) => handleImageUpload(file)}
+          >
+            {userData?.avatar ? (
+              <Avatar size={120} src={userData?.avatar} />
+            ) : (
+              <Avatar size={120} icon={<UserOutlined />} />
+            )}
+          </Upload>
+
+          <div className={styles.infoGroup}>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              {userData?.firstName} {userData?.lastName}
+            </Typography.Title>
+
+            <p>{userData?.role}</p>
+
+            <Avatar.Group>
+              {userData?.following?.map((item: any) => (
+                <Tooltip
+                  key={item.user._id}
+                  title={`${item.user.firstName} ${item.user.lastName}`}
+                  placement="bottom"
                 >
-                  {userData?.firstName} {userData?.lastName}
-                </Typography.Title>
-                <p>{userData?.role}</p>
-                <Avatar.Group>
-                  { 
-                    userData?.following?.map((item: any) => (
-                      <Tooltip 
-                        title={`${item.user.firstName} ${item.user.lastName}`} 
-                        placement="bottom"
-                      >
-                        <Avatar src="https://joesch.moe/api/v1/random?key=1" />
-                      </Tooltip>
-                    ))
-                  }
-                </Avatar.Group>
-              </div>
-          </div>
-          <div className={styles.btnGroup}>
-            <Button type="primary" onClick={() => setIsModalVisible(true)}>Edit infomation</Button>
+                  <Avatar src="https://joesch.moe/api/v1/random?key=1" />
+                </Tooltip>
+              ))}
+            </Avatar.Group>
           </div>
         </div>
-        <Divider />
-          <Tabs defaultActiveKey="1" items={items} />
-        <Divider />
-        <ProfileModal
-          visible={isModalVisible}
-          userData={userData}
-          setVisible={setIsModalVisible}
-          afterSuccess={refetch}
-        />
-      </Spin>
-  )
-}
 
-export default ViewProfile
+        <div className={styles.btnGroup}>
+          <Button type="primary" onClick={() => setIsModalVisible(true)}>
+            Edit infomation
+          </Button>
+        </div>
+      </div>
+
+      <Divider />
+
+      <Tabs defaultActiveKey="1" items={items} />
+
+      <Divider />
+
+      <ProfileModal
+        visible={isModalVisible}
+        userData={userData}
+        setVisible={setIsModalVisible}
+        afterSuccess={refetch}
+      />
+    </Spin>
+  );
+};
+
+export default ViewProfile;
