@@ -17,6 +17,16 @@
           margin-right: 8px;
         }
       }
+      .btnBuyBook{
+        display    : flex;
+        align-items: center;
+        margin-right: 1rem;
+        .iconPlus {
+          width       : 10.75px;
+          height      : 11.25px;
+          margin-right: 8px;
+        }
+      }
   }
 }
 

@@ -22,6 +22,8 @@ import { getCookie } from "~/utils/cookie";
 import Post from "../Profile/Post";
 import Infomations from "../Profile/Infomations";
 import Friends from "../Profile/Friends";
+import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
+import storage from '~/utils/firebase';
 
 const ProfileModal = loadable(
   () => import("~/components/molecules/ViewProfile/ModalEditProfile")
@@ -63,21 +65,47 @@ const ViewProfile = () => {
     }
     return isJpgOrPng && isLt2M;
   };
-  const handleImageUpload = async (file: any) => {
+  // const handleImageUpload = async (file: any) => {
+  //   try {
+  //     if (!(file?.file instanceof Blob)) {
+  //       throw new Error("Invalid file type");
+  //     }
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file.file);
+  //     reader.onload = async () => {
+  //       const base64String = reader.result;
+  //       const response = await setAvatar(userData?._id, { img: base64String });
+  //       if (response.message === SUCCESS) {
+  //         refetch();
+  //       }
+  //     };
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const uploadFileToFirebase = async (doc: any) => {
+    const file = doc?.file;
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
     try {
-      if (!(file?.file instanceof Blob)) {
-        throw new Error("Invalid file type");
-      }
-      const reader = new FileReader();
-      reader.readAsDataURL(file.file);
-      reader.onload = async () => {
-        const base64String = reader.result;
-        const response = await setAvatar(userData?._id, { img: base64String });
-        if (response.message === SUCCESS) {
-          refetch();
-        }
+      // Wait for the upload to finish
+      const snapshot = await uploadTask;
+      
+      // Get the metadata using getMetadata() method
+      const metadata = await getMetadata(storageRef);
+  
+      // Create the result object with metadata and download URL
+      const result = {
+        name: metadata.name,
+        contentType: metadata.contentType,
+        url: await getDownloadURL(snapshot.ref)
       };
-    } catch (error) {
+      // Set the result in the state
+      // setMetaData(result);
+  
+    } catch (error: any) {
       console.error(error);
     }
   };
@@ -92,7 +120,7 @@ const ViewProfile = () => {
             showUploadList={false}
             accept="image/*"
             beforeUpload={beforeUpload}
-            customRequest={(file: any) => handleImageUpload(file)}
+            customRequest={(file: any) => uploadFileToFirebase(file)}
           >
             {userData?.avatar ? (
               <Avatar size={120} src={userData?.avatar} />

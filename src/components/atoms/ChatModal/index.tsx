@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Drawer, Input, List, message } from "antd";
 import styles from "./styles.module.scss";
 import { RootState, useAppDispatch, useAppSelector } from "~/store";
@@ -6,6 +6,8 @@ import { SendOutlined } from "@ant-design/icons";
 import { sendMessage } from "~/api/user";
 import { setMessages } from "~/store/chatMessages";
 import { socket } from "~/socket";
+import ScrollIntoView from "react-scroll-into-view";
+// import ScrollTo from "react-scroll-into-view";
 
 interface Props {
   userId: string;
@@ -15,7 +17,7 @@ interface Props {
 }
 const ChatModal = (props: Props) => {
   const { userId, open, onClose, receiverName } = props;
-
+  const lastItemRef = useRef<any>(null);
   const messages = useAppSelector(
     (state: RootState) => state.chatMessages.messages
   );
@@ -25,7 +27,11 @@ const ChatModal = (props: Props) => {
   );
 
   const dispatch = useAppDispatch();
-
+  useEffect(() => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
   const [value, setValue] = useState<string>("");
 
   const handleSend = async () => {
@@ -89,11 +95,13 @@ const ChatModal = (props: Props) => {
       <List
         dataSource={messages}
         className={styles.listChat}
-        renderItem={(item) => (
+        renderItem={(item, index) => (
           <div className={styles.chatBorder}>
             <List.Item
               className={item.from === userId ? styles.sender : styles.receiver}
               key={item._id}
+              id={index === messages.length - 1 ? "last-item" : ""}
+              ref={index === messages.length - 1 ? lastItemRef : null}
             >
               {item.content}
             </List.Item>

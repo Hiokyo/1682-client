@@ -17,9 +17,9 @@ const Filter = () => {
       <div className={styles.container}>
         <div className={styles.contentWrapper}
         >
-          <Button type='primary' className={styles.btnAdd} onClick={showAddModal}>
+          <Button type='primary' className={styles.btnBuyBook} onClick={showAddModal}>
             <ShoppingCartOutlined />
-            By book
+            Buy book
           </Button>
           <Button className={styles.btnAdd} onClick={showAddModal}>
             <DownloadOutlined />

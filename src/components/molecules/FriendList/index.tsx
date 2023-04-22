@@ -22,27 +22,7 @@ const FriendList = () => {
     userId: userData?._id,
   });
 
-  // const [collapsed, setCollapsed] = useState(false);
-  // const [openKeys, setOpenKeys] = useState<string[]>([]);
-  // const [selectedKey, setSelectedKey] = useState('1');
   const friends = data?.data?.following;
-
-  // function getItem(
-  //   label: React.ReactNode,
-  //   key: React.Key,
-  //   icon?: React.ReactNode,
-  //   children?: MenuItem[],
-  //   type?: 'group',
-  // ): MenuItem {
-  //   return {
-  //     key,
-  //     icon,
-  //     children,
-  //     label,
-  //     type,
-  //   } as MenuItem;
-  // }
-
   const onClose = () => {
     setOpen(false);
   };
@@ -90,22 +70,6 @@ const FriendList = () => {
 
     return messages[messages.length - 1].content;
   };
-
-  // const itemsInMenu = useMemo(() => {
-  //   if (friends) {
-  //     return friends.map((friend: any) => (
-  //       getItem(
-  //         <List.Item.Meta
-  //           title={friend.user.firstName + " " + friend.user.lastName}
-  //           description={getLastMessage(friend.user._id)}
-  //         />,
-  //         friend.user._id,
-  //         <Avatar size={40} src={friend.user.avatar} />,
-  //         [],
-  //       )
-  //     ))
-  //   }
-  // }, [friends])
 
   return (
     <Spin spinning={isLoading || isFetching}>

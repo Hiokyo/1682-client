@@ -35,7 +35,6 @@ interface Props {
 const Post = (props: Props) => {
   const { data } = props;
   const useId = data?._id;
-  console.log(useId);
   const { data: dataPosts, isFetching, isLoading, refetch } = usePostByUser({ userId: useId })
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
