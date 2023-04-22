@@ -8,7 +8,8 @@ import {
   CloseOutlined,
   EllipsisOutlined,
   LikeTwoTone,
-  DislikeTwoTone} from '@ant-design/icons';
+  DislikeTwoTone
+} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
@@ -33,7 +34,8 @@ interface Prop {
 }
 
 const PostList = (props: Prop) => {
-  const {dataPosts, isFetching, isLoading, refetch} = props;
+  const { dataPosts, isFetching, isLoading, refetch } = props;
+  console.log(dataPosts);
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
@@ -47,11 +49,11 @@ const PostList = (props: Prop) => {
   const [postEditing, setPostEditing] = useState({});
 
   useEffect(() => {
-    if (dataPosts){
+    if (dataPosts) {
       setDataSource(dataPosts)
     }
   }, [dataPosts])
-  
+
   const handleShowComment = (itemId: string) => {
     setShowCommentMap({
       // ...showCommentMap,
@@ -159,7 +161,7 @@ const PostList = (props: Prop) => {
     }
   }
 
- const handleEditComment = (postId: string, commentId: string) => {
+  const handleEditComment = (postId: string, commentId: string) => {
     setItemEditComment({
       postId,
       commentId
@@ -192,94 +194,94 @@ const PostList = (props: Prop) => {
           <div key={item._id}>
             <Card
               className='mt-2'
-              headStyle={{border: 'none'}}
+              headStyle={{ border: 'none' }}
               actions={[
-                <Statistic 
+                <Statistic
                   value={item?.likeCount}
                   prefix={
                     item.like?.find((e: any) => e.user?._id === userData?._id) ?
-                    <Popover
-                      trigger={'hover'}
-                      content={(
-                        item.like?.map((userLike: any) => 
-                          <div key={userLike.user?._id}>
-                            {userLike.user?.firstName} {userLike.user?.lastName}
-                          </div>
-                        )
-                      )}
-                    >
-                      <LikeTwoTone
-                        onClick={() => handleLike_Dislike(item._id, 'like')}
-                      />
-                    </Popover>
-                    :
-                    <Popover
-                      trigger={'hover'}
-                      content={(
-                        item.like?.map((userLike: any) => 
-                          <div key={userLike.user?._id}>
-                            {userLike?.user?.firstName} {userLike?.user?.lastName}
-                          </div>
-                        )
-                      )}
-                    >
-                      <LikeOutlined
-                        onClick={() => handleLike_Dislike(item._id, 'like')}
-                      />
-                    </Popover>
+                      <Popover
+                        trigger={'hover'}
+                        content={(
+                          item.like?.map((userLike: any) =>
+                            <div key={userLike.user?._id}>
+                              {userLike.user?.firstName} {userLike.user?.lastName}
+                            </div>
+                          )
+                        )}
+                      >
+                        <LikeTwoTone
+                          onClick={() => handleLike_Dislike(item._id, 'like')}
+                        />
+                      </Popover>
+                      :
+                      <Popover
+                        trigger={'hover'}
+                        content={(
+                          item.like?.map((userLike: any) =>
+                            <div key={userLike.user?._id}>
+                              {userLike?.user?.firstName} {userLike?.user?.lastName}
+                            </div>
+                          )
+                        )}
+                      >
+                        <LikeOutlined
+                          onClick={() => handleLike_Dislike(item._id, 'like')}
+                        />
+                      </Popover>
                   }
-                  valueStyle={{fontSize: '16px'}}
+                  valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
                   value={item.dislikeCount}
                   prefix={
                     item.dislike?.find((e: any) => e.user?._id === userData?._id) ?
-                    <Popover
-                      trigger={'hover'}
-                      content={(
-                        item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike.user?._id}>
-                            {userDislike.user?.firstName} {userDislike.user?.lastName}
-                          </div>
-                        )
-                      )}
-                    >
-                      <DislikeTwoTone
-                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
-                      />
-                    </Popover>
-                    :
-                    <Popover
-                      trigger={'hover'}
-                      content={(
-                        item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike.user?._id}>
-                            {userDislike.user?.firstName} {userDislike.user?.lastName}
-                          </div>
-                        )
-                      )}
-                    >
-                      <DislikeOutlined 
-                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
-                      />
-                    </Popover>
+                      <Popover
+                        trigger={'hover'}
+                        content={(
+                          item.dislike?.map((userDislike: any) =>
+                            <div key={userDislike.user?._id}>
+                              {userDislike.user?.firstName} {userDislike.user?.lastName}
+                            </div>
+                          )
+                        )}
+                      >
+                        <DislikeTwoTone
+                          onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                        />
+                      </Popover>
+                      :
+                      <Popover
+                        trigger={'hover'}
+                        content={(
+                          item.dislike?.map((userDislike: any) =>
+                            <div key={userDislike.user?._id}>
+                              {userDislike.user?.firstName} {userDislike.user?.lastName}
+                            </div>
+                          )
+                        )}
+                      >
+                        <DislikeOutlined
+                          onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                        />
+                      </Popover>
                   }
-                  valueStyle={{fontSize: '16px'}}
+                  valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
                   value={item.commentCount}
-                  valueStyle={{fontSize: '16px'}}
+                  valueStyle={{ fontSize: '16px' }}
                   prefix={
-                    <MessageOutlined 
+                    <MessageOutlined
                       onClick={() => handleShowComment(item._id)}
                     />
-                  } 
+                  }
                 />,
               ]}
               extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
+                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -300,93 +302,93 @@ const PostList = (props: Prop) => {
               />
               <div className={styles.postContent}>
                 {item.content}
-                <ImageList imageList={item.images}/>
+                <ImageList imageList={item.images} />
               </div>
             </Card>
-            
-            { showCommentMap[item._id] &&
+
+            {showCommentMap[item._id] &&
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
-                {item?.comments?.map((comment: any) =>
-                  <div 
-                    key={comment._id}
-                    className={styles.comment}
-                  >
-                    <Meta
+                  {item?.comments?.map((comment: any) =>
+                    <div
                       key={comment._id}
-                      avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
-                      description={<p className={styles.commentContent}>{comment.content}</p>}
-                    />
-                    { (comment.createdBy._id === userData?._id) ?
-                      <Dropdown 
-                        menu={
-                          { 
-                            items: [
-                              {
-                                label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
-                                key: '0',
-                              },
-                              {
-                                type: 'divider',
-                              },
-                              {
-                                label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
-                                key: '2',
-                                danger: true,
-                              },
-                            ] 
+                      className={styles.comment}
+                    >
+                      <Meta
+                        key={comment._id}
+                        avatar={<><Avatar src={'https://joesch.moe/api/v1/random'} /> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                        description={<p className={styles.commentContent}>{comment.content}</p>}
+                      />
+                      {(comment.createdBy._id === userData?._id) ?
+                        <Dropdown
+                          menu={
+                            {
+                              items: [
+                                {
+                                  label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                  key: '0',
+                                },
+                                {
+                                  type: 'divider',
+                                },
+                                {
+                                  label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                  key: '2',
+                                  danger: true,
+                                },
+                              ]
+                            }
                           }
-                        } 
-                        trigger={['click']}
-                      >
-                        <div
-                          className={styles.commentOption}
+                          trigger={['click']}
                         >
-                          <EllipsisOutlined/>
-                        </div>
-                      </Dropdown>
-                      : null
-                    }
+                          <div
+                            className={styles.commentOption}
+                          >
+                            <EllipsisOutlined />
+                          </div>
+                        </Dropdown>
+                        : null
+                      }
+                    </div>
+                  )
+                  }
+                  <div className={styles.commentArea}>
+                    <Form
+                      form={form}
+                      layout='vertical'
+                      onFinish={handleComment}
+                      key={item._id}
+                    >
+                      <Form.Item
+                        name='content'
+                      >
+                        <TextArea
+                          className='mt-2'
+                          placeholder='Enter your comment'
+                          onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                        />
+                      </Form.Item>
+                    </Form>
                   </div>
-                  ) 
-                }
-                <div className={styles.commentArea}>
-                <Form
-                  form={form}
-                  layout='vertical'
-                  onFinish={handleComment}
-                  key={item._id}
-                >
-                  <Form.Item
-                    name='content'
-                  >
-                    <TextArea
-                      className='mt-2'
-                      placeholder='Enter your comment'
-                      onKeyPress={(e: any) => handleKeyPress(e, item._id)}
-                    />
-                  </Form.Item>
-                </Form>
-                </div>
                 </div>
               </Spin>
             }
           </div>
         )}
       />
-    <ModalEditComment
-      visible={visibleModalEditComment}
-      setVisivle={setVisibleModalEditComment}
-      postId={itemEditComment?.postId}
-      commentId={itemEditComment?.commentId}
-      refetch={refetch}
-    />  
-    <ModalPost 
-      postData={postEditing}
-      visible={visibleModalEditPost}
-      setVisible={setVisibleModalEditPost}
-      afterSuccess={refetch}
-    />
+      <ModalEditComment
+        visible={visibleModalEditComment}
+        setVisivle={setVisibleModalEditComment}
+        postId={itemEditComment?.postId}
+        commentId={itemEditComment?.commentId}
+        refetch={refetch}
+      />
+      <ModalPost
+        postData={postEditing}
+        visible={visibleModalEditPost}
+        setVisible={setVisibleModalEditPost}
+        afterSuccess={refetch}
+      />
     </Spin>
   )
 }
