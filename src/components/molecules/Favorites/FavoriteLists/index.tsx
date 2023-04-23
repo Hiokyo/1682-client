@@ -47,7 +47,7 @@ const FavoriteLists = (props: Props) => {
                 div % 2 !== 0 ? styles.background : ""
               }`}
             >
-              <BookFavorite item={item.book} refetch={refetch} />
+              <BookFavorite item={item} refetch={refetch} />
             </Item>
           );
         }}

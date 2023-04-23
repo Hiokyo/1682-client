@@ -8,7 +8,9 @@ import styles from "./styles.module.scss";
 import TopicTag from "~/components/atoms/TopicTag";
 import { removeBookFavorite } from "~/api/user";
 import { message } from "antd";
-
+import {
+  LikeOutlined,
+} from '@ant-design/icons';
 
 interface Props {
   item: any;
@@ -34,22 +36,24 @@ function BookFavorite(props: Props) {
       <div className={styles.departmentContainer}>
         <div className={styles.info}>
           <div className={styles.name}>
-            {item?.title ?? ""}
+            {item?.book?.title ?? ""}
+          </div>
+{/* 
+          <div className={styles.content}>
+            {item?.likeCount}  
+            <LikeOutlined/>
+          </div> */}
+
+          <div className={styles.topic}>
+            {
+              item.book.topics?.map((topic: any) => (
+                <TopicTag key={topic._id} topic={topic}/>
+              ))
+            }
           </div>
 
-          <div className={styles.content}>{item?.description}</div>
-
           <div className={styles.infoGroup}>
-            <div className={styles.dateRange}>
-              {/* {format(new Date(item?.createdAt), DATE) ?? "-"} */}
-            </div>
-            {/* <div className={styles.topic}>
-              {
-                item.topics?.map((topic: any) => (
-                  <TopicTag key={topic._id} topic={topic}/>
-                ))
-              }
-            </div> */}
+          
           </div>
         </div>
 
