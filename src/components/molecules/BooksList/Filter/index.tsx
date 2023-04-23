@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { SortBooks } from '~/utils/constant';
+import { PARAMS_GET_ALL_NAME, SortBooks } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import iconPlus from '~/assets/images/iconPlus.svg';
 
 import styles from './styles.module.scss';
+import { useCategories } from '~/hooks/useCategory';
+import Input from '~/components/atoms/Input';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalBooks = loadable(() => import('~/components/molecules/BooksList/ModalBooks'));
@@ -22,6 +24,19 @@ const Filter = (props: Props) => {
 
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  
+  const { data } = useCategories(PARAMS_GET_ALL_NAME);
+
+  const dataCategories = data?.data?.topics;
+  const categoryOptions = useMemo(
+    () =>
+      // render options campaign
+      dataCategories?.map((item: any) => ({
+        id: item._id,
+        name: item.name,
+      })),
+    [dataCategories]
+  );
 
   const sortOption = useMemo(() => Object.entries(SortBooks)
   // render options sort by
@@ -61,6 +76,25 @@ const Filter = (props: Props) => {
                     <Option key={item.id} value={item.value}>{item.name}</Option>
                   )}
                   </Select>
+                </Form.Item>
+                <Form.Item name='topics'>
+                  <Select
+                    className={styles.selectSort}
+                    placeholder="Category"
+                    mode="multiple"
+                  >
+                    {categoryOptions?.map((item: any) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name='keyword'>
+                  <Input
+                    autoComplete='off'
+                    placeholder="Search"
+                  />
                 </Form.Item>
               </div>
             </Form>

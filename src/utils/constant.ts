@@ -12,7 +12,7 @@ export const NAME_ASC = 'NAME_ASC';
 
 export const COMMON_PARAMS = {
   page: 1,
-  limit: 5,
+  limit: 10,
   sort: NAME_ASC
 }
 
@@ -21,6 +21,12 @@ export const PARAMS_GET_ALL = {
   page: 1,
   limit: 999,
   sort: TITLE_ASC
+}
+
+export const PARAMS_GET_ALL_NAME = {
+  page: 1,
+  limit: 999,
+  sort: NAME_ASC
 }
 
 export const PARAMS_FILTER = {
@@ -51,7 +57,7 @@ export enum SortTopic {
 
 export enum SortPosts {
   'LIKE_ASC' = 'Like (Accending)',
-  'LIKE_DESC ' = 'Like (Descending)',
+  'LIKE_DESC' = 'Like (Descending)',
   'DISLIKE_ASC' = 'Dislike (Ascending)',
   'DISLIKE_DESC' = 'Dislike (Descending)',
   'VIEW_ASC' = 'View (Ascending)',

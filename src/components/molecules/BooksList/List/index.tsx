@@ -7,6 +7,7 @@ import {
   MoreOutlined,
   CheckOutlined,
   CloseOutlined,
+  HeartOutlined,
   EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
@@ -24,6 +25,7 @@ import TopicTag from '~/components/atoms/TopicTag';
 import Modal from '~/components/atoms/Modal';
 import { createReport } from '~/api/report';
 import ModalEditComment from '~/components/atoms/ModalEditComment';
+import { addBookFavorite } from '~/api/user';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -205,6 +207,16 @@ const BookList = (props: Prop) => {
       message.error(res.message)
     }
   }
+
+
+  const handleAddToFavorite = async (bookId: string) => {
+    const res = await addBookFavorite(bookId);
+    if (res.message === SUCCESS) {
+      message.success('Add to favorite success')
+    } else {
+      message.error(res.message)
+    }
+  } 
   
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -313,11 +325,12 @@ const BookList = (props: Prop) => {
                       { 
                         items: [
                           {
-                            label: <div onClick={() => handleShowModalReportBook(item._id)}>Report novel</div>,
+                            label: <div onClick={() => handleAddToFavorite(item._id)}>Add to favorite</div>,
                             key: '0',
+                            icon: <HeartOutlined />,
                           },
                           {
-                            label: <a href="https://www.aliyun.com">2nd menu item</a>,
+                            label: <div onClick={() => handleShowModalReportBook(item._id)}>Report novel</div>,
                             key: '1',
                           },
                         ]  

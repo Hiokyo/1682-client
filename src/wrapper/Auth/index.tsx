@@ -11,6 +11,7 @@ import {
   UnorderedListOutlined,
   TagsOutlined,
   DashboardOutlined,
+  HeartOutlined,
   BookOutlined } from '@ant-design/icons'
 import { Content, Footer } from 'antd/es/layout/layout';
 import Header from '~/components/molecules/Header';
@@ -34,22 +35,6 @@ function Auth(props: Props) {
   const { pathname } = useLocation();
   const convertPathName = pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
 
-  const [friends, setFriends] = useState<any>([
-    {
-      id: '1',
-      name: 'Alice',
-      avatarUrl: 'https://randomuser.me/api/portraits/women/1.jpg',
-      isOnline: true,
-    },
-    {
-      id: '2',
-      name: 'Bob',
-      avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-      isOnline: false,
-    },
-    // ...
-  ]);
-
   const menuLeft: MenuItem[] = useMemo(() => [
     {
       key: ROUTES.Posts,
@@ -65,12 +50,12 @@ function Auth(props: Props) {
       url: ROUTES.Books,
       content: 'Books'
     },
-    // {
-    //   key: ROUTES.Campaign,
-    //   label: <Link to={ROUTES.Campaign}>Campaign</Link>,
-    //   icon: <BookOutlined style={{fontSize: '18px'}}/>,
-    //   url: ROUTES.Campaign,
-    // },
+    {
+      key: ROUTES.Favorites,
+      label: <Link to={ROUTES.Favorites}>Favorites</Link>,
+      icon: <HeartOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Favorites,
+    },
     {
       key: ROUTES.Category,
       label: <Link to={ROUTES.Category}>Category</Link>,

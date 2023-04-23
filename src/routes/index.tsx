@@ -6,6 +6,7 @@ const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
 const Posts = loadable(() => import('~/pages/posts/lists'));
 const Books = loadable(() => import('~/pages/books/lists'));
+const Favorites = loadable(() => import('~/pages/favorite'));
 const ResetPassword = loadable(() => import('~/pages/resetPassword'));
 const Category = loadable(() => import('~/pages/category'));
 const Campaign  = loadable(() => import('~/pages/thread'));
@@ -22,6 +23,7 @@ export const ROUTES = {
   Home: '/',
   Posts: '/posts',
   Books: '/books',
+  Favorites: '/favorites',
   Category: '/category',
   Campaign: '/campaign',
   DashBoard: '/dashboard',
@@ -39,6 +41,7 @@ const routes = [
   { exact: true, path: ROUTES.Home, component: Home, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Posts, component: Posts, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Books, component: Books, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.Favorites, component: Favorites, layout: Auth, isAuth: true },
 
   { exact: true, path: ROUTES.BookDetail(':id'), component: BookDetail, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.userProfile(':id'), component: userProfile, layout: Auth, isAuth: true },

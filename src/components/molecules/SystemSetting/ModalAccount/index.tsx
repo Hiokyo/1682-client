@@ -7,7 +7,7 @@ import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
 import { createAccount } from '~/api/account';
-import { useDepartment } from '~/hooks/useDepartment';
+import { useDepartment } from '~/hooks/useFavoriteBook';
 
 import styles from './styles.module.scss'
 

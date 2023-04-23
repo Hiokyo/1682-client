@@ -9,6 +9,7 @@ import iconPlus from '~/assets/images/iconPlus.svg';
 
 import styles from './styles.module.scss';
 import ModalPost from '../PostModal';
+import Input from '~/components/atoms/Input';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalIdeas = loadable(() => import('~/components/molecules/BooksList/ModalBooks'));
@@ -62,6 +63,12 @@ const Filter = (props: Props) => {
                     <Option key={item.id} value={item.value}>{item.name}</Option>
                   )}
                   </Select>
+                </Form.Item>
+                <Form.Item name='keyword'>
+                  <Input
+                    autoComplete='off'
+                    placeholder="Search"
+                  />
                 </Form.Item>
               </div>
             </Form>

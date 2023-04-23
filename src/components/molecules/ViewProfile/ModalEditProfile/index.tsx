@@ -52,7 +52,7 @@ const ProfileModal = (props: Props) => {
         phoneNumber: String(formValues?.phoneNumber),
         dob: format(new Date(formValues?.dob), DATE)
       }
-      res = await updateUserInfo( userData?._id, fmData);
+      res = await updateUserInfo(fmData);
       if (res.message === SUCCESS) {
         message.success('User information updated successfully')
         if (afterSuccess){

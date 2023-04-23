@@ -40,7 +40,7 @@ const CategoryTable = (props: Props) => {
   const [ category, setCategory ] = useState({});
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
-    pageSize: 5,
+    pageSize: 10,
     total: categories && categories?.total
   });
 
@@ -142,6 +142,7 @@ const CategoryTable = (props: Props) => {
             dataSource={dataCetogories}
             onChange={handleTableChange}
             pagination={pagination}
+            size="small"
           />
         </Spin>
       </div>

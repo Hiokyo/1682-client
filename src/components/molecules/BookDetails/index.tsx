@@ -12,13 +12,14 @@ import {
 } from "antd";
 import { format } from "date-fns";
 import { DATE, SUCCESS } from "~/utils/constant";
-import { MessageOutlined, EyeOutlined } from "@ant-design/icons";
+import { MessageOutlined, EyeOutlined, HeartOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import styles from "./styles.module.scss";
 import { setComment, viewBook } from "~/api/book";
 import { useBookDetail } from "~/hooks/useBooks";
 import { TextArea } from "~/components/atoms/Input";
 import HTMLFlipBook from "react-pageflip";
+import { addBookFavorite } from "~/api/user";
 const { Title } = Typography;
 interface Props {
   bookId: any;
@@ -80,6 +81,16 @@ const BookDetails = (props: Props) => {
   //   }
   // }, [bookId])
 
+
+  const handleAddFavorite = async () => {
+    const res = await addBookFavorite(bookId);
+    if (res.message === SUCCESS) {
+      message.success('Add to favorite success')
+    } else {
+      message.error(res.message)
+    }
+  }
+
   return (
     <>
       <Spin spinning={isLoading || isFetching}>
@@ -102,6 +113,10 @@ const BookDetails = (props: Props) => {
                   ]}
                   extra={
                     <div className={styles.extraGroup}>
+                      <HeartOutlined 
+                        onClick={handleAddFavorite}
+                        style={{marginRight: 10}}
+                      />
                       <EyeOutlined /> {dataBook?.viewCount}
                     </div>
                   }

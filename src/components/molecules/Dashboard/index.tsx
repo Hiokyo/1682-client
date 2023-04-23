@@ -8,69 +8,29 @@ import Meta from "antd/es/card/Meta";
 import Spin from "~/components/atoms/Spin";
 import styles from "./styles.module.scss";
 
+const listMonth= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
 const Dashboards = () => {
   const today = new Date();
-  const currentYear = today.getFullYear();
-  const lastYear = currentYear - 1;
+  const currentMonth = today.getMonth();
+
   const { data, isFetching, isLoading } = useDashboard(true);
   const dataDashBoard = data?.data;
-
-  console.log(dataDashBoard)
+  
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
     if (dataDashBoard) {
-      return [
-        {
-          month: "Jan",
-          value: dataDashBoard.numberAuthorByMonth?.Jan?.authorCount,
-        },
-        {
-          month: "Feb",
-          value: dataDashBoard.numberAuthorByMonth?.Feb?.authorCount,
-        },
-        {
-          month: "Mar",
-          value: dataDashBoard.numberAuthorByMonth?.Mar?.authorCount,
-        },
-        {
-          month: "Apr",
-          value: dataDashBoard.numberAuthorByMonth?.Apr?.authorCount,
-        },
-        {
-          month: "May",
-          value: dataDashBoard.numberAuthorByMonth?.May?.authorCount,
-        },
-        {
-          month: "Jun",
-          value: dataDashBoard.numberAuthorByMonth?.Jun?.authorCount,
-        },
-        {
-          month: "Jul",
-          value: dataDashBoard.numberAuthorByMonth?.Jul?.authorCount,
-        },
-        {
-          month: "Aug",
-          value: dataDashBoard.numberAuthorByMonth?.Aug?.authorCount,
-        },
-        {
-          month: "Sep",
-          value: dataDashBoard.numberAuthorByMonth?.Sep?.authorCount,
-        },
-        {
-          month: "Oct",
-          value: dataDashBoard.numberAuthorByMonth?.Oct?.authorCount,
-        },
-        {
-          month: "Nov",
-          value: dataDashBoard.numberAuthorByMonth?.Nov?.authorCount,
-        },
-        {
-          month: "Dec",
-          value: dataDashBoard.numberAuthorByMonth?.Dec?.authorCount,
-        },
-      ];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return months.map(month => {
+        return {
+          month: month,
+          value: dataDashBoard.numberAuthorByMonth?.[month]?.authorCount
+        };
+      });
     }
   }, [dataDashBoard?.numberAuthorByMonth]);
+  
 
   const config = {
     data: dataColumnChart ? dataColumnChart : [],
@@ -110,10 +70,20 @@ const Dashboards = () => {
     ],
   };
 
-  const dataLineChart = dataDashBoard?.interactionCount
+  const dataLineChart = dataDashBoard?.interactionCount;
+  
+  const transformedData = useMemo(() => {
+    if (dataLineChart) {
+      return dataLineChart?.map((item: any) => ({
+        name: item.name,
+        type: (item?.type?.charAt(0).toUpperCase() + item?.type?.slice(1))?.replace('Count', ''),
+        value: item.value,
+      }));
+    }
+  }, [dataLineChart])
 
   const configLineChart = {
-    data: dataLineChart ? dataLineChart : [],
+    data: transformedData ? transformedData : [],
     xField: 'name',
     yField: 'value',
     seriesField: 'type',
@@ -125,84 +95,26 @@ const Dashboards = () => {
 
   const dataBarChart = useMemo(() => {
     if (dataDashBoard) {
-      return [
-        {
-          month: "Jan",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Jan?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Jan?.topics[0]?.name,
-        },
-        {
-          month: "Feb",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Feb?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Feb?.topics[0]?.name,
-        },
-        {
-          month: "Mar",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Mar?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Mar?.topics[0]?.name,
-        },
-        {
-          month: "Apr",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Apr?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Apr?.topics[0]?.name,
-        },
-        {
-          month: "May",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.May?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.May?.topics[0]?.name,
-        },
-        {
-          month: "Jun",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Jun?.topics[0]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Jun?.topics[0]?.name,
-        },
-        
-        /// Note
-        {
-          month: "Jan",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Jan?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Jan?.topics[1]?.name,
-        },
-        {
-          month: "Feb",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Feb?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Feb?.topics[1]?.name,
-        },
-        {
-          month: "Mar",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Mar?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Mar?.topics[1]?.name,
-        },
-        {
-          month: "Apr",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Apr?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Apr?.topics[1]?.name,
-        },
-        {
-          month: "May",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.May?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.May?.topics[1]?.name,
-        },
-        {
-          month: "Jun",
-          bookCount:
-            dataDashBoard.numberAuthorByMonth?.Jun?.topics[1]?.bookCount,
-          type: dataDashBoard.numberAuthorByMonth?.Jun?.topics[1]?.name,
-        },
-      ];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      const topicFirst = months.map(month => {
+        return {
+          month: month,
+          bookCount: dataDashBoard.numberAuthorByMonth?.[month]?.topics[0]?.bookCount || 0,
+          type: dataDashBoard.numberAuthorByMonth?.[month]?.topics[0]?.name,
+        };
+      });
+      const topicSecond = months.map(month => {
+        return {
+          month: month,
+          bookCount: dataDashBoard.numberAuthorByMonth?.[month]?.topics[1]?.bookCount || 0,
+          type: dataDashBoard.numberAuthorByMonth?.[month]?.topics[1]?.name,
+        };
+      });
+
+      return [...topicFirst, ...topicSecond];
     }
-  }, [dataDashBoard]);
+  }, [dataDashBoard?.numberAuthorByMonth]);
+  
 
   const configBarChart = {
     data: dataBarChart ? dataBarChart?.reverse() : [],
@@ -214,18 +126,18 @@ const Dashboards = () => {
 
   const info = useMemo(() => {
     if(dataDashBoard) {
-      const { todayIdeaCount, yesterdayIdeaCount } = dataDashBoard;
+      const { todayPostCount, yesterdayPostCount } = dataDashBoard;
   
       let percent = 0;
       let type = "equal";
   
-      if (todayIdeaCount > yesterdayIdeaCount) {
+      if (todayPostCount > yesterdayPostCount) {
         type = "greaterThan";
         percent =
-          yesterdayIdeaCount === 0 ? 100 : todayIdeaCount / yesterdayIdeaCount;
-      } else if (todayIdeaCount < yesterdayIdeaCount) {
+          yesterdayPostCount === 0 ? 100 : todayPostCount / yesterdayPostCount;
+      } else if (todayPostCount < yesterdayPostCount) {
         type = "lessThan";
-        percent = todayIdeaCount === 0 ? 100 : yesterdayIdeaCount / todayIdeaCount;
+        percent = todayPostCount === 0 ? 100 : yesterdayPostCount / todayPostCount;
       }
   
       return {
@@ -237,16 +149,37 @@ const Dashboards = () => {
 
   const infoByYear = useMemo(() => {
     if(dataDashBoard) {
+      const { thisYearPostCount, lastYearPostCount } = dataDashBoard;
       let percent = 0;
       let type = "equal";
-      const dataNow = (dataDashBoard?.ideasByYear)?.find((item: any) => (item.year === currentYear))?.ideasCount;
-      const dataPast = (dataDashBoard?.ideasByYear)?.find((item: any) => (item.year === lastYear))?.ideasCount;
-      if (dataNow > dataPast) {
+      if (thisYearPostCount > lastYearPostCount) {
         type = "greaterThan";
-        percent = dataPast === 0 ? 100 : dataNow / dataPast;
-      } else if (dataNow < dataPast) {
+        percent = lastYearPostCount === 0 ? 100 : thisYearPostCount / lastYearPostCount;
+      } else if (thisYearPostCount < lastYearPostCount) {
         type = "lessThan";
-        percent = dataNow === 0 ? 100 : dataPast / dataNow;
+        percent = thisYearPostCount === 0 ? 100 : lastYearPostCount / thisYearPostCount;
+      }
+      return {
+        type,
+        percent,
+      };
+    }
+  },[dataDashBoard])
+
+  const authorContribution = useMemo(() => {
+    if(dataDashBoard) {
+      const currentMonthName = listMonth[currentMonth];
+      const lastMonthName = listMonth[currentMonth - 1];
+      const thisMonthAuthor = dataDashBoard.numberAuthorByMonth?.currentMonthName?.authorCount;
+      const lastMonthAuthor = dataDashBoard.numberAuthorByMonth?.lastMonthName?.authorCount;
+      let percent = 0;
+      let type = "equal";
+      if (thisMonthAuthor > lastMonthAuthor) {
+        type = "greaterThan";
+        percent = lastMonthAuthor === 0 ? 100 : thisMonthAuthor / lastMonthAuthor;
+      } else if (thisMonthAuthor < lastMonthAuthor) {
+        type = "lessThan";
+        percent = thisMonthAuthor === 0 ? 100 : lastMonthAuthor / thisMonthAuthor;
       }
       return {
         type,
@@ -326,19 +259,19 @@ const Dashboards = () => {
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="user contribution"
+                title="Author contribution"
                 description={
                   <Statistic
                     title="than last month"
-                    value={5.63}
+                    value={authorContribution?.percent}
                     style={{ display: "flex" }}
                     precision={2}
                     valueStyle={{
-                      color: "#3f8600",
+                      color:  authorContribution?.type === 'lessThan' ? 'red' : "#3f8600" ,
                       fontSize: 14,
                       marginLeft: 5,
                     }}
-                    prefix={<ArrowUpOutlined />}
+                    prefix={ authorContribution?.type === 'lessThan' ? <ArrowDownOutlined/> : <ArrowUpOutlined />}
                     suffix="%"
                   />
                 }
@@ -356,7 +289,13 @@ const Dashboards = () => {
             <Card
               className={styles.dualLineChart}
             >
-              <Column {...configLineChart} height={300} />
+              <Card>
+                <Column {...configLineChart} height={300} />
+              </Card>
+              <Meta
+                style={{ marginTop: 23 }}
+                title="Interactions of book"
+              />
             </Card>
           </Col>
         </Row>
@@ -370,7 +309,13 @@ const Dashboards = () => {
             xs={{ span: 24}}
           >
             <Card>
-              <Pie {...configPieChart} height={300} />
+              <Card>
+                <Pie {...configPieChart} height={300} />
+              </Card>
+              <Meta
+                style={{ marginTop: 23 }}
+                title="Number of books published per year"
+              />
             </Card>
           </Col>
           <Col 
@@ -382,7 +327,16 @@ const Dashboards = () => {
             xs={{ span: 24}}
           >
             <Card>
-              <Bar {...configBarChart} height={300} />
+              <Card>
+                <Bar {...configBarChart} height={300} />
+              </Card>
+              <Meta
+                style={{ marginTop: 23 }}
+                title="Book topics"
+                description={
+                  "Aventure and Classic"
+                }
+              />
             </Card>
           </Col>
         </Row>

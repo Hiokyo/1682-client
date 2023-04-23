@@ -34,8 +34,8 @@ interface Props {
 
 const Post = (props: Props) => {
   const { data } = props;
-  const useId = data?._id;
-  const { data: dataPosts, isFetching, isLoading, refetch } = usePostByUser({ userId: useId })
+  const userId = data?._id;
+  const { data: dataPosts, isFetching, isLoading, refetch } = usePostByUser({ userId: userId })
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
@@ -46,6 +46,8 @@ const Post = (props: Props) => {
 
   const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
   const [postEditing, setPostEditing] = useState({});
+
+  const userData = useAppSelector((state) => state.userInfo.userData);
 
   useEffect(() => {
     if (dataPosts?.data) {
@@ -76,49 +78,49 @@ const Post = (props: Props) => {
     let updatedDislike = post.dislike ? [...post.dislike] : [];
 
     const userLiked = updatedLike.find(
-      (item: any) => item.user?._id === useId
+      (item: any) => item.user?._id === userId
     );
     const userDisliked = updatedDislike.find(
-      (item: any) => item.user?._id === useId
+      (item: any) => item.user?._id === userId
     );
 
     if (action === "like") {
       if (!userLiked && !userDisliked) {
         newLike += 1;
-        updatedLike.push({ user: { _id: useId } });
+        updatedLike.push({ user: { _id: userId } });
       } else if (userLiked) {
         newLike -= 1;
         const userIndex = updatedLike.findIndex(
-          (item: any) => item.user?._id === useId
+          (item: any) => item.user?._id === userId
         );
         updatedLike.splice(userIndex, 1);
       } else if (!userLiked && userDisliked) {
         newLike += 1;
         newDislike -= 1;
         const userIndex = updatedDislike.findIndex(
-          (item: any) => item.user?._id === useId
+          (item: any) => item.user?._id === userId
         );
         updatedDislike.splice(userIndex, 1);
-        updatedLike.push({ user: { _id: useId } });
+        updatedLike.push({ user: { _id: userId } });
       }
     } else {
       if (!userLiked && !userDisliked) {
         newDislike += 1;
-        updatedDislike.push({ user: { _id: useId } });
+        updatedDislike.push({ user: { _id: userId } });
       } else if (userDisliked) {
         newDislike -= 1;
         const userIndex = updatedDislike.findIndex(
-          (item: any) => item.user?._id === useId
+          (item: any) => item.user?._id === userId
         );
         updatedDislike.splice(userIndex, 1);
       } else if (userLiked && !userDisliked) {
         newLike -= 1;
         newDislike += 1;
         const userIndex = updatedLike.findIndex(
-          (item: any) => item.user?._id === useId
+          (item: any) => item.user?._id === userId
         );
         updatedLike.splice(userIndex, 1);
-        updatedDislike.push({ user: { _id: useId } });
+        updatedDislike.push({ user: { _id: userId } });
       }
     }
 
@@ -199,7 +201,7 @@ const Post = (props: Props) => {
                 <Statistic
                   value={item?.likeCount}
                   prefix={
-                    item.like?.find((e: any) => e.user?._id === useId) ?
+                    item.like?.find((e: any) => e.user?._id === userId) ?
                       <Popover
                         trigger={'hover'}
                         content={(
@@ -235,7 +237,7 @@ const Post = (props: Props) => {
                 <Statistic
                   value={item.dislikeCount}
                   prefix={
-                    item.dislike?.find((e: any) => e.user?._id === useId) ?
+                    item.dislike?.find((e: any) => e.user?._id === userId) ?
                       <Popover
                         trigger={'hover'}
                         content={(
@@ -278,7 +280,7 @@ const Post = (props: Props) => {
                   }
                 />,
               ]}
-              extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
+              extra={ userData?._id === userId ? <div onClick={() => handleEditPost(item)}>Edit</div> : null}
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
@@ -319,7 +321,7 @@ const Post = (props: Props) => {
                         avatar={<><Avatar src={'https://joesch.moe/api/v1/random'} /> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
-                      {(comment.createdBy._id === useId) ?
+                      {(comment.createdBy._id === userId) ?
                         <Dropdown
                           menu={
                             {

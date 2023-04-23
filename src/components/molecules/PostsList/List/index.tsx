@@ -35,7 +35,6 @@ interface Prop {
 
 const PostList = (props: Prop) => {
   const { dataPosts, isFetching, isLoading, refetch } = props;
-  console.log(dataPosts);
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [postId, setPostId] = useState('')
@@ -278,7 +277,7 @@ const PostList = (props: Prop) => {
                   }
                 />,
               ]}
-              extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
+              // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
