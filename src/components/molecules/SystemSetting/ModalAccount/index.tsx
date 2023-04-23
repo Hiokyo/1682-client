@@ -7,7 +7,6 @@ import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
 import { createAccount } from '~/api/account';
-import { useDepartment } from '~/hooks/useFavoriteBook';
 
 import styles from './styles.module.scss'
 
@@ -68,7 +67,7 @@ const AccountModal = (props: Props) => {
       if (!userData) {
         res = await createAccount(fmData)
       } else {
-        res = await updateUserInfo( userData?._id, fmData);
+        // res = await updateUserInfo( userData?._id, fmData);
       }
       if (res?.message === SUCCESS) {
         message.success(!userData ? 'Create Account success' : 'Update account success')

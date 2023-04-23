@@ -12,10 +12,9 @@ const List = loadable(() => import("~/components/atoms/List"));
 
 interface Props {
   data?: any;
-  refetch?: () => void;
+  refetch: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
-  setParams?: (value: any) => void;
 }
 interface DataType {
   name: string;
@@ -24,7 +23,7 @@ interface DataType {
 }
 
 const FavoriteLists = (props: Props) => {
-  const { data, refetch, isLoading, isFetching, setParams } = props;
+  const { data, refetch, isLoading, isFetching } = props;
 
   return (
     <Spin spinning={isLoading || isFetching}>

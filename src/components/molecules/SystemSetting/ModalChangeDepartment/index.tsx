@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Form, Modal, message } from 'antd';
 import { Option } from '~/components/atoms/Select';
 import { changeDepartment } from '~/api/user';
-import { useDepartment } from '~/hooks/useFavoriteBook';
 import { PARAMS_GET_ALL, SUCCESS } from '~/utils/constant';
 
 import iconWarning from '~/assets/images/warning.svg';
