@@ -121,20 +121,6 @@ const TableAccount = (props: Props) => {
       width: '20%',
     },
     {
-      title: 'Department',
-      dataIndex: 'department',
-      width: '10%',
-      render: (_: string, record: any) => (
-        <Tag 
-          className='cursor-pointer'
-          color="blue"
-          onClick={() => handleOpenModal(record)}
-        >
-          {record.department.name}
-        </Tag>
-      )
-    },
-    {
       title: 'Role',
       dataIndex: 'role',
       width: '10%',

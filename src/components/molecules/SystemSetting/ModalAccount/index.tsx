@@ -33,8 +33,8 @@ const AccountModal = (props: Props) => {
     afterSuccess,
   } = props;
 
-  const {data, isLoading, isFetching} = useDepartment(PARAMS_GET_ALL);
-  const dataDepartment = data?.data?.departments;
+  // const {data, isLoading, isFetching} = useDepartment(PARAMS_GET_ALL);
+  const dataDepartment: any = [];
   
   const genderOption = useMemo(() => Object.entries(Gender)
   // render options gender
@@ -168,17 +168,6 @@ const AccountModal = (props: Props) => {
         >
           {roleOption?.map((item: any) =>
             <Option key={item.id} value={item.value}>{item.name}</Option>
-          )}
-        </Select>
-      </Form.Item>
-
-      <Form.Item label='Department' name='department' required>
-        <Select
-          placeholder='Select department'
-          loading={isLoading || isFetching}
-        >
-          {dataDepartment?.map((item: any) =>
-            <Option key={item._id} value={item._value}>{item.name}</Option>
           )}
         </Select>
       </Form.Item>

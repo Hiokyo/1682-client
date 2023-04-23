@@ -24,8 +24,8 @@ interface Props {
 const ModalChangeDepartment = (props: Props) => {
   const {visible, setVisible, refetch, user, setRecord} = props;
   const [form] = Form.useForm();
-  const {data, isLoading, isFetching} = useDepartment(PARAMS_GET_ALL);
-  const dataDepartment = data?.data?.departments;
+  // const {data, isLoading, isFetching} = useDepartment(PARAMS_GET_ALL);
+  const dataDepartment: any = [];
   const handleCancel = () => {
     setVisible(false)
     setRecord({})
@@ -75,7 +75,7 @@ const ModalChangeDepartment = (props: Props) => {
         >
           <Select
             placeholder='Select Department'
-            loading={isLoading || isFetching}
+            // loading={isLoading || isFetching}
           >
             {dataDepartment?.map((item: any) =>
               <Option key={item._id} value={item._value}>{item.name}</Option>

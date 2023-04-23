@@ -15,6 +15,7 @@ const Dashboards = () => {
   const { data, isFetching, isLoading } = useDashboard(true);
   const dataDashBoard = data?.data;
 
+  console.log(dataDashBoard)
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
     if (dataDashBoard) {
@@ -109,34 +110,17 @@ const Dashboards = () => {
     ],
   };
 
-  const dataLineChart = useMemo(() => {
-    if (dataDashBoard) {
-      const dataInteraction = dataDashBoard.departmentInteractionCount;
-      if (dataInteraction) {
-        const dataChart = dataInteraction.map((item: any) => ({
-          department: item.name,
-          like: item.likeCount,
-          view: item.viewCount,
-        }));
-        return dataChart;
-      }
-    }
-  }, [dataDashBoard?.departmentInteractionCount]);
+  const dataLineChart = dataDashBoard?.interactionCount
 
   const configLineChart = {
-    data: dataLineChart ? [dataLineChart, dataLineChart] : [{}, {}],
-    xField: "department",
-    yField: ["like", "view"],
-    geometryOptions: [
-      {
-        geometry: "line",
-        color: "#5B8FF9",
-      },
-      {
-        geometry: "line",
-        color: "#5AD8A6",
-      },
-    ],
+    data: dataLineChart ? dataLineChart : [],
+    xField: 'name',
+    yField: 'value',
+    seriesField: 'type',
+    isGroup: true,
+    columnStyle: {
+      radius: [10, 10, 0, 0],
+    },
   };
 
   const dataBarChart = useMemo(() => {
@@ -286,7 +270,7 @@ const Dashboards = () => {
               <h3>Today's posts</h3>
               <div className={styles.statistic}>
                 <h1 className={styles.cardInfoValue}>
-                  {dataDashBoard?.todayIdeaCount}
+                  {dataDashBoard?.todayPostCount}
                 </h1>
                 <Statistic
                   className="mt-2 ml-2"
@@ -313,7 +297,7 @@ const Dashboards = () => {
               <h3>Year's posts</h3>
               <div className={styles.statistic}>
                 <h1 className={styles.cardInfoValue}>
-                  {(dataDashBoard?.ideasByYear)?.find((item: any) => (item.year === currentYear))?.ideasCount}
+                  {dataDashBoard?.thisYearPostCount}
                 </h1>
                 <Statistic
                   className="mt-2 ml-2"
@@ -372,7 +356,7 @@ const Dashboards = () => {
             <Card
               className={styles.dualLineChart}
             >
-              <DualAxes {...configLineChart} height={300} />
+              <Column {...configLineChart} height={300} />
             </Card>
           </Col>
         </Row>
