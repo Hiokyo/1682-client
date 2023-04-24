@@ -3,8 +3,6 @@ import {
   SliceCaseReducers,
   createSlice,
 } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-import { RootState } from ".";
 
 export const initialStateValue = {
   userId: "",

@@ -1,60 +1,68 @@
-import { format } from "date-fns";
-import React, { Fragment, useState } from "react";
-import config from "./config";
-import { sortObject } from "~/utils/helper";
-import querystring from "qs";
-import crypto from "crypto";
-
-const paymentMethods = [
-  {
-    id: 1,
-    label: "Thanh toán qua ATM-Tài khoản ngân hàng nội địa",
-    value: "VNBANK",
-  },
-];
+import { message } from "antd";
+import React, { Fragment, useEffect, useState } from "react";
+import { createOrder, getAvailablePaymentMethod } from "~/api/payment";
+import { RootState, useAppDispatch, useAppSelector } from "~/store";
+import {
+  setAvailableMethods,
+  setCurrentOrder,
+  setMethodUsed,
+} from "~/store/payment";
 
 export default function Payment() {
   const [amount, setAmount] = useState<number>(0);
-  const [method, setMethod] = useState<string>(paymentMethods[0].value);
+  const availablePaymentMethod = useAppSelector(
+    (state: RootState) => state.payment.availableMethods
+  );
+  const methodUsed = useAppSelector(
+    (state: RootState) => state.payment.methodUsed
+  );
 
-  const handleSubmit = () => {
-    const date = new Date();
-    const createDate = format(date, "yyyyMMddHHmmss");
-    const ipAddr = "::1";
-    const tmnCode = config.vnp_TmnCode;
-    const secretKey = config.vnp_HashSecret;
-    let vnpUrl = config.vnp_Url;
-    const returnUrl = config.vnp_ReturnUrl;
-    const orderId = format(date, "ddHHmmss");
-    const locale = "en";
-    const currCode = "VND";
-    let vnp_Params: any = {};
+  const dispatch = useAppDispatch();
 
-    vnp_Params["vnp_Version"] = "2.1.0";
-    vnp_Params["vnp_Command"] = "pay";
-    vnp_Params["vnp_TmnCode"] = tmnCode;
-    vnp_Params["vnp_Locale"] = locale;
-    vnp_Params["vnp_CurrCode"] = currCode;
-    vnp_Params["vnp_TxnRef"] = orderId;
-    vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
-    vnp_Params["vnp_OrderType"] = "other";
-    vnp_Params["vnp_Amount"] = amount * 100;
-    vnp_Params["vnp_ReturnUrl"] = returnUrl;
-    vnp_Params["vnp_IpAddr"] = ipAddr;
-    vnp_Params["vnp_CreateDate"] = createDate;
-    vnp_Params["vnp_BankCode"] = method;
+  const handleSubmit = async () => {
+    if (JSON.stringify(methodUsed) === "{}") {
+      return message.error("Please select method");
+    } else if (amount === 0) {
+      return message.error("Please enter amount");
+    }
 
-    vnp_Params = sortObject(vnp_Params);
+    try {
+      const res = await createOrder(String(amount), methodUsed._id);
 
-    const signData = querystring.stringify(vnp_Params, { encode: false });
-    const hmac = crypto.createHmac("sha512", secretKey);
-    const signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+      if (res && !res.errorCode && !res.errors.length) {
+        const { data } = res;
 
-    vnp_Params["vnp_SecureHash"] = signed;
-    vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+        dispatch(setCurrentOrder(data.paymentId));
+        window.open(data.vnpUrl, "_self");
+      } else {
+        message.error("Internal error");
+      }
 
-    window.open(vnpUrl, "_blank");
+      console.log(res);
+    } catch (error) {
+      message.error("");
+    }
   };
+
+  useEffect(() => {
+    const getCurrentAvailableMethods = async () => {
+      try {
+        const res = await getAvailablePaymentMethod();
+
+        if (res && !res.errorCode && !res.errors.length) {
+          const { data } = res;
+
+          dispatch(setAvailableMethods(data));
+        } else {
+          message.error("Fail to get payment methods");
+        }
+      } catch (error) {
+        message.error("Fail to get payment methods");
+      }
+    };
+
+    getCurrentAvailableMethods();
+  }, []);
 
   return (
     <>
@@ -68,26 +76,26 @@ export default function Payment() {
 
       <div>Select payment method</div>
 
-      {paymentMethods.map((item) => (
-        <Fragment key={item.id}>
+      {availablePaymentMethod.map((item) => (
+        <Fragment key={item._id}>
           <input
             type="radio"
-            value={item.value}
-            onChange={(e) => setMethod(e.target.value)}
+            value={item.name}
+            onChange={() =>
+              dispatch(
+                setMethodUsed({
+                  name: item.name,
+                  _id: item._id,
+                  note: item.note,
+                })
+              )
+            }
           />
-          <label>{item.label}</label>
+          <label>{item.note}</label>
         </Fragment>
       ))}
 
       <button onClick={handleSubmit}>Thanh toan</button>
-
-      {/* <select value={method} onChange={(e) => console.log(e)}>
-        {paymentMethods.map((item) => (
-          <option value={item.value} key={item.id}>
-            {item.label}
-          </option>
-        ))}
-      </select> */}
     </>
   );
 }

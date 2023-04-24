@@ -4,12 +4,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import userInfoReducer from "./userInfo";
 import refetchApiReducer from "./stateRefetchApi";
 import chatMessages from "./chatMessages";
+import payment from "./payment";
 
 export const store = configureStore({
   reducer: {
     userInfo: userInfoReducer,
     refetchApi: refetchApiReducer,
     chatMessages: chatMessages,
+    payment: payment,
   },
 });
 

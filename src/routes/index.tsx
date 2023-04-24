@@ -16,6 +16,7 @@ const Setting = loadable(() => import("~/pages/systemSetting"));
 const ResetPasswordCode = loadable(() => import("~/pages/getResetPwCode"));
 const userProfile = loadable(() => import("~/pages/userProfile/[id]"));
 const Payment = loadable(() => import("~/pages/payment"));
+const PaymentReturn = loadable(() => import("~/pages/payment/PaymentReturn"));
 
 export const ROUTES = {
   Home: "/",
@@ -30,6 +31,7 @@ export const ROUTES = {
   BookDetail: (id: number | string) => `/books/lists/${id}`,
   userProfile: (id: number | string) => `/userProfile/${id}`,
   Payment: "/payment",
+  PaymentReturn: "/payment-return",
   // no auth
   Login: "/login",
   ResetPasswordCode: "/get-code",
@@ -120,6 +122,12 @@ const routes = [
     exact: true,
     path: ROUTES.Payment,
     component: Payment,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.PaymentReturn,
+    component: PaymentReturn,
     isAuth: true,
   },
 
