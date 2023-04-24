@@ -5,7 +5,7 @@ import {
   MessageOutlined,
   DislikeOutlined,
   MoreOutlined,
-  CheckOutlined,
+  FlagOutlined,
   CloseOutlined,
   HeartOutlined,
   EllipsisOutlined,
@@ -330,8 +330,13 @@ const BookList = (props: Prop) => {
                             icon: <HeartOutlined />,
                           },
                           {
+                            type: 'divider',
+                          },
+                          {
                             label: <div onClick={() => handleShowModalReportBook(item._id)}>Report novel</div>,
                             key: '1',
+                            icon: <FlagOutlined />,
+                            danger: true
                           },
                         ]  
                       }
@@ -344,7 +349,7 @@ const BookList = (props: Prop) => {
               }
             >
               <Meta
-                avatar={<Avatar shape='square' size={42} src={'https://joesch.moe/api/v1/random'}/>}
+                avatar={<Avatar shape='square' size={42} src={'https://covers.openlibrary.org/b/id/240727-S.jpg'}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link

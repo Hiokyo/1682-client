@@ -183,7 +183,7 @@ const Post = (props: Props) => {
     setVisibleModalEditPost(true)
     setPostEditing(post)
   }
-
+  console.log(dataSource)
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -283,7 +283,7 @@ const Post = (props: Props) => {
               extra={ userData?._id === userId ? <div onClick={() => handleEditPost(item)}>Edit</div> : null}
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
+                avatar={<Avatar size={42} src={item?.updatedBy?.avatar?.url || item?.createdBy?.avatar?.url} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -318,7 +318,12 @@ const Post = (props: Props) => {
                     >
                       <Meta
                         key={comment._id}
-                        avatar={<><Avatar src={'https://joesch.moe/api/v1/random'} /> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                        avatar={
+                          <>
+                            <Avatar src={comment.updatedBy?.avatar?.url || comment.createdBy?.avatar?.url} /> 
+                            <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong>
+                          </>
+                        }
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
                       {(comment.createdBy._id === userId) ?

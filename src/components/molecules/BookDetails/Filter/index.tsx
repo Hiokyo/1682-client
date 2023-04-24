@@ -3,11 +3,15 @@ import { Button, Form } from 'antd';
 import { DownloadOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import loadable from '~/utils/loadable';
 import styles from './styles.module.scss';
+import { Link } from 'react-router-dom';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 
-const Filter = () => {
-
+interface Props {
+  bookId: string;
+}
+const Filter = (props: Props) => {
+  const { bookId } = props;
   const showAddModal = () => {
     // setIsModalVisible(true);
   };
@@ -17,10 +21,14 @@ const Filter = () => {
       <div className={styles.container}>
         <div className={styles.contentWrapper}
         >
-          <Button type='primary' className={styles.btnBuyBook} onClick={showAddModal}>
-            <ShoppingCartOutlined />
-            Buy book
-          </Button>
+          <Link 
+            to={`/payment/${bookId}`}
+          >
+            <Button type='primary' className={styles.btnBuyBook}>
+              <ShoppingCartOutlined />
+              Buy book
+            </Button>
+          </Link>
           <Button className={styles.btnAdd} onClick={showAddModal}>
             <DownloadOutlined />
             Download file

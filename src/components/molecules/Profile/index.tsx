@@ -93,7 +93,7 @@ const Profile = (props: Props) => {
     <Spin spinning={isLoading || isFetching}>
       <div className={styles.profileContainer}>
         <div className={styles.avatarContainer}>
-          <Avatar size={120} src={userData?.avatar} icon={<UserOutlined />} />
+          <Avatar size={120} src={userData?.avatar?.url} icon={<UserOutlined />} />
           <div className={styles.infoGroup}>
             <Typography.Title 
               level={3}
@@ -110,7 +110,7 @@ const Profile = (props: Props) => {
                     title={`${item.user.firstName} ${item.user.lastName}`} 
                     placement="bottom"
                   >
-                    <Avatar src="https://joesch.moe/api/v1/random?key=1" />
+                    <Avatar src={item.user?.avatar?.url} />
                   </Tooltip>
                 ))
               }

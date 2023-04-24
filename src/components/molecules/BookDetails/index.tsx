@@ -94,7 +94,7 @@ const BookDetails = (props: Props) => {
   return (
     <>
       <Spin spinning={isLoading || isFetching}>
-        <Filter />
+        <Filter bookId={bookId}/>
         <div className={styles.container}>
           <div className={styles.contentWrapper}>
             <div className={styles.infoContainer}>
@@ -124,8 +124,9 @@ const BookDetails = (props: Props) => {
                   <Meta
                     avatar={
                       <Avatar
+                        shape='square'
                         size={42}
-                        src={"https://joesch.moe/api/v1/random"}
+                        src={"https://covers.openlibrary.org/b/id/240727-S.jpg"}
                       />
                     }
                     title={dataBook?.title}

@@ -8,18 +8,19 @@ import ChatModal from "~/components/atoms/ChatModal";
 import { setMessages, setReceiver } from "~/store/chatMessages";
 import { getMessages } from "~/api/user";
 import type { MenuProps } from 'antd';
+import { getCookie } from "~/utils/cookie";
 
 
 // type MenuItem = Required<MenuProps>['items'][number];
 const FriendList = () => {
   const userData = useAppSelector((state) => state.userInfo.userData);
-
+  const userId = getCookie('userId')
   const [open, setOpen] = useState<boolean>(false);
   const [receiverName, setReceiverName] = useState<string>("");
   const { data, isLoading, isFetching } = useFriends({
     page: 1,
     limit: 999,
-    userId: userData?._id,
+    userId: userId,
   });
 
   const friends = data?.data?.following;
@@ -90,7 +91,7 @@ const FriendList = () => {
             {/* Show only the avatar when screen size is small */}
             <div className={styles.avatarContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={30} src={item.user.avatar} />}
+                avatar={<Avatar size={30} src={item.user.avatar?.url} />}
               />
             </div>
 
