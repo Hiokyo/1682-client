@@ -1,26 +1,32 @@
 import { message } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { updateOrderStatus } from "~/api/payment";
-import { RootState, useAppSelector } from "~/store";
 import { PAYMENT_STATUS } from "~/utils/constant";
 
 export default function PaymentReturn() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [status, setStatus] = useState<string>("");
-  const currentOrder = useAppSelector(
-    (state: RootState) => state.payment.currentOrder
-  );
 
   useEffect(() => {
     const sendUpdateOrderStatus = async (status: PAYMENT_STATUS) => {
       try {
-        const res = await updateOrderStatus(currentOrder, status);
+        const vnp_OrderInfo = searchParams.get("vnp_OrderInfo");
 
-        if (res && !res.errorCode && !res.errors.length) {
-          message.success("Order successfully executed");
+        if (vnp_OrderInfo && vnp_OrderInfo.length) {
+          const res = await updateOrderStatus(
+            vnp_OrderInfo.split(" ")[vnp_OrderInfo?.split(" ").length - 1],
+            status
+          );
+
+          if (res && !res.errorCode && !res.errors.length) {
+            message.success("Order successfully executed");
+          } else {
+            message.error("Payment fail");
+          }
         } else {
-          message.error("Payment fail");
+          navigate("/");
         }
       } catch (error) {
         message.error("Payment fail");
