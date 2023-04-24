@@ -84,7 +84,11 @@ export default function Header() {
       url
         .replace(
           "schema",
-          schema === NotificationSchema.BOOK ? "books/lists" : ""
+          schema === NotificationSchema.BOOK
+            ? "books/lists"
+            : NotificationSchema.USER
+            ? "userProfile"
+            : ""
         )
         .replace("id", schemaId)
     );
