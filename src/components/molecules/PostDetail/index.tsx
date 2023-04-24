@@ -32,6 +32,7 @@ interface Props {
 
 const PostDetail = (props: Props) => {
   const { postId } = props;
+
   const {data, isLoading, isFetching, refetch} = usePostDetail({postId})
   const dataPosts = data?.data;
   const userData = useAppSelector((state) => state.userInfo.userData);
@@ -172,6 +173,7 @@ const PostDetail = (props: Props) => {
     setVisibleModalEditPost(true)
     setPostEditing(post)
   }
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <div className={styles.container}>
@@ -264,10 +266,10 @@ const PostDetail = (props: Props) => {
                   }
                 />,
               ]}
-              // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
+              extra={ userData?._id === dataSource.createdBy ? <div onClick={() => handleEditPost(dataSource)}>Edit</div> : null}
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
+                avatar={<Avatar size={42} src={dataSource.updatedBy?.avatar?.url} />}
                 title={
                   <div>
                     {dataSource.updatedBy?.firstName} {dataSource.updatedBy?.lastName}
@@ -279,7 +281,7 @@ const PostDetail = (props: Props) => {
                   //   <div>{item.description}</div>
                   // </>
                   <div>
-                    {/* {format(new Date(dataSource.createdAt), DATE)} */}
+                    { dataSource?.updatedAt && format(new Date(dataSource.updatedAt), DATE)}
                   </div>
                 )}
               />
@@ -299,7 +301,17 @@ const PostDetail = (props: Props) => {
                     >
                       <Meta
                         key={comment._id}
-                        avatar={<><Avatar src={'https://joesch.moe/api/v1/random'} /> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                        avatar={
+                          <>
+                            <Avatar 
+                              src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url}
+                              style={{marginRight: '0.5rem'}}
+                            /> 
+                            <strong>
+                              {comment.createdBy?.firstName} {comment.createdBy?.lastName}
+                            </strong>
+                          </>
+                        }
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
                       {(comment.createdBy._id === userData?._id) ?

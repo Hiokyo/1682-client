@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFavoriteBooks } from '~/api/user';
 
-export const QK_FAVORITE_BOOK = 'department';
+export const QK_FAVORITE_BOOK = 'favorite-book';
 
 export function useFavoriteBook(params: any) {
   const res = useQuery([QK_FAVORITE_BOOK, {params}], () => getFavoriteBooks(params), {

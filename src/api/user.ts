@@ -4,8 +4,8 @@ export const getUserInfo = (userId: any) => sendGet(`/user/${userId}/profile`);
 
 export const updateUserInfo = (params: any) => sendPut(`/user/edit-profile`, params);
 
-export const setAvatar = (userId: any, params: any) =>
-  sendPut(`/user/${userId}/upload-avatar`, params);
+export const setAvatar = (params: any) =>
+  sendPut(`/user/upload-avatar`, params);
 
 export const changeDepartment = (userId: any, params: any) =>
   sendPut(`/admin/user/${userId}/change-department`, params);
@@ -22,6 +22,7 @@ export const getPostByUser = (params: any) => sendGet(`/user/post/list`, params)
 
 export const addBookFavorite = (bookId: any) => sendPut(`/user/add-favorite/${bookId}`);
 export const removeBookFavorite = (bookId: any) => sendPut(`/user/remove-favorite/${bookId}`);
+
 export const getFavoriteBooks = (params: any) => sendGet(`/user/favorites`, params);
 
 

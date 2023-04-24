@@ -28,10 +28,6 @@ const Filter = (props: Props) => {
     { id: index, name: item[1], value: item[0] }
   )), []);
 
-  const showAddModal = () => {
-    setIsModalVisible(true);
-  };
-
   const handleValuesChange = useCallback((_: any, formValues: any) => {
     onChange(formValues);
   }, [onChange]);
@@ -59,17 +55,9 @@ const Filter = (props: Props) => {
                 </Form.Item>
               </div>
             </Form>
-              <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
-                <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
-              </Button>
           </div>
         </div>
       </div>
-      <AccountModal
-        visible={isModalVisible}
-        setVisible={setIsModalVisible}
-        afterSuccess={afterSuccess}
-      />
     </>
   );
 };

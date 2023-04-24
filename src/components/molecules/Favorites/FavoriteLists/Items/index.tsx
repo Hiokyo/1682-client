@@ -14,7 +14,6 @@ import {
 
 interface Props {
   item: any;
-  afterSuccess?: () => void;
   refetch: () => void;
 }
 
@@ -38,11 +37,6 @@ function BookFavorite(props: Props) {
           <div className={styles.name}>
             {item?.book?.title ?? ""}
           </div>
-{/* 
-          <div className={styles.content}>
-            {item?.likeCount}  
-            <LikeOutlined/>
-          </div> */}
 
           <div className={styles.topic}>
             {

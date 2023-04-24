@@ -280,12 +280,12 @@ const PostList = (props: Prop) => {
               // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
+                avatar={<Avatar size={42} src={item.updatedBy.avatar.url} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
-                    // to={`/userProfile/${item.updatedBy?._id}`}
-                    to={`/post/${item._id}`}
+                    to={`/userProfile/${item.updatedBy?._id}`}
+                    // to={`/post/${item._id}
                   >
                     {item.updatedBy?.firstName} {item.updatedBy?.lastName}
                   </Link>
@@ -295,9 +295,11 @@ const PostList = (props: Prop) => {
                   //   <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
                   //   <div>{item.description}</div>
                   // </>
-                  <div>
+                  <Link
+                    to={`/post/${item._id}`}
+                  >
                     {format(new Date(item.createdAt), DATE)}
-                  </div>
+                  </Link>
                 )}
               />
               <div className={styles.postContent}>
@@ -316,7 +318,14 @@ const PostList = (props: Prop) => {
                     >
                       <Meta
                         key={comment._id}
-                        avatar={<><Avatar src={'https://joesch.moe/api/v1/random'} /> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                        avatar={
+                        <>
+                          <Avatar style={{marginRight: '0.5rem'}} src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url} />
+                          <strong>
+                            {comment.createdBy?.firstName} {comment.createdBy?.lastName} 
+                          </strong>
+                        </>
+                          }
                         description={<p className={styles.commentContent}>{comment.content}</p>}
                       />
                       {(comment.createdBy._id === userData?._id) ?

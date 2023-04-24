@@ -172,7 +172,7 @@ const BookDetails = (props: Props) => {
                         className={styles.comment}
                         avatar={
                           <>
-                            <Avatar src={"https://joesch.moe/api/v1/random"} />{" "}
+                            <Avatar src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url} />{" "}
                             <strong>
                               {comment.createdBy?.firstName}{" "}
                               {comment.createdBy?.lastName}

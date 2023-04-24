@@ -5,20 +5,19 @@ import { Authorization } from '~/wrapper/Authorization'
 import loadable from '~/utils/loadable'
 import { useFavoriteBook } from '~/hooks/useFavoriteBook'
 import { useAppSelector } from '~/store'
+import FavoriteLists from './FavoriteLists'
+import { getCookie } from '~/utils/cookie'
 
-const FavoriteList = loadable(() => import('~/components/molecules/Favorites/FavoriteLists'));
 // const Filter = loadable(() => import('~/components/molecules/Departments/Filter'));
 
-
 const BookFavorites = () => {
-  const userData = useAppSelector((state) => state.userInfo.userData);
-
-  const {data, isFetching, isLoading, refetch} = useFavoriteBook({userId: userData?._id});
+  const userId = getCookie('userId')
+  const {data, isFetching, isLoading, refetch} = useFavoriteBook({userId});
   const dataFavorite = data?.data;
   return (
     <>
-      <FavoriteList
-        data={dataFavorite}
+      <FavoriteLists
+        dataFavorite={dataFavorite}
         refetch={refetch}
         isFetching={isFetching}
         isLoading={isLoading}

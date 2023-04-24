@@ -380,7 +380,12 @@ const BookList = (props: Prop) => {
                   >
                     <Meta
                       key={comment._id}
-                      avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                      avatar={
+                        <>
+                          <Avatar src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url}/> 
+                          <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong>
+                        </>
+                      }
                       description={<p className={styles.commentContent}>{comment.content}</p>}
                     />
                      {(comment.createdBy._id === userData?._id) ?

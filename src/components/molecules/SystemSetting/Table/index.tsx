@@ -92,7 +92,6 @@ const TableAccount = (props: Props) => {
       title: 'Name',
       dataIndex: 'name',
       width: '20%',
-      sorter: true,
       render: (_: string, record: any) => (
         <div className='d-flex'>
           <p>{record.firstName}</p>
@@ -105,7 +104,6 @@ const TableAccount = (props: Props) => {
       title: 'Date',
       dataIndex: 'createdAt',
       width: '20%',
-      sorter: true,
       render: (createdAt: string) => (
         <div>
           {
@@ -117,7 +115,6 @@ const TableAccount = (props: Props) => {
     {
       title: 'Email',
       dataIndex: 'email',
-      sorter: true,
       width: '20%',
     },
     {

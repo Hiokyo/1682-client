@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Dropdown, Layout, MenuProps } from "antd";
+import { Badge, Dropdown, Layout, MenuProps, message } from "antd";
 import { removeCookie } from "~/utils/cookie";
 import { ROUTES } from "~/routes";
 
@@ -15,8 +15,8 @@ import { Authorization } from "~/wrapper/Authorization";
 import { UserRole } from "~/utils/constant";
 import styles from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
-import { NotificationSchema } from "~/store/notification";
-import { markAsRead } from "~/api/notification";
+import { NotificationSchema, setAllNotifications } from "~/store/notification";
+import { getSelfNotification, markAsRead } from "~/api/notification";
 
 const Svg = loadable(() => import("~/components/atoms/Svg"));
 const { Header: LayoutHeader } = Layout;
@@ -74,8 +74,14 @@ export default function Header() {
     read: boolean,
     notificationId: string
   ) => {
-    if (read) {
-      markAsRead(notificationId);
+    if (!read) {
+      const res = await markAsRead(notificationId);
+      if (res && !res.errorCode && !res.errors.length) {
+        const { data } = res;
+        dispatch(setAllNotifications(data));
+      } else {
+        message.error("Fail to load notifications");
+      }
     }
 
     const url = `/schema/id`;
@@ -87,7 +93,7 @@ export default function Header() {
           schema === NotificationSchema.BOOK
             ? "books/lists"
             : NotificationSchema.USER
-            ? "userProfile"
+            ? "post"
             : ""
         )
         .replace("id", schemaId)

@@ -11,20 +11,14 @@ const List = loadable(() => import("~/components/atoms/List"));
 
 
 interface Props {
-  data?: any;
+  dataFavorite: any;
   refetch: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
 }
-interface DataType {
-  name: string;
-  createdAt: Date;
-  status: string;
-}
 
 const FavoriteLists = (props: Props) => {
-  const { data, refetch, isLoading, isFetching } = props;
-
+  const { dataFavorite, refetch, isLoading, isFetching } = props;
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -38,7 +32,7 @@ const FavoriteLists = (props: Props) => {
           xl: 3,
           xxl: 4,
         }}
-        dataSource={data}
+        dataSource={dataFavorite ? dataFavorite : []}
         renderItem={(item: any, i: number) => {
           const div = Math.floor(i / 3);
           return (

@@ -104,7 +104,12 @@ const ViewProfile = () => {
       };
       // Set the result in the state
       // setMetaData(result);
-  
+      const res = await setAvatar(result);
+      if (res.message === SUCCESS) {
+        refetch();
+      } else {
+        message.error("Upload image failed");
+      }
     } catch (error: any) {
       console.error(error);
     }
@@ -122,8 +127,8 @@ const ViewProfile = () => {
             beforeUpload={beforeUpload}
             customRequest={(file: any) => uploadFileToFirebase(file)}
           >
-            {userData?.avatar ? (
-              <Avatar size={120} src={userData?.avatar} />
+            {userData?.avatar?.url ? (
+              <Avatar size={120} src={userData?.avatar?.url} />
             ) : (
               <Avatar size={120} icon={<UserOutlined />} />
             )}
