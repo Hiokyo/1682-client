@@ -11,6 +11,7 @@ export const initialState = {
 export enum NotificationSchema {
   BOOK = "BOOK",
   POST = "POST",
+  USER = "USER"
 }
 
 export interface Notification {
