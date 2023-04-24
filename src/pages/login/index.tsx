@@ -10,6 +10,8 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import styles from './styles.module.scss';
 import ModalRegister from '~/components/molecules/ModalRegister';
+import { useAppDispatch } from '~/store';
+import { setUserInfo } from '~/store/userInfo';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -21,6 +23,7 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
+  const dispatch = useAppDispatch();
 
   const handleGetCookie = async (formValues: any) => {
     setLoading(true)
@@ -39,6 +42,7 @@ const Login = () => {
               accessToken: token,
               userId: userId
             })
+            dispatch(setUserInfo(res.data));
             setLoading(false)
           }
           else {
