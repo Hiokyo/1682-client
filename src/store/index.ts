@@ -5,6 +5,7 @@ import userInfoReducer from "./userInfo";
 import refetchApiReducer from "./stateRefetchApi";
 import chatMessages from "./chatMessages";
 import payment from "./payment";
+import notification from "./notification";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     refetchApi: refetchApiReducer,
     chatMessages: chatMessages,
     payment: payment,
+    notification: notification,
   },
 });
 

@@ -11,6 +11,8 @@ import { setUserInfo, setUserMessages } from "~/store/userInfo";
 import { setUserId } from "~/store/chatMessages";
 import { getAllMessages } from "~/api/user";
 import { message } from "antd";
+import { getSelfNotification } from "~/api/notification";
+import { setAllNotifications } from "~/store/notification";
 // import { socket } from "~/socket";
 
 function Wrapper() {
@@ -36,10 +38,26 @@ function Wrapper() {
       }
     };
 
+    const getSelfNotifications = async () => {
+      try {
+        const res = await getSelfNotification();
+
+        if (res && !res.errorCode && !res.errors.length) {
+          const { data } = res;
+          dispatch(setAllNotifications(data));
+        } else {
+          message.error("Fail to load notifications");
+        }
+      } catch (error) {
+        message.error("Fail to load notifications");
+      }
+    };
+
     if (!token) {
       navigate(ROUTES.Login);
     } else {
       getSelfMessages();
+      getSelfNotifications();
     }
   }, [token, dispatch]);
 
