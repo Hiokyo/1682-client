@@ -1,6 +1,8 @@
 import { sendDelete, sendGet, sendPost, sendPut } from '~/utils/axios';
 
 export const getPosts = (params: any) => sendGet('/post/list', params);
+export const getPostDetail = (params: any) => sendGet(`/post`, params);
+
 export const setPost = (params: any) => sendPost('/post/create', params);
 export const updatePost = (postId: string, params: any) => sendPut(`/post/${postId}/update`, params);
 

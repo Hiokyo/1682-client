@@ -1,0 +1,61 @@
+.container {
+  background: #fff;
+  overflow-y: scroll;
+  max-height: 75vh !important;
+  // margin: 0px 100px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  p{
+    margin: 0 0.5rem 0;
+    align-self: self-end;
+  }
+  :global {
+    .ant-card .ant-card-actions {
+      padding-left: 24px;
+      li {
+        width: fit-content !important;
+        margin-right: 15px;
+        margin-left: 15px;
+      }
+    }
+    .ant-card-actions>li:not(:last-child){
+      border: none;
+    }
+    .ant-card-meta-title {
+      margin-bottom: 0 !important;
+    }
+    .ant-card-head {
+      min-height: 22px !important;
+      margin-top: 15px;
+    }
+  }
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    .infoContainer {
+      margin: 16px;
+    }
+  }
+  .listFile {
+    margin: 16px;
+    .btnAdd{
+      margin-bottom: 30px;
+      align-self: flex-end;
+    }
+  }
+  .listChapter {
+    margin-top: 5rem;
+  }
+  .commentContainer{
+    .comment{ 
+      background-color: #e6f7ff;
+      padding: 15px 10px ;
+      border-radius: 1rem;
+      margin-top: 10px;
+      margin-left: 50px;
+      margin-right: 50px;
+      .commentContent{
+        margin-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Dropdown, Form, List, Popover, Statistic, Tag, message } from 'antd'
+import { Avatar, Card, Dropdown, Form, Popover, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
@@ -13,31 +13,29 @@ import {
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
-import { compareAsc, format } from 'date-fns';
+import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
 import styles from './styles.module.scss'
-import { Link } from 'react-router-dom';
 
 import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post';
 import ModalEditComment from '~/components/atoms/ModalEditComment';
-import ImageList from '../ImageList';
-import ModalPost from '../PostModal';
+import ImageList from '~/components/molecules/PostsList/ImageList';
+import { usePostDetail } from '~/hooks/usePosts';
+import Spin from '~/components/atoms/Spin';
+import ModalPost from '../PostsList/PostModal';
 
-const Spin = loadable(() => import('~/components/atoms/Spin'));
-interface Prop {
-  dataPosts?: any;
-  isLoading?: boolean;
-  isFetching?: boolean;
-  refetch: () => void;
+interface Props {
+  postId: any;
 }
 
-const PostList = (props: Prop) => {
-  const { dataPosts, isFetching, isLoading, refetch } = props;
+const PostDetail = (props: Props) => {
+  const { postId } = props;
+  const {data, isLoading, isFetching, refetch} = usePostDetail({postId})
+  const dataPosts = data?.data;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
-  const [postId, setPostId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
@@ -67,9 +65,7 @@ const PostList = (props: Prop) => {
   }
 
   const handleLike_Dislike = async (itemId: string, action: string) => {
-    const postIndex = dataSource.findIndex((item: any) => item._id === itemId);
-    if (postIndex === -1) return;
-    const post = dataSource[postIndex];
+    const post = dataSource;
     let newLike = post.likeCount;
     let newDislike = post.dislikeCount;
     let updatedLike = post.like ? [...post.like] : [];
@@ -130,20 +126,15 @@ const PostList = (props: Prop) => {
       dislike: updatedDislike.length > 0 ? updatedDislike : undefined,
     };
 
-    const newDataSourse = [...dataSource];
-    newDataSourse[postIndex] = updatedPost;
-    setDataSource(newDataSourse);
+    setDataSource(updatedPost);
 
     const res = await updateActionPost(itemId, action)
     if (res.message === SUCCESS) {
-      const updatedData = [...dataSource];
-      updatedData[postIndex] = res?.data;
-      setDataSource(updatedData)
+      setDataSource(res?.data)
     }
   };
 
-  const handleKeyPress = (event: any, postId: string) => {
-    setPostId(postId)
+  const handleKeyPress = (event: any) => {
     if (event.key === "Enter") {
       form.submit();
     }
@@ -183,26 +174,22 @@ const PostList = (props: Prop) => {
   }
   return (
     <Spin spinning={isLoading || isFetching}>
-      <List
-        className={styles.listContainer}
-        itemLayout="vertical"
-        size="small"
-        style={{ maxHeight: '60vh', overflowY: 'scroll' }}
-        dataSource={dataSource}
-        renderItem={(item: any) => (
-          <div key={item._id}>
+      <div className={styles.container}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.infoContainer}>
+            <div>
             <Card
               className='mt-2'
               headStyle={{ border: 'none' }}
               actions={[
                 <Statistic
-                  value={item?.likeCount}
+                  value={dataSource?.likeCount}
                   prefix={
-                    item.like?.find((e: any) => e.user?._id === userData?._id) ?
+                    dataSource.like?.find((e: any) => e.user?._id === userData?._id) ?
                       <Popover
                         trigger={'hover'}
                         content={(
-                          item.like?.map((userLike: any) =>
+                          dataSource.like?.map((userLike: any) =>
                             <div key={userLike.user?._id}>
                               {userLike.user?.firstName} {userLike.user?.lastName}
                             </div>
@@ -210,14 +197,14 @@ const PostList = (props: Prop) => {
                         )}
                       >
                         <LikeTwoTone
-                          onClick={() => handleLike_Dislike(item._id, 'like')}
+                          onClick={() => handleLike_Dislike(dataSource._id, 'like')}
                         />
                       </Popover>
                       :
                       <Popover
                         trigger={'hover'}
                         content={(
-                          item.like?.map((userLike: any) =>
+                          dataSource.like?.map((userLike: any) =>
                             <div key={userLike.user?._id}>
                               {userLike?.user?.firstName} {userLike?.user?.lastName}
                             </div>
@@ -225,20 +212,20 @@ const PostList = (props: Prop) => {
                         )}
                       >
                         <LikeOutlined
-                          onClick={() => handleLike_Dislike(item._id, 'like')}
+                          onClick={() => handleLike_Dislike(dataSource._id, 'like')}
                         />
                       </Popover>
                   }
                   valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
-                  value={item.dislikeCount}
+                  value={dataSource.dislikeCount}
                   prefix={
-                    item.dislike?.find((e: any) => e.user?._id === userData?._id) ?
+                    dataSource.dislike?.find((e: any) => e.user?._id === userData?._id) ?
                       <Popover
                         trigger={'hover'}
                         content={(
-                          item.dislike?.map((userDislike: any) =>
+                          dataSource.dislike?.map((userDislike: any) =>
                             <div key={userDislike.user?._id}>
                               {userDislike.user?.firstName} {userDislike.user?.lastName}
                             </div>
@@ -246,14 +233,14 @@ const PostList = (props: Prop) => {
                         )}
                       >
                         <DislikeTwoTone
-                          onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                          onClick={() => handleLike_Dislike(dataSource._id, 'dislike')}
                         />
                       </Popover>
                       :
                       <Popover
                         trigger={'hover'}
                         content={(
-                          item.dislike?.map((userDislike: any) =>
+                          dataSource.dislike?.map((userDislike: any) =>
                             <div key={userDislike.user?._id}>
                               {userDislike.user?.firstName} {userDislike.user?.lastName}
                             </div>
@@ -261,18 +248,18 @@ const PostList = (props: Prop) => {
                         )}
                       >
                         <DislikeOutlined
-                          onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                          onClick={() => handleLike_Dislike(dataSource._id, 'dislike')}
                         />
                       </Popover>
                   }
                   valueStyle={{ fontSize: '16px' }}
                 />,
                 <Statistic
-                  value={item.commentCount}
+                  value={dataSource.commentCount}
                   valueStyle={{ fontSize: '16px' }}
                   prefix={
                     <MessageOutlined
-                      onClick={() => handleShowComment(item._id)}
+                      onClick={() => handleShowComment(dataSource._id)}
                     />
                   }
                 />,
@@ -282,13 +269,9 @@ const PostList = (props: Prop) => {
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'} />}
                 title={
-                  // <a href={item.href}>{item.title}</a>
-                  <Link
-                    // to={`/userProfile/${item.updatedBy?._id}`}
-                    to={`/post/${item._id}`}
-                  >
-                    {item.updatedBy?.firstName} {item.updatedBy?.lastName}
-                  </Link>
+                  <div>
+                    {dataSource.updatedBy?.firstName} {dataSource.updatedBy?.lastName}
+                  </div>
                 }
                 description={(
                   // <>
@@ -296,20 +279,20 @@ const PostList = (props: Prop) => {
                   //   <div>{item.description}</div>
                   // </>
                   <div>
-                    {format(new Date(item.createdAt), DATE)}
+                    {/* {format(new Date(dataSource.createdAt), DATE)} */}
                   </div>
                 )}
               />
               <div className={styles.postContent}>
-                {item.content}
-                <ImageList imageList={item.images} />
+                {dataSource.content}
+                <ImageList imageList={dataSource.images} />
               </div>
             </Card>
 
-            {showCommentMap[item._id] &&
+            {showCommentMap[dataSource._id] &&
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
-                  {item?.comments?.map((comment: any) =>
+                  {dataSource?.comments?.map((comment: any) =>
                     <div
                       key={comment._id}
                       className={styles.comment}
@@ -325,14 +308,14 @@ const PostList = (props: Prop) => {
                             {
                               items: [
                                 {
-                                  label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                  label: <div onClick={() => handleEditComment(dataSource._id, comment._id)}>Edit comment</div>,
                                   key: '0',
                                 },
                                 {
                                   type: 'divider',
                                 },
                                 {
-                                  label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                  label: <div onClick={() => handleDeleteComment(dataSource._id, comment._id)}>Delete comment</div>,
                                   key: '2',
                                   danger: true,
                                 },
@@ -357,7 +340,6 @@ const PostList = (props: Prop) => {
                       form={form}
                       layout='vertical'
                       onFinish={handleComment}
-                      key={item._id}
                     >
                       <Form.Item
                         name='content'
@@ -365,7 +347,7 @@ const PostList = (props: Prop) => {
                         <TextArea
                           className='mt-2'
                           placeholder='Enter your comment'
-                          onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                          onKeyPress={(e: any) => handleKeyPress(e)}
                         />
                       </Form.Item>
                     </Form>
@@ -374,8 +356,9 @@ const PostList = (props: Prop) => {
               </Spin>
             }
           </div>
-        )}
-      />
+        </div>
+      </div>
+    </div>
       <ModalEditComment
         visible={visibleModalEditComment}
         setVisivle={setVisibleModalEditComment}
@@ -393,4 +376,5 @@ const PostList = (props: Prop) => {
   )
 }
 
-export default PostList
+
+export default PostDetail

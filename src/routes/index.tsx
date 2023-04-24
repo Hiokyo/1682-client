@@ -3,14 +3,18 @@ import Auth from "~/wrapper/Auth";
 
 const Home = loadable(() => import("~/pages/home"));
 const Login = loadable(() => import("~/pages/login"));
+
 const Posts = loadable(() => import("~/pages/posts/lists"));
+const PostDetails = loadable(() => import("~/pages/posts/[id]"));
+
 const Books = loadable(() => import("~/pages/books/lists"));
+const BookDetail = loadable(() => import("~/pages/books/[id]"));
+
 const Favorites = loadable(() => import("~/pages/favorite"));
 const ResetPassword = loadable(() => import("~/pages/resetPassword"));
 const Category = loadable(() => import("~/pages/category"));
 const Campaign = loadable(() => import("~/pages/thread"));
 const DashBoard = loadable(() => import("~/pages/dashboard"));
-const BookDetail = loadable(() => import("~/pages/books/[id]"));
 const Profile = loadable(() => import("~/pages/profile"));
 const Setting = loadable(() => import("~/pages/systemSetting"));
 const ResetPasswordCode = loadable(() => import("~/pages/getResetPwCode"));
@@ -21,14 +25,17 @@ const PaymentReturn = loadable(() => import("~/pages/payment/PaymentReturn"));
 export const ROUTES = {
   Home: "/",
   Posts: "/posts",
+  PostDetails: (id: number | string) => `/post/${id}`,
+
   Books: "/books",
+  BookDetail: (id: number | string) => `/books/lists/${id}`,
+
   Favorites: "/favorites",
   Category: "/category",
   Campaign: "/campaign",
   DashBoard: "/dashboard",
   Profile: "/profile",
   Setting: "/setting",
-  BookDetail: (id: number | string) => `/books/lists/${id}`,
   userProfile: (id: number | string) => `/userProfile/${id}`,
   Payment: "/payment",
   PaymentReturn: "/payment-return",
@@ -53,6 +60,14 @@ const routes = [
     layout: Auth,
     isAuth: true,
   },
+  {
+    exact: true,
+    path: ROUTES.PostDetails(":id"),
+    component: PostDetails,
+    layout: Auth,
+    isAuth: true,
+  },
+
   {
     exact: true,
     path: ROUTES.Books,

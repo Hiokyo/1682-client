@@ -8,7 +8,7 @@ const ImageList = (props: Props) => {
   const {imageList} = props;
   return (
     <div className={styles.grid}>
-    {imageList.map((item: any, index: any) => (
+    {imageList?.map((item: any, index: any) => (
       <div key={index} className={styles.gridItem}>
         <img src={item.url} alt={item?.name} />
       </div>
