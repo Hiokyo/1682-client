@@ -8,6 +8,7 @@ const Posts = loadable(() => import("~/pages/posts/lists"));
 const PostDetails = loadable(() => import("~/pages/posts/[id]"));
 
 const Books = loadable(() => import("~/pages/books/lists"));
+const CreateBook = loadable(() => import("~/pages/books/create"));
 const BookDetail = loadable(() => import("~/pages/books/[id]"));
 
 const Favorites = loadable(() => import("~/pages/favorite"));
@@ -29,6 +30,7 @@ export const ROUTES = {
   PostDetails: (id: number | string) => `/post/${id}`,
 
   Books: "/books",
+  CreateBook: "/books/create",
   BookDetail: (id: number | string) => `/books/lists/${id}`,
 
   Favorites: "/favorites",
@@ -74,6 +76,13 @@ const routes = [
     exact: true,
     path: ROUTES.Books,
     component: Books,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.CreateBook,
+    component: CreateBook,
     layout: Auth,
     isAuth: true,
   },

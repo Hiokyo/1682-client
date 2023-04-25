@@ -98,7 +98,7 @@ const FriendList = () => {
             {/* Show the name and last message when screen size is large */}
             <div className={styles.detailsContainer}>
               <List.Item.Meta
-                avatar={<Avatar size={40} src={item.user.avatar} />}
+                avatar={<Avatar size={40} src={item.user.avatar?.url} />}
                 title={item.user.firstName + " " + item.user.lastName}
                 description={getLastMessage(item.user._id)}
               />
