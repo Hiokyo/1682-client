@@ -17,6 +17,7 @@ const ReportList = () => {
     <>
       <Filter
         refetch={refetch}
+        onChange={setParams}
       />
       <ReportTable
         setParams={setParams}
