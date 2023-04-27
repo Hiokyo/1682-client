@@ -13,15 +13,15 @@ export default function SideNav(props: { menus: any[] }) {
   const handleClick: MenuProps['onClick'] = ({ key, keyPath }) => {
     history.push(key);
   };
-  const menusKey = menus.map((item: any) => item.key)
+  const menusKey = menus.map((item: any) => item?.key)
   useEffect(() => {
     menus.forEach((route) => {
-      if (pathname.startsWith(route.url || '###')) {
+      if (pathname.startsWith(route?.url || '###')) {
         setSelectedKey(route.key);
       }
-      if (route.children) {
-        for (let i = 0; i < route.children.length; i += 1) {
-          const childRoute = route.children[i];
+      if (route?.children) {
+        for (let i = 0; i < route?.children?.length; i += 1) {
+          const childRoute = route?.children[i];
           if (window.location.pathname.startsWith(childRoute.url || '###')) {
             setSelectedKey(childRoute.key);
             break;

@@ -224,7 +224,7 @@ const BookList = (props: Prop) => {
         className={styles.listContainer}
         itemLayout="vertical"
         size="small"
-        style={{ maxHeight: '60vh', overflowY: 'scroll' }}
+        style={{ maxHeight: '65vh', overflowY: 'scroll' }}
         dataSource={dataSource}
         renderItem={(item: any) => (
           <div key={item._id}>

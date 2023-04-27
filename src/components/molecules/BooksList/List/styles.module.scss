@@ -73,6 +73,7 @@
 @media only screen and (max-width: 500px) {
   .listContainer {
     margin: 10px 0px;
+    max-height: 60vh !important;
     :global {
       .ant-card .ant-card-actions {
         padding-left: 24px;

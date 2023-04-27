@@ -1,0 +1,68 @@
+.container {
+  .listChapter {
+    max-height: 60vh;
+    overflow-y: scroll;
+    padding: 24px;
+  }
+  .title{
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  
+  .datePicker{
+    width: calc(100% - 8px);
+  }
+  
+  .multiEditor{
+    :global {
+      .ql-editor{
+        height: 150px;
+      }
+    }
+  }
+  .btnGroup {
+    margin-top: 20px;
+  }
+  
+  .titleWrapper{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  
+    .titleSituation{
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 500;
+    }
+  }
+  
+  .btnAddContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .btnAdd{
+      display: flex;
+      align-items: center;
+  
+      .union{
+        margin-right: 6px;
+        width: 14px;
+      }
+    }
+  }
+  
+  
+  .btnGroup {
+    display: flex;
+    justify-content: flex-end;
+  
+    .btnClose {
+      margin-right: 5.5px;
+    }
+  }
+  
+}
+
+

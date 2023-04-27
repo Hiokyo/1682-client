@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { SortPosts } from '~/utils/constant';
+import { SortPosts, UserRole } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
@@ -10,6 +10,7 @@ import iconPlus from '~/assets/images/iconPlus.svg';
 import styles from './styles.module.scss';
 import ModalPost from '../PostModal';
 import Input from '~/components/atoms/Input';
+import { Authorization } from '~/wrapper/Authorization';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalIdeas = loadable(() => import('~/components/molecules/BooksList/ModalBooks'));
@@ -66,16 +67,19 @@ const Filter = (props: Props) => {
                 </Form.Item>
                 <Form.Item name='keyword'>
                   <Input
+                    className={styles.keyword}
                     autoComplete='off'
                     placeholder="Search"
                   />
                 </Form.Item>
               </div>
             </Form>
-            <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
-              <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
-              <p className={styles.btnText}> New post</p>
-            </Button>
+            <Authorization roles={[UserRole.Author, UserRole.User]}>
+              <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
+                <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
+                <p className={styles.btnText}> New post</p>
+              </Button>
+            </Authorization>
           </div>
         </div>
       </div>

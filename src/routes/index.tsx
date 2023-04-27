@@ -16,10 +16,14 @@ const ResetPassword = loadable(() => import("~/pages/resetPassword"));
 const Category = loadable(() => import("~/pages/category"));
 const Campaign = loadable(() => import("~/pages/thread"));
 const DashBoard = loadable(() => import("~/pages/dashboard"));
+
+const Reports = loadable(() => import("~/pages/reports"));
+
+const userProfile = loadable(() => import("~/pages/userProfile/[id]"));
 const Profile = loadable(() => import("~/pages/profile"));
+
 const Setting = loadable(() => import("~/pages/systemSetting"));
 const ResetPasswordCode = loadable(() => import("~/pages/getResetPwCode"));
-const userProfile = loadable(() => import("~/pages/userProfile/[id]"));
 // const Payment = loadable(() => import("~/pages/payment"));
 const PaymentOne = loadable(() => import("~/pages/payment/[id]"));
 const PaymentReturn = loadable(() => import("~/components/molecules/Payments/PaymentReturn/PaymentReturn"));
@@ -37,9 +41,12 @@ export const ROUTES = {
   Category: "/category",
   Campaign: "/campaign",
   DashBoard: "/dashboard",
+  Reports: "/reports",
+
   Profile: "/profile",
-  Setting: "/setting",
   userProfile: (id: number | string) => `/userProfile/${id}`,
+
+  Setting: "/setting",
   Payment: "/payment",
   PaymentOne: (id: number | string) => `/payment/${id}`,
   PaymentReturn: "/payment-return",
@@ -144,13 +151,13 @@ const routes = [
     layout: Auth,
     isAuth: true,
   },
-  // {
-  //   exact: true,
-  //   path: ROUTES.Payment,
-  //   component: Payment,
-  //   layout: Auth,
-  //   isAuth: true,
-  // },
+  {
+    exact: true,
+    path: ROUTES.Reports,
+    component: Reports,
+    layout: Auth,
+    isAuth: true,
+  },
 
   {
     exact: true,

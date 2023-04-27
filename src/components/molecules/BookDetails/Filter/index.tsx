@@ -31,7 +31,7 @@ const Filter = (props: Props) => {
           </Link>
           <Button className={styles.btnAdd} onClick={showAddModal}>
             <DownloadOutlined />
-            Download file
+            <p className={styles.btnText}>Download file</p>
           </Button>
         </div>
       </div>

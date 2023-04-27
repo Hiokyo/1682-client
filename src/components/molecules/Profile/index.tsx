@@ -1,11 +1,11 @@
 import { Avatar, Button, Col, Divider, Row, Tabs, TabsProps, Tooltip, Typography, message } from 'antd';
 import React, { useState } from 'react'
 import { useUser } from '~/hooks/useUser';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, WarningOutlined } from '@ant-design/icons';
 import Spin from '~/components/atoms/Spin';
 import styles from './styles.module.scss'
 import { addFriend } from '~/api/friend';
-import { SUCCESS } from '~/utils/constant';
+import { SUCCESS, UserRole } from '~/utils/constant';
 import {UserDeleteOutlined} from '@ant-design/icons'
 import { RootState, useAppDispatch, useAppSelector } from '~/store';
 import Infomations from './Infomations';
@@ -13,7 +13,10 @@ import Friends from './Friends';
 import ChatModal from '~/components/atoms/ChatModal';
 import Post from './Post';
 import { setMessages, setReceiver } from '~/store/chatMessages';
-import { getMessages } from '~/api/user';
+import { getMessages, warningUser } from '~/api/user';
+import ModalConfirm from '~/components/atoms/ModalConfirm';
+import Input from '~/components/atoms/Input';
+import { Authorization } from '~/wrapper/Authorization';
 interface Props{
   userId: any;
 }
@@ -29,7 +32,8 @@ const Profile = (props: Props) => {
   const [adding, setAdding] = useState(false);
   const me = useAppSelector((state) => state.userInfo.userData);
   const [openChat, setOpenChat] = useState(false);
-
+  const [visibleModalConfirm, setVisibleModalConfirm] = useState(false);
+  const [messageWarn, setMessagesWarn] = useState('')
   const handleAddFriend = async () => {
     setAdding(true)
     const res = await addFriend(userId);
@@ -89,6 +93,18 @@ const Profile = (props: Props) => {
       message.error(String(error));
     }
   };
+
+  const handleWarning = async () => {
+    if (!messageWarn) return message.error('Please enter message');
+    const res = await warningUser(userId, {message: messageWarn} );
+    if (res.message === SUCCESS) {
+      message.success('Warning success')
+      setVisibleModalConfirm(false)
+    } else {
+      message.error(res.message)
+    }
+  }
+
   return (
     <Spin spinning={isLoading || isFetching}>
       <div className={styles.profileContainer}>
@@ -100,6 +116,14 @@ const Profile = (props: Props) => {
               style={{marginBottom: 0}}
             >
               {userData?.firstName} {userData?.lastName}
+              <Authorization
+                roles={[UserRole.Admin]}
+              >
+                <WarningOutlined
+                  style={{fontSize: 24, marginLeft: 5, color: 'red'}}
+                  onClick={() => setVisibleModalConfirm(true)}
+                />
+              </Authorization>
             </Typography.Title>
             <p>{userData?.role}</p>
             <Avatar.Group>
@@ -144,6 +168,18 @@ const Profile = (props: Props) => {
         userId={userId}
         receiverName={receiverName}
       />
+
+      <ModalConfirm
+        visible={visibleModalConfirm}
+        title="Are you sure to warning this user?"
+        onCancel={() => setVisibleModalConfirm(false)}
+        onOk={handleWarning}
+      >
+        <Input
+          onChange={(e: any) => setMessagesWarn(e.target.value)}
+          onPressEnter={handleWarning}
+        />
+      </ModalConfirm>
     </Spin>
 
   );

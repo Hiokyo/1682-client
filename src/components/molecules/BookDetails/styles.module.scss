@@ -1,7 +1,7 @@
 .container {
   background: #fff;
   overflow-y: scroll;
-  max-height: 64vh !important;
+  max-height: 70vh !important;
   // margin: 0px 100px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   p{
@@ -46,10 +46,16 @@
     margin-top: 5rem;
   }
   .bookContainer {
-    background-image: url('~/assets/images/readBookBg.jpg');
+    background-image: url('~/assets/images/book-bg.png');
     background-repeat: no-repeat, repeat;
     background-position: center;
     background-size: cover;
+
+    .pageNumber {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .flipBook {
       .coverPage {
         background-color: #fdfaf7 !important;

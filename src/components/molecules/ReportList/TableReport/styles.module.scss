@@ -1,0 +1,60 @@
+.container {
+  .tableContainer{
+    :global { 
+      .ant-table {
+        overflow-x: auto;
+      }
+      .ant-table-cell-scrollbar:not([rowspan]){
+        box-shadow: none;
+        background-color: #002766 
+      }
+      .ant-table-thead{
+        height: 60px;
+      }
+      .ant-table-thead >tr>th {
+        color: #FFFFFF;
+      }
+      .ant-table-thead >tr>td {
+        background-color: #002766 
+      }
+      
+      .ant-table-cell:nth-last-child(2)::before{
+        background-color: #002766 !important;
+      }
+      .ant-form-item {
+        margin: 0;
+      }
+      .ant-table-body {
+        font-size: 12px !important;
+      }
+  
+      .ant-table-thead th,
+      .ant-table-column-has-sorters {
+        background: #002766 !important;
+        color: #fff;
+      }
+  
+      .ant-table-cell::before,
+      .ant-table-thead th.ant-table-column-has-sorters:hover:before,
+      .ant-table-thead th.ant-table-column-sort:before {
+        background-color: #fff !important;
+      }
+    }
+    .groupSave {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+}
+.headerConfirmDelete{
+  display: flex;
+  .iconWarning{
+    width: 20px !important;
+  }
+  .title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    margin-left: 16px;
+  }
+}

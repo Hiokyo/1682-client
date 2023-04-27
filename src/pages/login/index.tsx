@@ -14,7 +14,6 @@ import { useAppDispatch } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
-const Modal = loadable(() => import('~/components/atoms/Modal'));
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -40,7 +39,8 @@ const Login = () => {
             const userId = res?.data?._id
             handleLogin({
               accessToken: token,
-              userId: userId
+              userId: userId,
+              userRole: res.data.role,
             })
             dispatch(setUserInfo(res.data));
             setLoading(false)

@@ -183,7 +183,6 @@ const Post = (props: Props) => {
     setVisibleModalEditPost(true)
     setPostEditing(post)
   }
-  console.log(dataSource)
   return (
     <Spin spinning={isLoading || isFetching}>
       <List

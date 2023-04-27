@@ -1,237 +1,112 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import type { InputRef } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import React, { useState } from 'react';
+
+import { Button, Form, Input, message } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
-const EditableContext = React.createContext<FormInstance<any> | null>(null);
-
-interface Item {
-  key: string;
-  name: string;
-  content: string;
-}
-
-
-interface EditableRowProps {
-  index: number;
-}
-interface EditableCellProps {
-  title: React.ReactNode;
-  editable: boolean;
-  children: React.ReactNode;
-  fieldType: string;
-  dataIndex: keyof Item;
-  record: Item;
-  handleSave: (record: Item) => void;
-}
+import TextEditor from '~/components/atoms/TextEditor';
+import styles from './styles.module.scss'
+import Svg from '~/components/atoms/Svg';
+import iconPlus from '~/assets/images/iconPlus.svg';
+import { DeleteOutlined } from '@ant-design/icons';
+import FormBook from './Filter';
+import { createBook } from '~/api/book';
+import { SUCCESS } from '~/utils/constant';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '~/routes';
 
 const CreateBooks = () => {
-
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
-  const [form] = Form.useForm();
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
-  );
-};
-
-const EditableCell: React.FC<EditableCellProps> = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  fieldType,
-  record,
-  handleSave,
-  ...restProps
-}) => {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<InputRef>(null);
-  const form = useContext(EditableContext)!;
-
-  // useEffect(() => {
-  //   if (editing) {
-  //     inputRef.current!.focus();
-  //   }
-  // }, [editing]);
-
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  };
-
-  const save = async () => {
-    try {
-      const values = await form.validateFields();
-
-      toggleEdit();
-      handleSave({ ...record, ...values });
-    } catch (errInfo) {
-      console.log('Save failed:', errInfo);
+const [form] = Form.useForm();
+const [bookInfo, setBookInfo] = useState<any>(null);
+const navigate = useNavigate();
+const handleSave = async (formValues: any) => {
+  if (formValues && bookInfo) {
+    const fmData = {
+      ...bookInfo,
+      chapters: formValues.chapters,
     }
-  };
-
-  let childNode = children;
-
-  const renderFormItem = () => {
-    switch (fieldType) {
-      case 'Input':
-        return (
-          <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-        );
-      case 'TextEditor':
-        return (
-          <ReactQuill theme="snow"/>
-        )
-      default:
-        break;
+    const res = await createBook(fmData);
+    if (res.message === SUCCESS) {
+      message.success('Create book successfully');
+      form.resetFields();
+      navigate(ROUTES.Books) 
+    } else {
+      message.error('Create book failed');
     }
   }
-
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{ margin: 0 }}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: '',
-          },
-        ]}
-      >
-      {
-        renderFormItem()
-      }
-      </Form.Item>
-    ) : (
-      <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
-        {children}
-      </div>
-    );
-  }
-
-  return <td {...restProps}>{childNode}</td>;
-};
-
-type EditableTableProps = Parameters<typeof Table>[0];
-
-interface DataType {
-  key: React.Key;
-  name: string;
-  content: string
 }
 
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
-const [dataSource, setDataSource] = useState<DataType[]>([
-  {
-    key: '0',
-    name: 'Edward King 0',
-    content: 'asdasdasdasdsadasd'
-  },
-  {
-    key: '1',
-    name: 'Edward King 1',
-    content: 'London, Park Lane no. 1',
-  },
-]);
-
-const [count, setCount] = useState(2);
-
-const handleDelete = (key: React.Key) => {
-  const newData = dataSource.filter((item) => item.key !== key);
-  setDataSource(newData);
+const handleGetBookInfo = (value: any) => {
+  setBookInfo(value)
 };
-
-const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    width: '20%',
-    editable: true,
-  },
-  {
-    title: 'Content',
-    dataIndex: 'content',
-    editable: true,
-  },
-  {
-    title: 'operation',
-    dataIndex: 'operation',
-    width: '5%',
-    render: (_, record: any) =>
-      dataSource.length >= 1 ? (
-        <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-          <a>Delete</a>
-        </Popconfirm>
-      ) : null,
-  },
-];
-
-const handleAdd = () => {
-  const newData: DataType = {
-    key: count,
-    name: `Edward King ${count}`,
-    content: `London, Park Lane no. ${count}`,
-  };
-  setDataSource([...dataSource, newData]);
-  setCount(count + 1);
-};
-
-const handleSave = (row: DataType) => {
-  const newData = [...dataSource];
-  const index = newData.findIndex((item) => row.key === item.key);
-  const item = newData[index];
-  newData.splice(index, 1, {
-    ...item,
-    ...row,
-  });
-  setDataSource(newData);
-};
-
-const components = {
-  body: {
-    row: EditableRow,
-    cell: EditableCell,
-  },
-};
-
-const columns = defaultColumns.map((col) => {
-  if (!col.editable) {
-    return col;
-  }
-  return {
-    ...col,
-    onCell: (record: DataType) => ({
-      record,
-      editable: col.editable,
-      dataIndex: col.dataIndex,
-      title: col.title,
-      handleSave,
-    }),
-  };
-});
 
 return (
-  <div>
-    <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-      Add a row
-    </Button>
-    <Table
-      components={components}
-      rowClassName={() => 'editable-row'}
-      bordered
-      pagination={false}
-      dataSource={dataSource}
-      columns={columns as ColumnTypes}
+  <div className={styles.container}>
+    <FormBook
+      onChange={handleGetBookInfo}
     />
+    <Form
+      form={form}
+      layout='vertical'
+      onFinish={handleSave}
+    >
+      <div className={styles.listChapter}>
+        <Form.List
+          name='chapters'
+        >
+          {(fields, { add, remove }) => (
+            <>
+              {fields?.map((value, index) => (
+                <div key={value.key}>
+                  <div className={styles.titleWrapper}>
+                    <div className={styles.titleSituation}>{`Chapter ${index + 1}`}</div>
+                    <div>
+                      {(fields.length > 1) ?
+                        <a className='cursor-pointer' onClick={() => remove(value.name)} ><DeleteOutlined style={{fontSize: 20}} /></a>
+                        :
+                        <a className='cursor-not-allowed'  ><DeleteOutlined style={{fontSize: 20}} /></a>
+                      }
+                    </div>
+                  </div>
+                  <Form.Item
+                    name={[value.name, 'name']}
+                    rules={[
+                      { required: true, message: '' },
+                    ]}
+                  >
+                    <Input/>
+                  </Form.Item>
+                  <Form.Item
+                    name={[value.name, 'content']}
+                    className={styles.multiEditor}
+                  >
+                    <TextEditor className={index} />
+                  </Form.Item>
+                </div>
+              ))}
+              <div className={styles.btnAddContainer}>
+                  <Button
+                    onClick={() => add()}
+                    className={styles.btnAdd}
+                    type='primary'
+                  >
+                    <Svg src={iconPlus} alt='union' className={styles.union} />
+                    {'Add chapter'}
+                  </Button>
+              </div>
+            </>
+          )}
+        </Form.List>
+      </div>
+      <div className={styles.btnGroup}>
+        <Button
+          htmlType='submit'
+        >
+          {'Create'}
+        </Button>
+      </div>
+    </Form>
   </div>
-  )
+);
 }
 
 export default CreateBooks

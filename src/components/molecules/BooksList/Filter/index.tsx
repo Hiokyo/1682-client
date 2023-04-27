@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { PARAMS_GET_ALL_NAME, SortBooks } from '~/utils/constant';
+import { PARAMS_GET_ALL_NAME, SortBooks, UserRole } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
@@ -10,6 +10,8 @@ import iconPlus from '~/assets/images/iconPlus.svg';
 import styles from './styles.module.scss';
 import { useCategories } from '~/hooks/useCategory';
 import Input from '~/components/atoms/Input';
+import { Link } from 'react-router-dom';
+import { Authorization } from '~/wrapper/Authorization';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalBooks = loadable(() => import('~/components/molecules/BooksList/ModalBooks'));
@@ -92,15 +94,23 @@ const Filter = (props: Props) => {
                 </Form.Item>
                 <Form.Item name='keyword'>
                   <Input
+                    className={styles.keyword}
                     autoComplete='off'
                     placeholder="Search"
                   />
                 </Form.Item>
               </div>
             </Form>
-            <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
-              <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
-            </Button>
+            <Authorization roles={[UserRole.Author]}>
+              <Link 
+                to='/books/create'
+              >
+                <Button className={styles.btnAdd} type="primary">
+                  <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
+                  <p className={styles.btnText}> New book</p>
+                </Button>        
+              </Link>
+            </Authorization>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ interface Props {
   onCancel: () => void;
   onOk: () => void;
   title: string;
+  children?: any;
 }
 
 const ModalConfirm = (props: Props) => {
@@ -27,6 +28,7 @@ const ModalConfirm = (props: Props) => {
         <Svg className={styles.iconWarning} src={iconWarning} alt="icon warning"/>
         <span className={styles.title}>{title}</span>
       </div>
+      {props.children}
     </Modal>
   )
 }

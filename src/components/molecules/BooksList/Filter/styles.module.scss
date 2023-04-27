@@ -48,15 +48,14 @@
       .btnAdd {
         display    : flex;
         align-items: center;
+        p {
+          margin: 0;
+        }
         .iconPlus {
           width       : 10.75px;
           height      : 11.25px;
-          margin-right: 8px;
+          margin-right: 5px;
         }
-      }
-
-      .btnAdd:after{
-        content:"Add new book";
       }
     }
   }
@@ -114,22 +113,21 @@
         .btnAdd {
           display    : flex;
           align-items: center;
+          p {
+            margin: 0;
+          }
           .iconPlus {
             width       : 10.75px;
             height      : 11.25px;
-            margin-right: 8px;
           }
         }
 
-        .btnAdd:after{
-          content:"Add new book";
-        }
       }
     }
   }
 }
 
-@media only screen and (max-width: 500px){
+@media only screen and (max-width: 650px){
   .container {
     background: #fff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
@@ -153,27 +151,23 @@
         display        : flex;
         justify-content: space-between;
         .searchName{ 
-          width: 190px;
+          width: 100px;
         }
         .filterWrapper {
           display: flex;
-  
+          flex-direction: column;
           :global {
             .ant-form-item {
               margin: 0;
             }
           }
-  
-          .rangePicker {
-            width       : 256px;
-            margin-right: 8px;
+
+          .selectSort {
+            margin-bottom: 0.5rem;
           }
   
-          .selectProject,
-          .selectStatus,
-          .selectMember {
-            width       : 97px;
-            margin-right: 8px;
+          .keyword {
+            width       : 200px;
           }
   
         }
@@ -181,16 +175,15 @@
         .btnAdd {
           display    : flex;
           align-items: center;
-          padding: 4px 5px;
+          align-self: center;
           .iconPlus {
             width       : 10.75px;
             height      : 11.25px;
-            margin-right: 8px;
+            margin: 0;
           }
-        }
-
-        .btnAdd:after{
-          content:"New book";
+          .btnText {
+            display: none;
+          }
         }
       }
     }

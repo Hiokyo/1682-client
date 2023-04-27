@@ -11,6 +11,7 @@ import {
   UnorderedListOutlined,
   TagsOutlined,
   DashboardOutlined,
+  FileExclamationOutlined,
   HeartOutlined,
   BookOutlined } from '@ant-design/icons'
 import { Content, Footer } from 'antd/es/layout/layout';
@@ -19,6 +20,8 @@ import Sider from 'antd/es/layout/Sider';
 import history from '~/utils/history';
 import SideNav from '~/components/molecules/Sidebar';
 import FriendList from '~/components/molecules/FriendList';
+import { RootState, useAppSelector } from '~/store';
+import { UserRole } from '~/utils/constant';
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -33,8 +36,7 @@ function Auth(props: Props) {
   } = theme.useToken();
 
   const { pathname } = useLocation();
-  const convertPathName = pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
-
+  const userData = useAppSelector((state: RootState) => state.userInfo.userData); 
   const menuLeft: MenuItem[] = useMemo(() => [
     {
       key: ROUTES.Posts,
@@ -50,27 +52,34 @@ function Auth(props: Props) {
       url: ROUTES.Books,
       content: 'Books'
     },
-    {
+    (userData && (userData.role && userData.role !== UserRole.Admin)) && {
       key: ROUTES.Favorites,
       label: <Link to={ROUTES.Favorites}>Favorites</Link>,
       icon: <HeartOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.Favorites,
     },
-    {
+
+   {
+      key: ROUTES.Reports,
+      label: <Link to={ROUTES.Reports}>Reports</Link>,
+      icon: <FileExclamationOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Reports,
+    },
+    (userData && (userData.role && userData.role === UserRole.Admin)) && {
       key: ROUTES.Category,
       label: <Link to={ROUTES.Category}>Category</Link>,
       icon: <TagsOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.Category,
       content: 'Category'
     },
-    {
+    (userData && (userData.role && userData.role === UserRole.Admin)) && {
       key: ROUTES.DashBoard,
       label: <Link to={ROUTES.DashBoard}>DashBoard</Link>,
       icon: <DashboardOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.DashBoard,
       content: 'DashBoard'
     },
-  ], []);
+  ], [userData]);
 
   return (
     <Layout className={styles.layoutContainer}>

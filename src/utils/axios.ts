@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     const data: any = error.response?.data;
-    if (data?.errorCode === '403') {
+    if (data?.errorCode === '403' && data?.message !== 'Required admin permission') {
       handleLogout(ROUTES.Login)
     }
     // if (id) {

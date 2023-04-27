@@ -14,7 +14,7 @@ import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
 import { compareAsc, format } from 'date-fns';
-import { DATE, SUCCESS } from '~/utils/constant';
+import { DATE, SUCCESS, UserRole } from '~/utils/constant';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
 import styles from './styles.module.scss'
@@ -24,6 +24,7 @@ import { deletePostComment, setCommentPost, updateActionPost } from '~/api/post'
 import ModalEditComment from '~/components/atoms/ModalEditComment';
 import ImageList from '../ImageList';
 import ModalPost from '../PostModal';
+import { Authorization } from '~/wrapper/Authorization';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -187,7 +188,7 @@ const PostList = (props: Prop) => {
         className={styles.listContainer}
         itemLayout="vertical"
         size="small"
-        style={{ maxHeight: '60vh', overflowY: 'scroll' }}
+        style={{ maxHeight: '65vh', overflowY: 'scroll' }}
         dataSource={dataSource}
         renderItem={(item: any) => (
           <div key={item._id}>
@@ -275,7 +276,7 @@ const PostList = (props: Prop) => {
                       onClick={() => handleShowComment(item._id)}
                     />
                   }
-                />,
+                />
               ]}
               // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
@@ -361,24 +362,26 @@ const PostList = (props: Prop) => {
                     </div>
                   )
                   }
-                  <div className={styles.commentArea}>
-                    <Form
-                      form={form}
-                      layout='vertical'
-                      onFinish={handleComment}
-                      key={item._id}
-                    >
-                      <Form.Item
-                        name='content'
+                  <Authorization roles={[UserRole.Author, UserRole.User]}>
+                    <div className={styles.commentArea}>
+                      <Form
+                        form={form}
+                        layout='vertical'
+                        onFinish={handleComment}
+                        key={item._id}
                       >
-                        <TextArea
-                          className='mt-2'
-                          placeholder='Enter your comment'
-                          onKeyPress={(e: any) => handleKeyPress(e, item._id)}
-                        />
-                      </Form.Item>
-                    </Form>
-                  </div>
+                        <Form.Item
+                          name='content'
+                        >
+                          <TextArea
+                            className='mt-2'
+                            placeholder='Enter your comment'
+                            onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                          />
+                        </Form.Item>
+                      </Form>
+                    </div>
+                  </Authorization>
                 </div>
               </Spin>
             }

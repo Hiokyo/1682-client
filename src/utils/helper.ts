@@ -1,6 +1,7 @@
 import { ROUTES } from "~/routes";
 import { getCookie, removeCookie, setCookie } from "./cookie";
 import history from "./history";
+import { UserRole } from "./constant";
 
 export const getFileName = (path: string) => {
   const index = path.lastIndexOf("/");
@@ -12,6 +13,7 @@ interface IHandleLogin {
   expiresOn?: Date | null;
   callbackUrl?: string;
   userId?: string;
+  userRole?: any;
 }
 
 export const handleLogin = ({
@@ -19,6 +21,7 @@ export const handleLogin = ({
   expiresOn,
   callbackUrl,
   userId,
+  userRole,
 }: IHandleLogin) => {
   if (typeof window === "undefined" || !accessToken) return;
   const expires = expiresOn ? +new Date(expiresOn) : 9999;
@@ -29,9 +32,18 @@ export const handleLogin = ({
     setCookie("userId", userId, { expires });
   }
 
-  if (getCookie("token")) {
-    history.push(callbackUrl ?? ROUTES.Posts);
+  if (getCookie('token')) {
+    if (userRole === UserRole.Admin) {
+      history.push(callbackUrl ?? ROUTES.DashBoard);
+    }
+    if (userRole === UserRole.Author ) {
+      history.push(ROUTES.Books);
+    } else {
+      history.push(ROUTES.Posts);
+    }
+    // window.location.reload();
   }
+
 };
 
 export const handleLogout = (callbackUrl = ROUTES.Posts) => {

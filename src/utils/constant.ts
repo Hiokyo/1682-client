@@ -107,9 +107,8 @@ export enum Category {
 
 export enum UserRole {
   Admin = "ADMIN",
-  Staff = "STAFF",
-  QA_M = "QUALITY_ASSURANCE_MANAGER",
-  QA_C = "QUALITY_ASSURANCE_COORDINATOR",
+  User = "USER",
+  Author= "AUTHOR",
 }
 
 export const userIcon = {

@@ -13,7 +13,7 @@ export const Authorization = (props: Props) => {
   const userRole = userData?.role;
   if (!userRole) return null;
   if (userRole && Array.isArray(roles) && roles?.includes(userRole)) {
-    if (userRole === UserRole.Admin) return <>{children}</>;
+    return <>{children}</>;
   }
   return null;
 };

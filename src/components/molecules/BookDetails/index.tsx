@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Filter from "./Filter";
 import {
   Avatar,
+  Button,
   Card,
   Form,
+  Input,
   List,
   Spin,
   Statistic,
@@ -20,6 +22,7 @@ import { useBookDetail } from "~/hooks/useBooks";
 import { TextArea } from "~/components/atoms/Input";
 import HTMLFlipBook from "react-pageflip";
 import { addBookFavorite } from "~/api/user";
+import InputNumber from "~/components/atoms/InputNumber";
 const { Title } = Typography;
 interface Props {
   bookId: any;
@@ -30,10 +33,13 @@ const BookDetails = (props: Props) => {
   const { data, isFetching, isLoading, refetch } = useBookDetail({ bookId });
   const dataBook = data?.data;
   const [showComment, setShowComment] = useState(false);
-  const [pageContent, setPageContent] = useState([]);
+  const [pageContent, setPageContent] = useState<any>();
   const [loadingBook, setLoadingBook] = useState(false)
   const [form] = Form.useForm();
-
+  const [currentPage, setCurrentPage] = useState(0);
+  const localPage = localStorage.getItem('currentPage');
+  const bookRef = useRef<any>();
+  const bookArea = useRef<any>(null);
   const handleShowComment = () => {
     setShowComment(!showComment);
     form.resetFields();
@@ -56,22 +62,42 @@ const BookDetails = (props: Props) => {
     }
   };
 
-  const contentChapter = (chapterId: string) => {
-    if (dataBook && chapterId) {
-      return dataBook.chapters?.find((item: any) => item._id === chapterId)
-        ?.content;
+
+  const htmlParser = (htmlString: string) => {
+    let match;
+    let lastIndex = 0;
+    const parts: string[] = [];
+    let charCount = 0;
+    const regex = /<\/\w+>/g;
+    while ((match = regex.exec(htmlString))) {
+      const tagEndIndex = match.index + match[0].length;
+
+      if (tagEndIndex - lastIndex > 20) {
+        const part = htmlString.substring(lastIndex, match.index);
+        parts.push(part);
+        lastIndex = match.index;
+        charCount = 0;
+      } else {
+        charCount = tagEndIndex - lastIndex;
+      }
     }
-  };
+
+    if (lastIndex < htmlString.length) {
+      const part = htmlString.substring(lastIndex);
+      parts.push(part);
+    }
+    return parts;
+  }
 
   const handleGetContentpage = (chapterId: string) => {
-    setLoadingBook(true)
-    const regex = /(\S+\s*){1,30}/g;
-    const substrings = contentChapter(chapterId)?.match(regex);
-    setPageContent(substrings);
-    setTimeout(function() {
-      document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
-      setLoadingBook(false);
-    }, 1000);
+    // setLoadingBook(true)
+    const contentChapter = dataBook.chapters?.find((item: any) => item._id === chapterId)?.content;
+    const data = htmlParser(contentChapter);
+    setPageContent(data);
+    // setTimeout(function() {
+    //   // document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
+    //   setLoadingBook(false);
+    // }, 1000);
   };
   // Api count view
 
@@ -81,6 +107,11 @@ const BookDetails = (props: Props) => {
   //   }
   // }, [bookId])
 
+  useEffect(() => {
+    if (localPage) {
+      setCurrentPage(+localPage)
+    }
+  }, []);
 
   const handleAddFavorite = async () => {
     const res = await addBookFavorite(bookId);
@@ -90,6 +121,34 @@ const BookDetails = (props: Props) => {
       message.error(res.message)
     }
   }
+
+  const handleTurnPage = (value: any) => {
+    bookRef?.current.pageFlip().flip(+value)
+    setCurrentPage(value)
+  }
+
+  const handleNextPage = () => {
+    bookRef?.current.pageFlip().flipNext()
+  }
+
+  const handlePrePage = () => {
+    bookRef?.current.pageFlip().flipPrev()
+  }
+
+  const handleSaveCurrentPage = (value: any) => {
+    setCurrentPage(value.data)
+    localStorage.setItem('currentPage', value.data)
+  }
+
+  useEffect(() => {
+    if (bookArea.current && pageContent) {
+      setTimeout(function() {
+      // document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
+      bookArea.current.scrollIntoView({ behavior: 'smooth' });
+      setLoadingBook(false);
+    }, 500);
+    }
+  }, [pageContent]);
 
   return (
     <>
@@ -143,7 +202,15 @@ const BookDetails = (props: Props) => {
                   />
                   <List
                     className={styles.listChapter}
-                    grid={{ gutter: 16, column: 5 }}
+                    grid={{
+                      gutter: 16,
+                      xs: 1,
+                      sm: 1,
+                      md: 3,
+                      lg: 3,
+                      xl: 4,
+                      xxl: 5,
+                    }}
                     dataSource={dataBook?.chapters}
                     renderItem={(item: any) => (
                       <List.Item>
@@ -207,22 +274,43 @@ const BookDetails = (props: Props) => {
               </div>
             </div>
           </div>
-          { (pageContent.length > 0) ? 
+          { (pageContent) ? 
             <Card
               loading={loadingBook}
               className={styles.bookContainer}
               id="bookReader"
+              ref={bookArea}
+              actions={
+                [
+                  <div
+                    className={styles.pageNumber}
+
+                  >
+                    <Button
+                      onClick={() => handlePrePage()}
+                    >Pre</Button>
+                    <InputNumber 
+                      value={currentPage}
+                      onPressEnter={(e: any) => handleTurnPage(e.target.value)}
+                    />
+                    <Button
+                      onClick={() => handleNextPage()}
+                    >Next</Button>
+                  </div>
+                ]
+              }
             >
               <HTMLFlipBook
+                ref={bookRef}
                 width={300}
-                height={500}
+                height={400}
                 className={styles.flipBook}
                 style={{margin: 0}}
-                startPage={0}
+                startPage={localPage ? +localPage : 0}
                 size={"fixed"}
-                minWidth={300}
+                minWidth={200}
                 maxWidth={300}
-                minHeight={500}
+                minHeight={400}
                 maxHeight={500}
                 drawShadow={true}
                 flippingTime={1000}
@@ -230,13 +318,14 @@ const BookDetails = (props: Props) => {
                 startZIndex={0}
                 autoSize={false}
                 maxShadowOpacity={1}
-                showCover={true}
+                showCover={false}
                 mobileScrollSupport={true}
                 clickEventForward={false}
                 useMouseEvents={true}
                 swipeDistance={30}
                 showPageCorners={true}
                 disableFlipByClick={false}
+                onFlip={(value: any) => handleSaveCurrentPage(value)}
               >
                 <div
                   className={styles.coverPage}
@@ -245,15 +334,25 @@ const BookDetails = (props: Props) => {
                 </div>
                 {
                   pageContent?.map((item: any, index: number ) => (
-                    <div key={index} className={styles.pageContent}>{item}</div>
+                    <div 
+                      key={index}
+                      className={styles.pageContent}
+                      dangerouslySetInnerHTML={{ __html: item }}
+                    >
+                    </div>
                   ))
                 }
+                {/* <div 
+                  dangerouslySetInnerHTML={{ __html: pageContent }}
+                  className={styles.pageContent}>  
+                </div> */}
                 <div
                   className={styles.coverPage}
                 >
                   <h2>End chapter</h2>
                 </div>
-              </HTMLFlipBook>
+
+                </HTMLFlipBook>
             </Card>
             : null
           }

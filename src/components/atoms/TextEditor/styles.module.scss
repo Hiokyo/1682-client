@@ -1,0 +1,11 @@
+.textEditor{
+  :global{
+    .ql-editor{
+    height: 300px;
+    }
+
+    .ql-snow .ql-color-picker .ql-picker-item {
+      border: 1px solid #bfbfbf;
+    }
+  }
+}

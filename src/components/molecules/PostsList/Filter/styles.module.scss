@@ -150,34 +150,28 @@
         display        : flex;
         justify-content: space-between;
         .searchName{ 
-          width: 190px;
+          width: 100px;
         }
         .filterWrapper {
           display: flex;
-  
+          flex-direction: column;
           :global {
             .ant-form-item {
               margin: 0;
             }
           }
   
-          .rangePicker {
-            width       : 256px;
-            margin-right: 8px;
-          }
-  
-          .selectProject,
-          .selectStatus,
-          .selectMember {
-            width       : 97px;
-            margin-right: 8px;
+          .keyword {
+            width       : 200px;
+            margin-top: 0.5rem;
           }
   
         }
   
         .btnAdd {
           display    : flex;
-          align-items: center;;
+          align-items: center;
+          align-self: center;
           .iconPlus {
             width       : 10.75px;
             height      : 11.25px;

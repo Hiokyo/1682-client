@@ -25,5 +25,7 @@ export const removeBookFavorite = (bookId: any) => sendPut(`/user/remove-favorit
 
 export const getFavoriteBooks = (params: any) => sendGet(`/user/favorites`, params);
 
+export const warningUser = (userId: string, params: any) => sendPut(`/admin/user/${userId}/warn`, params);
+
 
 
