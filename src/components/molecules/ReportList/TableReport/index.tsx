@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import iconEdit from '~/assets/images/iconEdit.svg';
 import iconDelete from '~/assets/images/iconDelete.svg';
@@ -19,6 +19,7 @@ interface Props {
   refetch?: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
+  total?: number;
   setParams?: (value: any) => void;
 }
 interface DataType {
@@ -28,14 +29,19 @@ interface DataType {
 }
 
 const ReportTable = (props: Props) => {
-  const { reports, refetch, isLoading, isFetching, setParams } = props;
+  const { reports, refetch, isLoading, isFetching, setParams, total } = props;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ idInactive, setIdInactive ] = useState();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
-    total: 20
+    total: total && total
   });
+
+  useEffect(() => {
+    setPagination({...pagination, total: total})
+  
+  }, [total])
   
   const modalConfirmDelete = (record: any) => {
     //Code here

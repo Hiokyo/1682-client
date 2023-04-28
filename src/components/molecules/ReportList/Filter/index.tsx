@@ -4,7 +4,7 @@ import { Button, Form, Select } from 'antd';
 import { Option } from '~/components/atoms/Select';
 
 import styles from './styles.module.scss'
-import { SortBooks } from '~/utils/constant';
+import { SortBooks, SortReports } from '~/utils/constant';
 import Input from '~/components/atoms/Input';
 
 interface Props {
@@ -17,7 +17,7 @@ const Filter = (props: Props) => {
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [form] = Form.useForm();
   
-  const sortOption = useMemo(() => Object.entries(SortBooks)
+  const sortOption = useMemo(() => Object.entries(SortReports)
   // render options sort by
   .map((item: any, index) => (
     { id: index, name: item[1], value: item[0] }
@@ -61,8 +61,8 @@ const Filter = (props: Props) => {
                       </Option>
                     ))}
                   </Select>
-                </Form.Item>
-                <Form.Item name='keyword'>
+                </Form.Item> */}
+                {/* <Form.Item name='keyword'>
                   <Input
                     className={styles.keyword}
                     autoComplete='off'

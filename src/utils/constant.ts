@@ -47,6 +47,19 @@ export enum SortBooks {
   "COMENT_DESC" = "Comment (Descending)",
 }
 
+export enum SortReports {
+  "TITLE_DESC" = "Title",
+  "TITLE_ASC" = "Title (Ascending)",
+  "DATE_CREATED_ASC" = "Date create (Accending)",
+  "DATE_CREATED_DESC" = "Date create (Descending)",
+  "STATUS_ASC" = "Status (Ascending)",
+  "STATUS_DESC" = "Status (Descending)",
+  "LIKE_ASC" = "Like (Accending)",
+  "LIKE_DESC" = "Like (Descending)",
+  "TYPE_ASC" = "Type (Descending)",
+  "TYPE_DESC" = "Type (Descending)",
+}
+
 export enum SortTopic {
   "NAME_ASC" = "Name (Ascending)",
   "NAME_DESC" = "Name (Descending)",
