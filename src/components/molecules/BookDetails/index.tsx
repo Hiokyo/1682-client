@@ -34,10 +34,10 @@ const BookDetails = (props: Props) => {
   const dataBook = data?.data;
   const [showComment, setShowComment] = useState(false);
   const [pageContent, setPageContent] = useState<any>();
-  const [loadingBook, setLoadingBook] = useState(false)
+  const [loadingBook, setLoadingBook] = useState(false);
   const [form] = Form.useForm();
   const [currentPage, setCurrentPage] = useState(0);
-  const localPage = localStorage.getItem('currentPage');
+  const localPage = localStorage.getItem("currentPage");
   const bookRef = useRef<any>();
   const bookArea = useRef<any>(null);
   const handleShowComment = () => {
@@ -61,7 +61,6 @@ const BookDetails = (props: Props) => {
       message.error(res.message);
     }
   };
-
 
   const htmlParser = (htmlString: string) => {
     let match;
@@ -87,11 +86,13 @@ const BookDetails = (props: Props) => {
       parts.push(part);
     }
     return parts;
-  }
+  };
 
   const handleGetContentpage = (chapterId: string) => {
     // setLoadingBook(true)
-    const contentChapter = dataBook.chapters?.find((item: any) => item._id === chapterId)?.content;
+    const contentChapter = dataBook.chapters?.find(
+      (item: any) => item._id === chapterId
+    )?.content;
     const data = htmlParser(contentChapter);
     setPageContent(data);
     // setTimeout(function() {
@@ -109,51 +110,55 @@ const BookDetails = (props: Props) => {
 
   useEffect(() => {
     if (localPage) {
-      setCurrentPage(+localPage)
+      setCurrentPage(+localPage);
     }
   }, []);
 
   const handleAddFavorite = async () => {
     const res = await addBookFavorite(bookId);
     if (res.message === SUCCESS) {
-      message.success('Add to favorite success')
+      message.success("Add to favorite success");
     } else {
-      message.error(res.message)
+      message.error(res.message);
     }
-  }
+  };
 
   const handleTurnPage = (value: any) => {
-    bookRef?.current.pageFlip().flip(+value)
-    setCurrentPage(value)
-  }
+    bookRef?.current.pageFlip().flip(+value);
+    setCurrentPage(value);
+  };
 
   const handleNextPage = () => {
-    bookRef?.current.pageFlip().flipNext()
-  }
+    bookRef?.current.pageFlip().flipNext();
+  };
 
   const handlePrePage = () => {
-    bookRef?.current.pageFlip().flipPrev()
-  }
+    bookRef?.current.pageFlip().flipPrev();
+  };
 
   const handleSaveCurrentPage = (value: any) => {
-    setCurrentPage(value.data)
-    localStorage.setItem('currentPage', value.data)
-  }
+    setCurrentPage(value.data);
+    localStorage.setItem("currentPage", value.data);
+  };
 
   useEffect(() => {
     if (bookArea.current && pageContent) {
-      setTimeout(function() {
-      // document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
-      bookArea.current.scrollIntoView({ behavior: 'smooth' });
-      setLoadingBook(false);
-    }, 500);
+      setTimeout(function () {
+        // document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
+        bookArea.current.scrollIntoView({ behavior: "smooth" });
+        setLoadingBook(false);
+      }, 500);
     }
   }, [pageContent]);
 
   return (
     <>
       <Spin spinning={isLoading || isFetching}>
-        <Filter bookId={bookId}/>
+        <Filter
+          bookId={bookId}
+          price={dataBook?.price || { amount: 0, currency: "" }}
+          purchaser={dataBook?.purchaser || []}
+        />
         <div className={styles.container}>
           <div className={styles.contentWrapper}>
             <div className={styles.infoContainer}>
@@ -172,9 +177,9 @@ const BookDetails = (props: Props) => {
                   ]}
                   extra={
                     <div className={styles.extraGroup}>
-                      <HeartOutlined 
+                      <HeartOutlined
                         onClick={handleAddFavorite}
-                        style={{marginRight: 10}}
+                        style={{ marginRight: 10 }}
                       />
                       <EyeOutlined /> {dataBook?.viewCount}
                     </div>
@@ -183,7 +188,7 @@ const BookDetails = (props: Props) => {
                   <Meta
                     avatar={
                       <Avatar
-                        shape='square'
+                        shape="square"
                         size={42}
                         src={"https://covers.openlibrary.org/b/id/240727-S.jpg"}
                       />
@@ -240,7 +245,12 @@ const BookDetails = (props: Props) => {
                         className={styles.comment}
                         avatar={
                           <>
-                            <Avatar src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url} />{" "}
+                            <Avatar
+                              src={
+                                comment?.createdBy?.avatar?.url ||
+                                comment?.updatedBy?.avatar?.url
+                              }
+                            />{" "}
                             <strong>
                               {comment.createdBy?.firstName}{" "}
                               {comment.createdBy?.lastName}
@@ -274,38 +284,29 @@ const BookDetails = (props: Props) => {
               </div>
             </div>
           </div>
-          { (pageContent) ? 
+          {pageContent ? (
             <Card
               loading={loadingBook}
               className={styles.bookContainer}
               id="bookReader"
               ref={bookArea}
-              actions={
-                [
-                  <div
-                    className={styles.pageNumber}
-
-                  >
-                    <Button
-                      onClick={() => handlePrePage()}
-                    >Pre</Button>
-                    <InputNumber 
-                      value={currentPage}
-                      onPressEnter={(e: any) => handleTurnPage(e.target.value)}
-                    />
-                    <Button
-                      onClick={() => handleNextPage()}
-                    >Next</Button>
-                  </div>
-                ]
-              }
+              actions={[
+                <div className={styles.pageNumber}>
+                  <Button onClick={() => handlePrePage()}>Pre</Button>
+                  <InputNumber
+                    value={currentPage}
+                    onPressEnter={(e: any) => handleTurnPage(e.target.value)}
+                  />
+                  <Button onClick={() => handleNextPage()}>Next</Button>
+                </div>,
+              ]}
             >
               <HTMLFlipBook
                 ref={bookRef}
                 width={300}
                 height={400}
                 className={styles.flipBook}
-                style={{margin: 0}}
+                style={{ margin: 0 }}
                 startPage={localPage ? +localPage : 0}
                 size={"fixed"}
                 minWidth={200}
@@ -327,35 +328,26 @@ const BookDetails = (props: Props) => {
                 disableFlipByClick={false}
                 onFlip={(value: any) => handleSaveCurrentPage(value)}
               >
-                <div
-                  className={styles.coverPage}
-                >
+                <div className={styles.coverPage}>
                   <h2>{dataBook?.title}</h2>
                 </div>
-                {
-                  pageContent?.map((item: any, index: number ) => (
-                    <div 
-                      key={index}
-                      className={styles.pageContent}
-                      dangerouslySetInnerHTML={{ __html: item }}
-                    >
-                    </div>
-                  ))
-                }
+                {pageContent?.map((item: any, index: number) => (
+                  <div
+                    key={index}
+                    className={styles.pageContent}
+                    dangerouslySetInnerHTML={{ __html: item }}
+                  ></div>
+                ))}
                 {/* <div 
                   dangerouslySetInnerHTML={{ __html: pageContent }}
                   className={styles.pageContent}>  
                 </div> */}
-                <div
-                  className={styles.coverPage}
-                >
+                <div className={styles.coverPage}>
                   <h2>End chapter</h2>
                 </div>
-
-                </HTMLFlipBook>
+              </HTMLFlipBook>
             </Card>
-            : null
-          }
+          ) : null}
         </div>
       </Spin>
     </>
