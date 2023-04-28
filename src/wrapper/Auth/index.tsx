@@ -12,6 +12,9 @@ import {
   TagsOutlined,
   DashboardOutlined,
   FileExclamationOutlined,
+  MoneyCollectOutlined,
+  AccountBookOutlined,
+  DollarCircleOutlined,
   HeartOutlined,
   BookOutlined } from '@ant-design/icons'
 import { Content, Footer } from 'antd/es/layout/layout';
@@ -59,7 +62,13 @@ function Auth(props: Props) {
       url: ROUTES.Favorites,
     },
 
-   {
+    (userData && (userData.role && userData.role === UserRole.Author)) && {
+      key: ROUTES.PaymentsAuthor,
+      label: <Link to={ROUTES.PaymentsAuthor}>Payments</Link>,
+      icon: <MoneyCollectOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.PaymentsAuthor,
+    },
+    {
       key: ROUTES.Reports,
       label: <Link to={ROUTES.Reports}>Reports</Link>,
       icon: <FileExclamationOutlined style={{fontSize: '18px'}}/>,

@@ -4,29 +4,28 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import styles from './styles.module.scss';
 import Spin from '~/components/atoms/Spin';
 import Table from '~/components/atoms/Table';
-import { DATE, SUCCESS } from '~/utils/constant';
+import { DATE, PARAMS_GET_ALL, SUCCESS } from '~/utils/constant';
 import { Tag, message } from 'antd';
 import { inactiveCategory } from '~/api/categories';
 import { SorterResult } from 'antd/es/table/interface';
+import { format } from 'date-fns';
+import { useBooks } from '~/hooks/useBooks';
 
 interface Props {
-  reports?: any;
+  payments?: any;
   refetch?: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
   total?: number;
-  setParams?: (value: any) => void;
+  setParams: (value: any) => void;
 }
 interface DataType {
   name: string;
   createdAt: Date;
   status: string;
 }
-
-const ReportTable = (props: Props) => {
-  const { reports, refetch, isLoading, isFetching, setParams, total } = props;
-  const [ isModalVisible, setIsModalVisible ] = useState(false);
-  const [ idInactive, setIdInactive ] = useState();
+const PaymentTable = (props: Props) => {
+  const { payments, refetch, isLoading, isFetching, setParams, total } = props;
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
@@ -35,24 +34,8 @@ const ReportTable = (props: Props) => {
 
   useEffect(() => {
     setPagination({...pagination, total: total})
-  
   }, [total])
   
-  const modalConfirmDelete = (record: any) => {
-    //Code here
-  }
-
-  const handleInactive = async () => {
-    if (idInactive) {
-      const res = await inactiveCategory(idInactive);
-      if (res.message === SUCCESS) {
-        message.success('Inactive Category success')
-        // refetch();
-      } else {
-        message.error(res.message)
-      }
-    }
-  }
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
@@ -61,7 +44,7 @@ const ReportTable = (props: Props) => {
     setPagination(newPagination);
 
     const paramsfilters = {
-      sort: 'TITLE_ASC',
+      sort: 'DATE_CREATED_DESC',
       oder: sorter.order,
       page: newPagination.current,
       limit: newPagination.pageSize
@@ -71,38 +54,62 @@ const ReportTable = (props: Props) => {
     }
   };
 
-
   const columns: ColumnsType<any> = [
     {
-      title: 'Title',
-      dataIndex: 'title',
+      title: 'Name',
+      dataIndex: 'name',
       width: '20%',
-    },
-    {
-      title: 'Reported by',
-      dataIndex: 'createdBy',
-      width: '15%',
-      render: (item: any) => 
-      <div>
-        {item.firstName} {item.lastName}
-      </div>
+      render: (item: any, record: any) =>
+      ( record.paymentFor?.bookId ?
+          <div>
+            {(record.paymentFor?.bookId?.title)}
+          </div> : 
+          '-'
+      )
     },
     {
       title: 'Type',
-      dataIndex: 'schema',
+      dataIndex: 'paymentFor',
+      width: '20%',
+      render: (item: any) => 
+        <div>
+          {item?.paymentType}
+        </div>
+    },
+    {
+      title: 'Created by',
+      dataIndex: 'createdBy',
       width: '15%',
-      render: (_: string, record: any) =>
+      render: (item: any, record: any) => 
       <div>
-        {record.type} - {record.schema}
+        {item?.firstName} {item?.lastName}
       </div>
     },
     {
-      title: 'Schema name',
-      dataIndex: 'schemaId',
+      title: 'Date create',
+      dataIndex: 'createdAt',
       width: '15%',
-      render: (item: any) => 
+      render: (date: string, record: any) =>
       <div>
-        {item.title}
+        {date ? format(new Date(date), DATE) : '-'}
+      </div>
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      width: '15%',
+      render: (item: any, record) => 
+      <div>
+        {record.amount} {record.currency}
+      </div>
+    },
+    {
+      title: 'Payment gate',
+      dataIndex: 'method',
+      width: '15%',
+      render: (item: any, record) => 
+      <div>
+        {item.name}
       </div>
     },
     {
@@ -113,27 +120,22 @@ const ReportTable = (props: Props) => {
       (status === 'PENDING') ?
         <Tag color='orange' >{status}</Tag> 
         :
-        <Tag color="red">{status}</Tag> 
+        <Tag color="green">{status}</Tag>
     },
-    {
-      title: 'Content',
-      dataIndex: 'content',
-      width: '20%',
-    },
-    {
-      title: '',
-      dataIndex: 'optional',
-      width: '15%',
-      render: (_: any, record: any) => (
-        <>
-          {/* <div className={styles.groupSave}>
-            <a onClick={() => handleEdit(record)}>
-              <Svg src={iconEdit} alt="icon Edit" />
-            </a>
-          </div> */}
-        </>
-      )
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'optional',
+    //   width: '15%',
+    //   render: (_: any, record: any) => (
+    //     <>
+    //       {/* <div className={styles.groupSave}>
+    //         <a onClick={() => handleEdit(record)}>
+    //           <Svg src={iconEdit} alt="icon Edit" />
+    //         </a>
+    //       </div> */}
+    //     </>
+    //   )
+    // },
   ];
 
   return (
@@ -146,9 +148,10 @@ const ReportTable = (props: Props) => {
             className={styles.tableContainer}
             pagination={pagination}
             columns={columns}
+            size='small'
             onChange={handleTableChange}
             rowKey={(record: any) => record._id}
-            dataSource={reports}
+            dataSource={payments}
           />
         </Spin>
       </div>
@@ -156,4 +159,4 @@ const ReportTable = (props: Props) => {
   )
 }
 
-export default ReportTable
+export default PaymentTable

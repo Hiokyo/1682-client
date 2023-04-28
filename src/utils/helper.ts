@@ -55,3 +55,10 @@ export const handleLogout = (callbackUrl = ROUTES.Posts) => {
     history.push(callbackUrl);
   }
 };
+
+export const formatter = (price: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price);
+}

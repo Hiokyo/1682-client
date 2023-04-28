@@ -88,6 +88,12 @@ export enum SortAccount {
   "DATE_CREATED_ASC" = "Date create (Accending)",
   "DATE_CREATED_DESC" = "Date create (Descending)",
 }
+export enum PaymentSort {
+  AMOUNT_ASC = "Amount (Ascending)",
+  AMOUNT_DESC = "Amount (Descending)",
+  DATE_CREATED_DESC = "Date created (Descending)",
+  DATE_CREATED_ASC = "Date created (Ascending)",
+}
 
 export enum UserStatus {
   "ACTIVE" = "Active",
@@ -116,6 +122,21 @@ export enum Category {
   "STAFF" = "Staff",
   "QUALITY_ASSURANCE_MANAGER" = "Quality assurance manager",
   "QUALITY_ASSURANCE_COORDINATOR" = "Quality assurance coordinator",
+}
+
+export enum PaymentStatus {
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  FAILURE = "FAILURE",
+}
+export enum BookCurrency {
+  VND = "VND",
+  USD = "USD",
+}
+
+export enum PaymentType {
+  'Book' = "BOOK",
+  'Subscription' = "SUBSCRIPTION_PLAN",
 }
 
 export enum UserRole {

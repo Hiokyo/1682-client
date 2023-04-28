@@ -9,6 +9,7 @@ import loadable from "~/utils/loadable";
 import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
 import { getCookie } from "~/utils/cookie";
+import { formatter } from "~/utils/helper";
 
 interface Props {
   bookId: string;
@@ -37,8 +38,7 @@ const Filter = (props: Props) => {
             <Link to={`/payment/${bookId}`}>
               <Button type="primary" className={styles.btnBuyBook}>
                 <ShoppingCartOutlined />
-                Buy book - {price.currency}
-                {String(price.amount)}
+                Buy book - {formatter(+price?.amount) || 0}
               </Button>
             </Link>
           )}

@@ -4,7 +4,7 @@ import { Button, Form, Select } from 'antd';
 import { Option } from '~/components/atoms/Select';
 
 import styles from './styles.module.scss'
-import { SortBooks, SortReports } from '~/utils/constant';
+import { PaymentSort, SortBooks, SortReports } from '~/utils/constant';
 import Input from '~/components/atoms/Input';
 
 interface Props {
@@ -14,10 +14,9 @@ interface Props {
 
 const Filter = (props: Props) => {
   const {refetch, onChange} = props;
-  const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [form] = Form.useForm();
   
-  const sortOption = useMemo(() => Object.entries(SortReports)
+  const sortOption = useMemo(() => Object.entries(PaymentSort)
   // render options sort by
   .map((item: any, index) => (
     { id: index, name: item[1], value: item[0] }
@@ -35,14 +34,14 @@ const Filter = (props: Props) => {
               form={form}
               onValuesChange={handleValuesChange}
               initialValues={{
-                sort: sortOption[0].value
+                sort: sortOption[2].value
               }}
             >
               <div className={styles.filterWrapper}>
                 <Form.Item name='sort'>
                   <Select
                     className={styles.selectSort}
-                    placeholder="Sort books"
+                    placeholder="Sort payment"
                   >
                   {sortOption?.map((item: any) =>
                     <Option key={item.id} value={item.value}>{item.name}</Option>

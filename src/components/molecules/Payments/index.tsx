@@ -11,6 +11,7 @@ import { useBookDetail } from "~/hooks/useBooks";
 import Svg from "~/components/atoms/Svg";
 import styles from "./styles.module.scss";
 import { getCookie } from "~/utils/cookie";
+import { formatter } from "~/utils/helper";
 
 interface Props {
   bookId: any;
@@ -136,8 +137,11 @@ const Payments = (props: Props) => {
               <div>
                 {/* <h1>Giá tiền: 300.000 VNĐ</h1> */}
                 <h1>
-                  Price: {dataBook?.price?.currency || ""}
-                  {dataBook?.price?.amount || 0}
+                  {/* Price: {dataBook?.price?.currency || ""} */}
+                  &nbsp;
+                  {
+                    formatter(+dataBook?.price?.amount) || 0
+                  }
                 </h1>
                 <Radio.Group
                 // value={paymentMethod}
@@ -168,7 +172,7 @@ const Payments = (props: Props) => {
                   style={{ width: "100%" }}
                   onClick={handleSubmit}
                 >
-                  Thanh toán
+                  Payment
                 </Button>
               </div>
             </Col>
