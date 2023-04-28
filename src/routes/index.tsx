@@ -18,6 +18,7 @@ const Campaign = loadable(() => import("~/pages/thread"));
 const DashBoard = loadable(() => import("~/pages/dashboard"));
 
 const Reports = loadable(() => import("~/pages/reports"));
+const Membership = loadable(() => import("~/pages/membership"));
 
 const userProfile = loadable(() => import("~/pages/userProfile/[id]"));
 const Profile = loadable(() => import("~/pages/profile"));
@@ -44,6 +45,8 @@ export const ROUTES = {
   Campaign: "/campaign",
   DashBoard: "/dashboard",
   Reports: "/reports",
+
+  Membership: "/membership",
 
   Profile: "/profile",
   userProfile: (id: number | string) => `/userProfile/${id}`,
@@ -130,6 +133,13 @@ const routes = [
     exact: true,
     path: ROUTES.Campaign,
     component: Campaign,
+    layout: Auth,
+    isAuth: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.Membership,
+    component: Membership,
     layout: Auth,
     isAuth: true,
   },

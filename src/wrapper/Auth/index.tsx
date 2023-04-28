@@ -13,6 +13,7 @@ import {
   DashboardOutlined,
   FileExclamationOutlined,
   MoneyCollectOutlined,
+  UserAddOutlined,
   AccountBookOutlined,
   DollarCircleOutlined,
   HeartOutlined,
@@ -55,6 +56,14 @@ function Auth(props: Props) {
       url: ROUTES.Books,
       content: 'Books'
     },
+    // (userData && (userData.role && userData.role === UserRole.User)) &&
+    {
+      key: ROUTES.Membership,
+      label: <Link to={ROUTES.Membership}>Membership</Link>,
+      icon: <UserAddOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Membership,
+    },
+
     (userData && (userData.role && userData.role !== UserRole.Admin)) && {
       key: ROUTES.Favorites,
       label: <Link to={ROUTES.Favorites}>Favorites</Link>,
