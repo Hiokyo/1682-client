@@ -4,18 +4,18 @@ import { useReports } from '~/hooks/useReport'
 import { PARAMS_FILTER, PARAMS_GET_ALL } from '~/utils/constant'
 import Filter from './Filter'
 import PaymentTable from './Table'
-import { usePaymentAuthor } from '~/hooks/usePayment'
+import { usePaymentAuthor } from '~/hooks/usePaymentAuthor'
 
 const PaymentAuthorList = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
-    sort: 'TITLE_DESC'
+    sort: 'DATE_CREATED_DESC',
   })
 
   const handleFilter = (value: any) => {
     setParams({
-      sort: 'TITLE_DESC',
+      sort: 'DATE_CREATED_DESC',
       ...PARAMS_FILTER,
       ...value
     })

@@ -25,11 +25,6 @@ interface Props {
   isLoading?: boolean;
   setParams?: (value: any) => void;
 }
-interface DataType {
-  name: string;
-  createdAt: Date;
-  status: string;
-}
 
 const CategoryTable = (props: Props) => {
   const { categories, refetch, isFetching, isLoading, setParams } = props;

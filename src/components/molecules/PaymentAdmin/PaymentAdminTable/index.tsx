@@ -4,55 +4,21 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import styles from './styles.module.scss';
 import Spin from '~/components/atoms/Spin';
 import Table from '~/components/atoms/Table';
-import { DATE, PARAMS_GET_ALL, SUCCESS } from '~/utils/constant';
+import { DATE } from '~/utils/constant';
 import { Tag, message } from 'antd';
-import { inactiveCategory } from '~/api/categories';
 import { SorterResult } from 'antd/es/table/interface';
 import { format } from 'date-fns';
-import { useBooks } from '~/hooks/useBooks';
 
 interface Props {
   payments?: any;
   refetch?: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
-  total?: number;
-  setParams: (value: any) => void;
 }
-interface DataType {
-  name: string;
-  createdAt: Date;
-  status: string;
-}
-const PaymentTable = (props: Props) => {
-  const { payments, refetch, isLoading, isFetching, setParams, total } = props;
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-    total: total && total
-  });
 
-  useEffect(() => {
-    setPagination({...pagination, total: total})
-  }, [total])
-  
-
-  const handleTableChange = (
-    newPagination: TablePaginationConfig,
-    sorter: SorterResult<any>
-  ) => {
-    setPagination(newPagination);
-
-    const paramsfilters = {
-      sort: 'DATE_CREATED_DESC',
-      oder: sorter.order,
-      page: newPagination.current,
-      limit: newPagination.pageSize
-    }; 
-    if (setParams) {
-      setParams(paramsfilters)
-    }
-  };
+const PaymentAdminTable = (props: Props) => {
+  const { payments, refetch, isLoading, isFetching } = props;
+  const dataPayments = payments?.payments;
 
   const columns: ColumnsType<any> = [
     {
@@ -146,12 +112,12 @@ const PaymentTable = (props: Props) => {
         <Spin spinning={isLoading || isFetching}>
           <Table
             className={styles.tableContainer}
-            pagination={pagination}
             columns={columns}
+            pagination={false}
             size='small'
-            onChange={handleTableChange}
+            scroll={{y : '58vh'}}
             rowKey={(record: any) => record._id}
-            dataSource={payments}
+            dataSource={dataPayments}
           />
         </Spin>
       </div>
@@ -159,4 +125,4 @@ const PaymentTable = (props: Props) => {
   )
 }
 
-export default PaymentTable
+export default PaymentAdminTable

@@ -62,11 +62,11 @@ function Auth(props: Props) {
       url: ROUTES.Favorites,
     },
 
-    (userData && (userData.role && userData.role === UserRole.Author)) && {
-      key: ROUTES.PaymentsAuthor,
-      label: <Link to={ROUTES.PaymentsAuthor}>Payments</Link>,
+    (userData && (userData.role && userData.role === UserRole.Admin)) && {
+      key: ROUTES.PaymentAdmin,
+      label: <Link to={ROUTES.PaymentAdmin}>Payments</Link>,
       icon: <MoneyCollectOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.PaymentsAuthor,
+      url: ROUTES.PaymentAdmin,
     },
     {
       key: ROUTES.Reports,

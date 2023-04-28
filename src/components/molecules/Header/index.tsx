@@ -50,7 +50,7 @@ export default function Header() {
   };
 
   const handleShowTransaction = () => {
-    history.push(ROUTES.Payments);
+    history.push(ROUTES.PaymentsAuthor);
   }
 
   const items: MenuProps["items"] = [
@@ -69,8 +69,8 @@ export default function Header() {
     {
       key: "3",
       label: (
-        <Authorization roles={[UserRole.Admin]}>
-          <div onClick={handleShowTransaction}>System Transaction</div>
+        <Authorization roles={[UserRole.Author]}>
+          <div onClick={handleShowTransaction}>Payments</div>
         </Authorization>
       ),
     },

@@ -25,7 +25,7 @@ const Profile = loadable(() => import("~/pages/profile"));
 const Setting = loadable(() => import("~/pages/systemSetting"));
 const ResetPasswordCode = loadable(() => import("~/pages/getResetPwCode"));
 
-const Payments = loadable(() => import("~/pages/payment/lists"));
+const PaymentAdmin = loadable(() => import("~/pages/payment/admin"));
 const PaymentsAuthor = loadable(() => import("~/pages/payment/author"));
 const PaymentOne = loadable(() => import("~/pages/payment/[id]"));
 const PaymentReturn = loadable(() => import("~/components/molecules/Payments/PaymentReturn/PaymentReturn"));
@@ -49,7 +49,7 @@ export const ROUTES = {
   userProfile: (id: number | string) => `/userProfile/${id}`,
 
   Setting: "/setting",
-  Payments: "/payments",
+  PaymentAdmin: "/payments-admin",
   PaymentsAuthor: "/payments-author",
   PaymentOne: (id: number | string) => `/payment/${id}`,
   PaymentReturn: "/payment-return",
@@ -164,8 +164,8 @@ const routes = [
 
   {
     exact: true,
-    path: ROUTES.Payments,
-    component: Payments,
+    path: ROUTES.PaymentAdmin,
+    component: PaymentAdmin,
     layout: Auth,
     isAuth: true,
   },
