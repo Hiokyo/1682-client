@@ -17,7 +17,6 @@ export default function PaymentReturn() {
 
         if (responseCode === "00") {
           const orderInfo = JSON.parse(vnp_OrderInfo || "{}");
-
           const { paymentId, validTime, paymentType, bookId } = orderInfo;
 
           const body: any = {
@@ -44,20 +43,14 @@ export default function PaymentReturn() {
         message.error("Payment fail");
       }
     };
-    // const vnp_ResponseCode = searchParams.get("vnp_ResponseCode");
-
-    // setStatus(() => vnp_ResponseCode || "");
-
-    // let status;
-
-    // if (vnp_ResponseCode === "00") {
-    //   status = PAYMENT_STATUS.SUCCESS;
-    // } else {
-    //   status = PAYMENT_STATUS.FAILURE;
-    // }
 
     sendUpdateOrderStatus();
   }, []);
 
-  return <Spin tip="Successfully paid, redirecting..."></Spin>;
+  return (
+    <Spin
+      tip="Successfully paid, redirecting..."
+      style={{ width: "100%", marginTop: "25%" }}
+    ></Spin>
+  );
 }

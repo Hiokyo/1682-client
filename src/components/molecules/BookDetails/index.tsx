@@ -105,9 +105,9 @@ const BookDetails = (props: Props) => {
 
   useEffect(() => {
     if (bookId) {
-      viewBook(bookId)
+      viewBook(bookId);
     }
-  }, [bookId])
+  }, [bookId]);
 
   useEffect(() => {
     if (localPage) {
@@ -218,40 +218,50 @@ const BookDetails = (props: Props) => {
                       xxl: 5,
                     }}
                     dataSource={dataBook?.chapters}
-                    renderItem={(item: any) => (
-                      (userData?.supscriptionPlan?.isSubscribed) || (dataBook.purchaser?.find((item: any) => item?.user === userData?._id)) ?
-                      <List.Item>
-                        <Card
-                          onClick={() => handleGetContentpage(item._id)}
-                          hoverable
-                          cover={
-                            <img
-                              alt="example"
-                              src="https://picsum.photos/300/200"
-                            />
-                          }
-                        >
-                          <Title level={4}>{item.name}</Title>
-                          <p>{format(new Date(item?.createdAt), DATE)}</p>
-                        </Card>
-                      </List.Item>
-                      :
-                      <List.Item>
-                        <Card
-                          onClick={() => message.warning("Please subscribe to read this book")}
-                          hoverable
-                          cover={
-                            <img
-                              alt="example"
-                              src="https://picsum.photos/300/200"
-                            />
-                          }
-                        >
-                          <Title level={4}>{item.name}</Title>
-                          <p>{format(new Date(item?.createdAt), DATE)}</p>
-                        </Card>
-                      </List.Item>
-                    )}
+                    renderItem={(item: any) =>
+                      (userData &&
+                        userData?.subscriptionPlan &&
+                        userData?.subscriptionPlan?.isSubscribed) ||
+                      dataBook.purchaser?.find(
+                        (item: any) => item?.user === userData?._id
+                      ) ? (
+                        <List.Item>
+                          <Card
+                            onClick={() => handleGetContentpage(item._id)}
+                            hoverable
+                            cover={
+                              <img
+                                alt="example"
+                                src="https://picsum.photos/300/200"
+                              />
+                            }
+                          >
+                            <Title level={4}>{item.name}</Title>
+                            <p>{format(new Date(item?.createdAt), DATE)}</p>
+                          </Card>
+                        </List.Item>
+                      ) : (
+                        <List.Item>
+                          <Card
+                            onClick={() =>
+                              message.warning(
+                                "Please subscribe to read this book"
+                              )
+                            }
+                            hoverable
+                            cover={
+                              <img
+                                alt="example"
+                                src="https://picsum.photos/300/200"
+                              />
+                            }
+                          >
+                            <Title level={4}>{item.name}</Title>
+                            <p>{format(new Date(item?.createdAt), DATE)}</p>
+                          </Card>
+                        </List.Item>
+                      )
+                    }
                   />
                 </Card>
 

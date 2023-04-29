@@ -11,6 +11,7 @@
       justify-content: center;
       align-items: center;
       margin-left: 10px;
+
       .logo {
         width: 90px !important;
       }
@@ -20,6 +21,7 @@
       display: flex;
       margin-left: auto;
       align-items: center;
+
       .name {
         font-weight: 400;
         font-size: 14px;
@@ -30,7 +32,7 @@
         align-items: center;
       }
 
-      .iconNotification{
+      .iconNotification {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -38,10 +40,12 @@
         height: fit-content;
         margin: 0px 10px;
       }
+
       .coverInfo {
         cursor: pointer;
         display: flex;
       }
+
       .avatar {
         width: 38px;
         height: 48px;
@@ -50,11 +54,14 @@
         justify-content: center;
         align-items: center;
         margin-left: 8px;
+
         .iconAvatar {
           width: 24px;
           height: 24px;
           border-radius: 50%;
         }
+
+        position: relative;
       }
     }
   }
@@ -69,24 +76,26 @@
       color: #ffffff;
       width: 100%;
       padding: 0;
-  
+
       .title {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-left: 10px;
+
         .logo {
           width: 50px !important;
         }
-        h3{
+
+        h3 {
           display: none;
         }
       }
-  
+
       .info {
         display: flex;
         margin-left: auto;
-  
+
         .name {
           font-weight: 400;
           font-size: 14px;
@@ -97,18 +106,20 @@
           align-items: center;
           display: none;
         }
-  
-        .iconNotification{
+
+        .iconNotification {
           display: flex;
           justify-content: center;
           align-items: center;
           height: 18px !important;
 
         }
+
         .coverInfo {
           cursor: pointer;
           display: flex;
         }
+
         .avatar {
           width: 38px;
           height: 48px;
@@ -117,6 +128,7 @@
           justify-content: center;
           align-items: center;
           margin-left: 8px;
+
           .iconAvatar {
             width: 24px;
             height: 24px;
@@ -137,19 +149,21 @@
       color: #ffffff;
       width: 100%;
       padding: 0 15px;
-  
+
       .title {
         display: flex;
         justify-content: center;
         align-items: center;
+
         .logo {
           width: 50px !important;
         }
       }
-  
+
       .info {
         display: flex;
         margin-left: auto;
+
         .name {
           font-weight: 400;
           font-size: 14px;
@@ -159,7 +173,7 @@
           justify-content: center;
           align-items: center;
         }
-  
+
         .iconSearch,
         .iconDetail,
         .iconNotification {
@@ -171,10 +185,12 @@
           width: 38px;
           height: 48px;
         }
+
         .coverInfo {
           cursor: pointer;
           display: flex;
         }
+
         .avatar {
           width: 38px;
           height: 48px;
@@ -183,6 +199,7 @@
           justify-content: center;
           align-items: center;
           margin-left: 8px;
+
           .iconAvatar {
             width: 24px;
             height: 24px;

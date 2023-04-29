@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { NotificationSchema, setAllNotifications } from "~/store/notification";
 import { getSelfNotification, markAsRead } from "~/api/notification";
 
+import { CrownTwoTone } from "@ant-design/icons";
+
 const Svg = loadable(() => import("~/components/atoms/Svg"));
 const { Header: LayoutHeader } = Layout;
 
@@ -51,27 +53,27 @@ export default function Header() {
 
   const handleShowTransaction = () => {
     history.push(ROUTES.PaymentsAuthor);
-  }
+  };
 
   const items: MenuProps["items"] = [
     {
       key: "1",
       label: <div onClick={showProfile}>Profile</div>,
     },
-    (me && (me.role && me.role === UserRole.Admin))&& {
-      key: "2",
-      label: (
-        <div onClick={handleSetting}>Setting</div>
-      ),
-    },
-    (me && (me.role && me.role === UserRole.Author))&& {
-      key: "3",
-      label: (
-          <div onClick={handleShowTransaction}>Payments</div>
-      ),
-    },
+    me &&
+      me.role &&
+      me.role === UserRole.Admin && {
+        key: "2",
+        label: <div onClick={handleSetting}>Setting</div>,
+      },
+    me &&
+      me.role &&
+      me.role === UserRole.Author && {
+        key: "3",
+        label: <div onClick={handleShowTransaction}>Payments</div>,
+      },
     {
-      type: 'divider',
+      type: "divider",
     },
     {
       key: "4",
@@ -104,8 +106,8 @@ export default function Header() {
           schema === NotificationSchema.BOOK
             ? "books/lists"
             : NotificationSchema.USER
-            ? "post"
-            : ""
+            ? "userProfile"
+            : "post"
         )
         .replace("id", schemaId)
     );
@@ -168,6 +170,14 @@ export default function Header() {
                   alt="icon avatar"
                   className={styles.iconAvatar}
                 />
+                {me &&
+                  me.subscriptionPlan &&
+                  me.subscriptionPlan.isSubscribed && (
+                    <CrownTwoTone
+                      twoToneColor="yellow"
+                      style={{ position: "absolute", left: 2, top: 7 }}
+                    />
+                  )}
               </div>
 
               <div className={styles.name}>
