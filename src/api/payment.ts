@@ -5,9 +5,10 @@ export const getAvailablePaymentMethod = () =>
   sendGet("/payment/available-payment-method");
 export const createOrder = (bookId: string, method: string) =>
   sendPost("/payment/create-order", { bookId, method });
-export const updateOrderStatus = (paymentId: string, status: PAYMENT_STATUS) =>
-  sendPut(`/payment/${paymentId}/update-status`, { status });
-export const createOrderMembership = (params: any) => sendPost('/payment/create-order-for-subscription', params)
+export const updateOrderStatus = (paymentId: string, body: any) =>
+  sendPut(`/payment/${paymentId}/update-status`, body);
+export const createOrderMembership = (params: any) =>
+  sendPost("/payment/create-order-for-subscription", params);
 
 export const getPaymentHistoryAdmin = (params: any) =>
   sendGet("/admin/payment/list", params);

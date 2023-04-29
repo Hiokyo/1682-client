@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { Spin, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { updateOrderStatus } from "~/api/payment";
@@ -7,32 +7,57 @@ import { PAYMENT_STATUS } from "~/utils/constant";
 export default function PaymentReturn() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState<string>("");
+  // const [status, setStatus] = useState<string>("");
 
   useEffect(() => {
-    const sendUpdateOrderStatus = async (status: PAYMENT_STATUS) => {
+    const sendUpdateOrderStatus = async () => {
       try {
         const vnp_OrderInfo = searchParams.get("vnp_OrderInfo");
+        const responseCode = searchParams.get("vnp_ResponseCode");
 
-        console.log(vnp_OrderInfo);
+        if (responseCode === "00") {
+          const orderInfo = JSON.parse(vnp_OrderInfo || "{}");
+
+          const { paymentId, validTime, paymentType, bookId } = orderInfo;
+
+          const body: any = {
+            status: "SUCCESS",
+          };
+
+          if (validTime) {
+            body.validTime = validTime;
+          }
+
+          const res = await updateOrderStatus(paymentId, body);
+
+          if (res && !res.errorCode && !res.errors.length) {
+            if (paymentType === "BOOK") {
+              navigate(`/books/lists/${bookId}`);
+            } else {
+              navigate("/books");
+            }
+          } else {
+            navigate("/books");
+          }
+        }
       } catch (error) {
         message.error("Payment fail");
       }
     };
-    const vnp_ResponseCode = searchParams.get("vnp_ResponseCode");
+    // const vnp_ResponseCode = searchParams.get("vnp_ResponseCode");
 
-    setStatus(() => vnp_ResponseCode || "");
+    // setStatus(() => vnp_ResponseCode || "");
 
-    let status;
+    // let status;
 
-    if (vnp_ResponseCode === "00") {
-      status = PAYMENT_STATUS.SUCCESS;
-    } else {
-      status = PAYMENT_STATUS.FAILURE;
-    }
+    // if (vnp_ResponseCode === "00") {
+    //   status = PAYMENT_STATUS.SUCCESS;
+    // } else {
+    //   status = PAYMENT_STATUS.FAILURE;
+    // }
 
-    sendUpdateOrderStatus(status);
+    sendUpdateOrderStatus();
   }, []);
 
-  return <div>{status === "00" ? "Success" : "Failure"}</div>;
+  return <Spin tip="Successfully paid, redirecting..."></Spin>;
 }
