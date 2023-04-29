@@ -58,21 +58,20 @@ export default function Header() {
       key: "1",
       label: <div onClick={showProfile}>Profile</div>,
     },
-    {
+    (me && (me.role && me.role === UserRole.Admin))&& {
       key: "2",
       label: (
-        <Authorization roles={[UserRole.Admin]}>
-          <div onClick={handleSetting}>Setting</div>
-        </Authorization>
+        <div onClick={handleSetting}>Setting</div>
+      ),
+    },
+    (me && (me.role && me.role === UserRole.Author))&& {
+      key: "3",
+      label: (
+          <div onClick={handleShowTransaction}>Payments</div>
       ),
     },
     {
-      key: "3",
-      label: (
-        <Authorization roles={[UserRole.Author]}>
-          <div onClick={handleShowTransaction}>Payments</div>
-        </Authorization>
-      ),
+      type: 'divider',
     },
     {
       key: "4",

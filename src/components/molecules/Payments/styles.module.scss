@@ -1,9 +1,5 @@
 .container {
   margin: 0 100px;
-
-  // .cardContainer{
-  //   padding: 0 50px;
-  // }
   .paymentMethod {
     display: flex;
     flex-direction: column;
@@ -15,6 +11,17 @@
       width: 80%;
       margin-bottom: 4rem;
 
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container{
+    margin: 0;
+    :global{
+      .ant-row {
+        margin: 0 !important;
+      }
     }
   }
 }

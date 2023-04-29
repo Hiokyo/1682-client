@@ -57,7 +57,7 @@ function Auth(props: Props) {
       content: 'Books'
     },
     // (userData && (userData.role && userData.role === UserRole.User)) &&
-    {
+    (userData && (userData.role && userData.role === UserRole.User)) && {
       key: ROUTES.Membership,
       label: <Link to={ROUTES.Membership}>Membership</Link>,
       icon: <UserAddOutlined style={{fontSize: '18px'}}/>,
@@ -77,7 +77,7 @@ function Auth(props: Props) {
       icon: <MoneyCollectOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.PaymentAdmin,
     },
-    {
+    (userData && (userData.role && userData.role === UserRole.Admin)) && {
       key: ROUTES.Reports,
       label: <Link to={ROUTES.Reports}>Reports</Link>,
       icon: <FileExclamationOutlined style={{fontSize: '18px'}}/>,

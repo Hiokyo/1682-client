@@ -80,40 +80,10 @@ const Payments = (props: Props) => {
 
   return (
     <>
-      {/* <div>New Order</div>
-
-      <input
-        value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
-        type="number"
-      />
-
-      <div>Select payment method</div>
-
-      {availablePaymentMethod.map((item) => (
-        <Fragment key={item._id}>
-          <input
-            type="radio"
-            value={item.name}
-            onChange={() =>
-              dispatch(
-                setMethodUsed({
-                  name: item.name,
-                  _id: item._id,
-                  note: item.note,
-                })
-              )
-            }
-          />
-          <label>{item.note}</label>
-        </Fragment>
-      ))}
-
-      <button onClick={handleSubmit}>Thanh toan</button> */}
       <Spin spinning={isLoading}>
         <div className={styles.container}>
           <Row gutter={[36, 36]}>
-            <Col span={12} className={styles.cardContainer}>
+            <Col xs={24} sm={12} className={styles.cardContainer}>
               <Card
                 cover={
                   <Svg
@@ -133,20 +103,10 @@ const Payments = (props: Props) => {
                 />
               </Card>
             </Col>
-            <Col className={styles.paymentMethod} span={12}>
+            <Col xs={24} sm={12} className={styles.paymentMethod}>
               <div>
-                {/* <h1>Giá tiền: 300.000 VNĐ</h1> */}
-                <h1>
-                  {/* Price: {dataBook?.price?.currency || ""} */}
-                  &nbsp;
-                  {
-                    formatter(+dataBook?.price?.amount) || 0
-                  }
-                </h1>
-                <Radio.Group
-                // value={paymentMethod}
-                // onChange={handlePaymentMethodChange}
-                >
+                <h1> Price: &nbsp;{formatter(+dataBook?.price?.amount) || 0}</h1>
+                <Radio.Group>
                   {availablePaymentMethod.map((item) => (
                     <Radio
                       key={item._id}
@@ -179,6 +139,7 @@ const Payments = (props: Props) => {
           </Row>
         </div>
       </Spin>
+
     </>
   );
 };
