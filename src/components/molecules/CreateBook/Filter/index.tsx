@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import Select from '~/components/atoms/Select';
 import { useCategories } from '~/hooks/useCategory';
-import { PARAMS_GET_ALL_NAME } from '~/utils/constant';
+import { PARAMS_GET_ALL_NAME, UserRole } from '~/utils/constant';
 import { Option } from '~/components/atoms/Select';
 import styles from './styles.module.scss';
 import { Button, Form, Input } from 'antd';
+import { Authorization } from '~/wrapper/Authorization';
 
 
 interface Props {
@@ -28,7 +29,6 @@ const FormBook = (props: Props) => {
       })),
     [dataCategories]
   );
-
 
   const handleValuesChange = useCallback((_: any, formValues: any) => {
     onChange(formValues);
@@ -62,6 +62,16 @@ const FormBook = (props: Props) => {
                   ))}
                 </Select>
               </Form.Item>
+              <Authorization
+                roles={[UserRole.User]}
+              >
+                <Form.Item name='message'>
+                  <Input
+                    className='ml-2'
+                    placeholder='Message to register to be a writer'
+                  />
+                </Form.Item>
+              </Authorization>
             </div>
           </Form>
         </div>

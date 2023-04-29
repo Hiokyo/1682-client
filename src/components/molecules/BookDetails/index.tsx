@@ -23,6 +23,7 @@ import { TextArea } from "~/components/atoms/Input";
 import HTMLFlipBook from "react-pageflip";
 import { addBookFavorite } from "~/api/user";
 import InputNumber from "~/components/atoms/InputNumber";
+import { useAppSelector } from "~/store";
 const { Title } = Typography;
 interface Props {
   bookId: any;
@@ -40,6 +41,9 @@ const BookDetails = (props: Props) => {
   const localPage = localStorage.getItem("currentPage");
   const bookRef = useRef<any>();
   const bookArea = useRef<any>(null);
+
+  const userData = useAppSelector((state) => state.userInfo.userData);
+
   const handleShowComment = () => {
     setShowComment(!showComment);
     form.resetFields();
@@ -95,18 +99,15 @@ const BookDetails = (props: Props) => {
     )?.content;
     const data = htmlParser(contentChapter);
     setPageContent(data);
-    // setTimeout(function() {
-    //   // document.getElementById('bookReader')?.scrollIntoView({ behavior: "smooth", inline: "center"});
-    //   setLoadingBook(false);
-    // }, 1000);
   };
+
   // Api count view
 
-  // useEffect(() => {
-  //   if (bookId) {
-  //     viewBook(bookId)
-  //   }
-  // }, [bookId])
+  useEffect(() => {
+    if (bookId) {
+      viewBook(bookId)
+    }
+  }, [bookId])
 
   useEffect(() => {
     if (localPage) {
@@ -218,9 +219,26 @@ const BookDetails = (props: Props) => {
                     }}
                     dataSource={dataBook?.chapters}
                     renderItem={(item: any) => (
+                      (userData?.supscriptionPlan?.isSubscribed) || (dataBook.purchaser?.find((item: any) => item?.user === userData?._id)) ?
                       <List.Item>
                         <Card
                           onClick={() => handleGetContentpage(item._id)}
+                          hoverable
+                          cover={
+                            <img
+                              alt="example"
+                              src="https://picsum.photos/300/200"
+                            />
+                          }
+                        >
+                          <Title level={4}>{item.name}</Title>
+                          <p>{format(new Date(item?.createdAt), DATE)}</p>
+                        </Card>
+                      </List.Item>
+                      :
+                      <List.Item>
+                        <Card
+                          onClick={() => message.warning("Please subscribe to read this book")}
                           hoverable
                           cover={
                             <img

@@ -42,10 +42,6 @@ const Filter = (props: Props) => {
               </Button>
             </Link>
           )}
-          <Button className={styles.btnAdd} onClick={showAddModal}>
-            <DownloadOutlined />
-            <p className={styles.btnText}>Download file</p>
-          </Button>
         </div>
       </div>
     </>

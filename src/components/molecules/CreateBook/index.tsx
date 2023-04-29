@@ -13,25 +13,38 @@ import { createBook } from '~/api/book';
 import { SUCCESS } from '~/utils/constant';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/routes';
+import { registerForAuthor } from '~/api/registerAuthor';
 
 const CreateBooks = () => {
 const [form] = Form.useForm();
 const [bookInfo, setBookInfo] = useState<any>(null);
 const navigate = useNavigate();
+
 const handleSave = async (formValues: any) => {
-  if (formValues && bookInfo) {
+  let res: any = null;
+  if (formValues && bookInfo.message) {
+    const fmData = {
+      ...bookInfo,
+      chapters: formValues.chapters,
+      message: bookInfo.message,
+    }
+    console.log(fmData)
+    res = registerForAuthor(fmData);
+  } else if (formValues && bookInfo) {
     const fmData = {
       ...bookInfo,
       chapters: formValues.chapters,
     }
-    const res = await createBook(fmData);
-    if (res.message === SUCCESS) {
-      message.success('Create book successfully');
-      form.resetFields();
-      navigate(ROUTES.Books) 
-    } else {
-      message.error('Create book failed');
-    }
+    res = await createBook(fmData);
+  }
+  if (res.message === SUCCESS) {
+    message.success({
+      content: !bookInfo.message ? 'Create book successfully' : 'Create book successfully, please wait for admin to approve',
+    });
+    form.resetFields();
+    navigate(ROUTES.Books) 
+  } else {
+    message.error('Create book failed');
   }
 }
 
@@ -73,7 +86,9 @@ return (
                       { required: true, message: '' },
                     ]}
                   >
-                    <Input/>
+                    <Input
+                      placeholder='Chapter name'
+                    />
                   </Form.Item>
                   <Form.Item
                     name={[value.name, 'content']}

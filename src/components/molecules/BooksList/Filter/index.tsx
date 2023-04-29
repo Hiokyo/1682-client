@@ -101,7 +101,7 @@ const Filter = (props: Props) => {
                 </Form.Item>
               </div>
             </Form>
-            <Authorization roles={[UserRole.Author]}>
+            <Authorization roles={[UserRole.Author, UserRole.User]}>
               <Link 
                 to='/books/create'
               >
