@@ -76,6 +76,10 @@ const Payments = (props: Props) => {
     };
 
     getCurrentAvailableMethods();
+
+    return () => {
+      dispatch(setMethodUsed(""));
+    };
   }, []);
 
   return (
@@ -105,8 +109,16 @@ const Payments = (props: Props) => {
             </Col>
             <Col xs={24} sm={12} className={styles.paymentMethod}>
               <div>
-                <h1> Price: &nbsp;{formatter(+dataBook?.price?.amount) || 0}</h1>
-                <Radio.Group>
+                {/* <h1>Giá tiền: 300.000 VNĐ</h1> */}
+                <h1>
+                  {/* Price: {dataBook?.price?.currency || ""} */}
+                  &nbsp;
+                  {formatter(+dataBook?.price?.amount) || 0}
+                </h1>
+                <Radio.Group
+                // value={paymentMethod}
+                // onChange={handlePaymentMethodChange}
+                >
                   {availablePaymentMethod.map((item) => (
                     <Radio
                       key={item._id}
@@ -139,7 +151,6 @@ const Payments = (props: Props) => {
           </Row>
         </div>
       </Spin>
-
     </>
   );
 };

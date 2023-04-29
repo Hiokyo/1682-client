@@ -9,5 +9,18 @@ export const updateOrderStatus = (paymentId: string, status: PAYMENT_STATUS) =>
   sendPut(`/payment/${paymentId}/update-status`, { status });
 export const createOrderMembership = (params: any) => sendPost('/payment/create-order-for-subscription', params)
 
-export const getPaymentHistoryAdmin = (params: any) => sendGet('/admin/payment/list', params);
-export const getPaymentHistoryAuthor = (params: any) => sendGet('/author/payment/list', params);
+export const getPaymentHistoryAdmin = (params: any) =>
+  sendGet("/admin/payment/list", params);
+export const getPaymentHistoryAuthor = (params: any) =>
+  sendGet("/author/payment/list", params);
+export const createOrderForSubscription = (
+  amount: string,
+  validTime: number,
+  method: string
+) =>
+  sendPost("/payment/create-order-for-subscription", {
+    method,
+    amount,
+    validTime,
+    currency: "VND",
+  });

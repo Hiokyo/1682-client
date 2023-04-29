@@ -14,20 +14,7 @@ export default function PaymentReturn() {
       try {
         const vnp_OrderInfo = searchParams.get("vnp_OrderInfo");
 
-        if (vnp_OrderInfo && vnp_OrderInfo.length) {
-          const res = await updateOrderStatus(
-            vnp_OrderInfo.split(" ")[vnp_OrderInfo?.split(" ").length - 1],
-            status
-          );
-
-          if (res && !res.errorCode && !res.errors.length) {
-            message.success("Order successfully executed");
-          } else {
-            message.error("Payment fail");
-          }
-        } else {
-          navigate("/");
-        }
+        console.log(vnp_OrderInfo);
       } catch (error) {
         message.error("Payment fail");
       }
