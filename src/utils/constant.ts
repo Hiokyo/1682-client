@@ -39,22 +39,24 @@ export enum SortBooks {
   "SUBSCRIBED_USER_DESC" = "Subscribed",
   "VIEW_ASC" = "View (Ascending)",
   "VIEW_DESC" = "View (Descending)",
-  "LIKE_ASC" = "Like (Accending)",
+  "LIKE_ASC" = "Like (Ascending)",
   "LIKE_DESC" = "Like (Descending)",
   "DISLIKE_ASC" = "Dislike (Ascending)",
   "DISLIKE_DESC" = "Dislike (Descending)",
-  "COMENT_ASC" = "Comment (Accending)",
-  "COMENT_DESC" = "Comment (Descending)",
+  "COMMENT_ASC" = "Comment (Ascending)",
+  "COMMENT_DESC" = "Comment (Descending)",
+  "DATE_CREATED_ASC" = "Date created (Ascending)",
+  "DATE_CREATED_DESC" = "Date created (Descending)",
 }
 
 export enum SortReports {
   "TITLE_DESC" = "Title",
   "TITLE_ASC" = "Title (Ascending)",
-  "DATE_CREATED_ASC" = "Date create (Accending)",
+  "DATE_CREATED_ASC" = "Date create (Ascending)",
   "DATE_CREATED_DESC" = "Date create (Descending)",
   "STATUS_ASC" = "Status (Ascending)",
   "STATUS_DESC" = "Status (Descending)",
-  "LIKE_ASC" = "Like (Accending)",
+  "LIKE_ASC" = "Like (Ascending)",
   "LIKE_DESC" = "Like (Descending)",
   "TYPE_ASC" = "Type (Descending)",
   "TYPE_DESC" = "Type (Descending)",
@@ -68,14 +70,14 @@ export enum SortTopic {
 }
 
 export enum SortPosts {
-  "LIKE_ASC" = "Like (Accending)",
+  "LIKE_ASC" = "Like (Ascending)",
   "LIKE_DESC" = "Like (Descending)",
   "DISLIKE_ASC" = "Dislike (Ascending)",
   "DISLIKE_DESC" = "Dislike (Descending)",
   "VIEW_ASC" = "View (Ascending)",
   "VIEW_DESC" = "View (Descending)",
-  "COMENT_ASC" = "Comment (Accending)",
-  "COMENT_DESC" = "Comment (Descending)",
+  "COMMENT_ASC" = "Comment (Ascending)",
+  "COMMENT_DESC" = "Comment (Descending)",
   "DATE_CREATED_ASC" = "Date created (Ascending)",
   "DATE_CREATED_DESC" = "Date created (Descending)",
 }
@@ -85,7 +87,7 @@ export enum SortAccount {
   "EMAIL_DESC" = "Email (Descending)",
   "NAME_ASC" = "Name (Ascending)",
   "NAME_DESC" = "Name (Descending)",
-  "DATE_CREATED_ASC" = "Date create (Accending)",
+  "DATE_CREATED_ASC" = "Date create (Ascending)",
   "DATE_CREATED_DESC" = "Date create (Descending)",
 }
 export enum PaymentSort {
@@ -135,14 +137,14 @@ export enum BookCurrency {
 }
 
 export enum PaymentType {
-  'Book' = "BOOK",
-  'Subscription' = "SUBSCRIPTION_PLAN",
+  "Book" = "BOOK",
+  "Subscription" = "SUBSCRIPTION_PLAN",
 }
 
 export enum UserRole {
   Admin = "ADMIN",
   User = "USER",
-  Author= "AUTHOR",
+  Author = "AUTHOR",
 }
 
 export const userIcon = {
@@ -173,7 +175,7 @@ Compliance: You agree to comply with all applicable laws and regulations regardi
 
 Removal: We reserve the right to remove any uploaded files that violate our terms and conditions or are otherwise deemed inappropriate.
 
-By uploading files to our platform, you agree to the above terms and conditions. If you have any questions or concerns, please contact us at [insert contact information].`;
+By uploading files to our platform, you agree to the above terms and conditions. If you have any questions or concerns, please contact us at trananhquan23499@gmail.com.`;
 
 export enum PAYMENT_STATUS {
   PENDING = "PENDING",
