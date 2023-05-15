@@ -105,7 +105,7 @@ export default function Header() {
           "schema",
           schema === NotificationSchema.BOOK
             ? "books/lists"
-            : NotificationSchema.USER
+            : schema === NotificationSchema.USER
             ? "userProfile"
             : "post"
         )
@@ -143,6 +143,7 @@ export default function Header() {
                       )
                     }
                     style={{ color: item.read ? "" : "blue" }}
+                    key={item._id}
                   >
                     {item.content}
                   </div>
