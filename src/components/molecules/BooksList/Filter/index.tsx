@@ -127,7 +127,7 @@ const Filter = (props: Props) => {
                     alt="iconPlus"
                   />
                   <p className={styles.btnText}>
-                    {userData && userData.userRole === UserRole.Author
+                    {userData && userData.role === UserRole.Author
                       ? "New book"
                       : "Register for author"}
                   </p>
