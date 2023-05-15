@@ -24,12 +24,14 @@ import HTMLFlipBook from "react-pageflip";
 import { addBookFavorite } from "~/api/user";
 import InputNumber from "~/components/atoms/InputNumber";
 import { useAppSelector } from "~/store";
+import { useNavigate } from "react-router-dom";
 const { Title } = Typography;
 interface Props {
   bookId: any;
 }
 
 const BookDetails = (props: Props) => {
+  const navigate = useNavigate();
   const { bookId } = props;
   const { data, isFetching, isLoading, refetch } = useBookDetail({ bookId });
   const dataBook = data?.data;
@@ -114,6 +116,13 @@ const BookDetails = (props: Props) => {
       setCurrentPage(+localPage);
     }
   }, []);
+
+  useEffect(() => {
+    if (!dataBook) {
+      message.error("Book not existed");
+      navigate("/books");
+    }
+  }, [dataBook]);
 
   const handleAddFavorite = async () => {
     const res = await addBookFavorite(bookId);
