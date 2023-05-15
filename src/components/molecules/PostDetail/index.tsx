@@ -62,9 +62,6 @@ const PostDetail = (props: Props) => {
   useEffect(() => {
     if (dataPosts) {
       setDataSource(dataPosts);
-    } else {
-      message.error("Post not existed");
-      navigate("/");
     }
   }, [dataPosts]);
 

@@ -117,12 +117,12 @@ const BookDetails = (props: Props) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!dataBook) {
-      message.error("Book not existed");
-      navigate("/books");
-    }
-  }, [dataBook]);
+  // useEffect(() => {
+  //   if (!dataBook) {
+  //     message.error("Book not existed");
+  //     navigate("/books");
+  //   }
+  // }, [dataBook]);
 
   const handleAddFavorite = async () => {
     const res = await addBookFavorite(bookId);

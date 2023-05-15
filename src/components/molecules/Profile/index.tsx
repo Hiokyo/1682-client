@@ -119,12 +119,12 @@ const Profile = (props: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (!userData) {
-      message.error("User not existed");
-      navigate("/");
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   if (!userData) {
+  //     message.error("User not existed");
+  //     navigate("/");
+  //   }
+  // }, [userData]);
 
   return (
     <Spin spinning={isLoading || isFetching}>
