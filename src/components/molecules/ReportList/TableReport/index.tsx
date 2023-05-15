@@ -148,36 +148,42 @@ const ReportTable = (props: Props) => {
       title: "",
       dataIndex: "_id",
       width: "15%",
-      render: (value: any, record: any, index) => (
-        <Row
-          style={{ display: "flex", flexDirection: "row", flexFlow: "initial" }}
-        >
-          <Button
+      render: (value: any, record: any, index) => {
+        return record.status !== "APPROVED" && record.status !== "RESOLVED" ? (
+          <Row
             style={{
-              color: "green",
-              border: "none",
-              padding: 0,
-              height: "fit-content",
+              display: "flex",
+              flexDirection: "row",
+              flexFlow: "initial",
             }}
-            onClick={() => handleUpdateRecordStatus(value, "APPROVED")}
           >
-            <CheckSquareFilled />
-          </Button>
+            <Button
+              style={{
+                color: "green",
+                border: "none",
+                padding: 0,
+                height: "fit-content",
+              }}
+              onClick={() => handleUpdateRecordStatus(value, "APPROVED")}
+            >
+              <CheckSquareFilled />
+            </Button>
 
-          <Button
-            style={{
-              color: "red",
-              border: "none",
-              padding: 0,
-              height: "fit-content",
-              marginLeft: 5,
-            }}
-            onClick={() => handleUpdateRecordStatus(value, "REJECTED")}
-          >
-            <CloseSquareFilled />
-          </Button>
-        </Row>
-      ),
+            <Button
+              style={{
+                color: "red",
+                border: "none",
+                padding: 0,
+                height: "fit-content",
+                marginLeft: 5,
+              }}
+              onClick={() => handleUpdateRecordStatus(value, "REJECTED")}
+            >
+              <CloseSquareFilled />
+            </Button>
+          </Row>
+        ) : null;
+      },
     },
   ];
 
