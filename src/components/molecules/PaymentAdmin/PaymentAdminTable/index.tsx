@@ -82,11 +82,14 @@ const PaymentAdminTable = (props: Props) => {
       title: 'Status',
       dataIndex: 'status',
       width: '15%',
-      render: (status: string, record: any) =>
-      (status === 'PENDING') ?
-        <Tag color='orange' >{status}</Tag> 
-        :
-        <Tag color="green">{status}</Tag>
+      render: (status: string, record: any) => 
+      (status === 'PENDING') ? (
+        <Tag color='orange'>{status}</Tag> 
+      ) : (status === 'SUCCESS') ? (
+        <Tag color='green'>{status}</Tag>
+      ) : (
+        <Tag color='red'>{status}</Tag>
+      )
     },
     // {
     //   title: '',
