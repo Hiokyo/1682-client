@@ -75,7 +75,7 @@ const Dashboards = () => {
   const transformedData = useMemo(() => {
     if (dataLineChart) {
       return dataLineChart?.map((item: any) => ({
-        name: item.name.length > 4 ? item.name.slice(0, 4) + '...' : item.name,
+        name: item.name,
         type: (item?.type?.charAt(0).toUpperCase() + item?.type?.slice(1))?.replace('Count', ''),
         value: item.value,
       }));
@@ -87,6 +87,15 @@ const Dashboards = () => {
     xField: 'name',
     yField: 'value',
     seriesField: 'type',
+    xAxis: {
+      label: {
+        autoRotate: true, // Enable automatic rotation of labels
+        overflow: 'hidden', // Hide any overflowing text
+        whiteSpace: 'nowrap', // Prevent line breaks
+        textOverflow: 'ellipsis', // Display ellipsis (...) for overflowed text
+        width: 50, // Set a fixed width for the label (adjust as needed)
+      },
+    },
     isGroup: true,
     columnStyle: {
       radius: [10, 10, 0, 0],
