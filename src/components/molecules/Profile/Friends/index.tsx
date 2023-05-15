@@ -2,6 +2,7 @@ import { Avatar, Card, List } from 'antd';
 import React from 'react'
 import Svg from '~/components/atoms/Svg';
 import styles from './styles.module.scss'
+import defaultUser from '~/assets/images/defaultUser.png';
 
 interface Props{
   data: any;
@@ -20,7 +21,7 @@ const Friends = (props: Props) => {
         >
           <Card className={styles.friend}>
             <Avatar 
-              src={`https://joesch.moe/api/v1/random`}
+              src={friend.user?.avatar?.url || defaultUser}
               shape="square"
               size={46}
             />

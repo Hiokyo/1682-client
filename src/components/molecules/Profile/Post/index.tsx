@@ -11,6 +11,7 @@ import {
   DislikeTwoTone
 } from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
+import defaultUser from '~/assets/images/defaultUser.png';
 import loadable from '~/utils/loadable';
 
 import { compareAsc, format } from 'date-fns';
@@ -46,7 +47,6 @@ const Post = (props: Props) => {
 
   const [visibleModalEditPost, setVisibleModalEditPost] = useState(false);
   const [postEditing, setPostEditing] = useState({});
-
   const userData = useAppSelector((state) => state.userInfo.userData);
 
   useEffect(() => {
@@ -282,14 +282,13 @@ const Post = (props: Props) => {
               extra={ userData?._id === userId ? <div onClick={() => handleEditPost(item)}>Edit</div> : null}
             >
               <Meta
-                avatar={<Avatar size={42} src={item?.updatedBy?.avatar?.url || item?.createdBy?.avatar?.url} />}
+                avatar={<Avatar size={42} src={data.avatar?.url || defaultUser} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
-                  <Link
-                    to={`/userProfile/${item.updatedBy?._id}`}
+                  <div
                   >
                     {item.updatedBy?.firstName} {item.updatedBy?.lastName}
-                  </Link>
+                  </div>
                 }
                 description={(
                   // <>
@@ -319,7 +318,7 @@ const Post = (props: Props) => {
                         key={comment._id}
                         avatar={
                           <>
-                            <Avatar src={comment.updatedBy?.avatar?.url || comment.createdBy?.avatar?.url} /> 
+                            <Avatar style={{marginRight: '0.5rem'}} src={comment.updatedBy?.avatar?.url || comment.createdBy?.avatar?.url || defaultUser} /> 
                             <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong>
                           </>
                         }

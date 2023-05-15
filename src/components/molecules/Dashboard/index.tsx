@@ -75,7 +75,7 @@ const Dashboards = () => {
   const transformedData = useMemo(() => {
     if (dataLineChart) {
       return dataLineChart?.map((item: any) => ({
-        name: item.name,
+        name: item.name.length > 4 ? item.name.slice(0, 4) + '...' : item.name,
         type: (item?.type?.charAt(0).toUpperCase() + item?.type?.slice(1))?.replace('Count', ''),
         value: item.value,
       }));
@@ -332,10 +332,7 @@ const Dashboards = () => {
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Book topics"
-                description={
-                  "Aventure and Classic"
-                }
+                title="Book topics per month"
               />
             </Card>
           </Col>

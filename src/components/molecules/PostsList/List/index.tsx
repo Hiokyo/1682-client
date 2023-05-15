@@ -25,6 +25,7 @@ import ModalEditComment from '~/components/atoms/ModalEditComment';
 import ImageList from '../ImageList';
 import ModalPost from '../PostModal';
 import { Authorization } from '~/wrapper/Authorization';
+import defaultUser from '~/assets/images/defaultUser.png';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -281,7 +282,7 @@ const PostList = (props: Prop) => {
               // extra={<div onClick={() => handleEditPost(item)}>Edit</div>}
             >
               <Meta
-                avatar={<Avatar size={42} src={item.updatedBy.avatar.url} />}
+                avatar={<Avatar size={42} src={item.updatedBy.avatar.url || defaultUser} />}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -321,7 +322,7 @@ const PostList = (props: Prop) => {
                         key={comment._id}
                         avatar={
                         <>
-                          <Avatar style={{marginRight: '0.5rem'}} src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url} />
+                          <Avatar style={{marginRight: '0.5rem'}} src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url || defaultUser} />
                           <strong>
                             {comment.createdBy?.firstName} {comment.createdBy?.lastName} 
                           </strong>

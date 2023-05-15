@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { format } from "date-fns";
 import { DATE, SUCCESS } from "~/utils/constant";
-import { MessageOutlined, EyeOutlined, HeartOutlined } from "@ant-design/icons";
+import { MessageOutlined, EyeOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import styles from "./styles.module.scss";
 import { setComment, viewBook } from "~/api/book";
@@ -187,22 +187,21 @@ const BookDetails = (props: Props) => {
                   ]}
                   extra={
                     <div className={styles.extraGroup}>
-                      <HeartOutlined
-                        onClick={handleAddFavorite}
-                        style={{ marginRight: 10 }}
-                      />
+                      { userData?.favorites?.find((item: any) => item.book._id === bookId) ?
+                        <HeartFilled
+                          style={{ marginRight: 10 }}
+                        />
+                        : 
+                        <HeartOutlined
+                          onClick={handleAddFavorite}
+                          style={{ marginRight: 10 }}
+                        />
+                      }
                       <EyeOutlined /> {dataBook?.viewCount}
                     </div>
                   }
                 >
                   <Meta
-                    avatar={
-                      <Avatar
-                        shape="square"
-                        size={42}
-                        src={"https://covers.openlibrary.org/b/id/240727-S.jpg"}
-                      />
-                    }
                     title={dataBook?.title}
                     description={
                       <div className={styles.userIdea}>

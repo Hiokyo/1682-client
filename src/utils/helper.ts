@@ -33,13 +33,13 @@ export const handleLogin = ({
   }
 
   if (getCookie('token')) {
-    if (userRole === UserRole.Admin) {
-      history.push(callbackUrl ?? ROUTES.DashBoard);
+    if (userRole === UserRole.User) {
+      history.push(ROUTES.Posts);
     }
-    if (userRole === UserRole.Author ) {
+    else if (userRole === UserRole.Author ) {
       history.push(ROUTES.Books);
     } else {
-      history.push(ROUTES.Posts);
+      history.push(callbackUrl ?? ROUTES.DashBoard);
     }
     // window.location.reload();
   }
@@ -50,6 +50,7 @@ export const handleLogout = (callbackUrl = ROUTES.Posts) => {
   removeCookie("token");
   removeCookie("userId");
   removeCookie("refreshToken");
+  removeCookie("userName");
   localStorage.clear();
   if (callbackUrl) {
     history.push(callbackUrl);

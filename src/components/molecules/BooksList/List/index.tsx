@@ -7,12 +7,14 @@ import {
   MoreOutlined,
   FlagOutlined,
   CloseOutlined,
+  HeartFilled,
   HeartOutlined,
   EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
+import defaultUser from '~/assets/images/defaultUser.png';
 
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
@@ -349,7 +351,6 @@ const BookList = (props: Prop) => {
               }
             >
               <Meta
-                avatar={<Avatar shape='square' size={42} src={'https://covers.openlibrary.org/b/id/240727-S.jpg'}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -387,7 +388,7 @@ const BookList = (props: Prop) => {
                       key={comment._id}
                       avatar={
                         <>
-                          <Avatar src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url}/> 
+                          <Avatar style={{marginRight: '0.5rem'}} src={comment?.createdBy?.avatar?.url || comment?.updatedBy?.avatar?.url || defaultUser}/> 
                           <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong>
                         </>
                       }

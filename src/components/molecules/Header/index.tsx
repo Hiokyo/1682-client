@@ -128,6 +128,11 @@ export default function Header() {
 
         <div className={styles.info}>
           <Dropdown
+            overlayStyle={{
+              maxHeight: "40vh",
+              overflowX: "hidden",
+              overflowY: "scroll",
+            }}
             menu={{
               items: allNotifications.map((item) => ({
                 ...item,
